@@ -1,0 +1,245 @@
+<!doctype html>
+<!--注意：引入thymeleaf模板标签的名称空间-->
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+    <title>互助网</title>
+    <style>
+        body {
+            /*所有元素不可选中*/
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+        }
+
+        img {
+            max-width: 80%;
+            height: auto
+        }
+
+        .nav {
+            width: 80%;
+            height: 80px;
+            padding: 10px;
+        }
+
+        .logo {
+            position: relative;
+            top: 20px;
+            left: 20px;
+            display: inline-block;
+        }
+
+        .center {
+            width: 400px;
+            height: 300px;
+            position: absolute;
+            padding: 5px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -70%);
+        }
+
+        .btn-login {
+            display: inline-block;
+            width: 165px;
+            height: 55px;
+            line-height: 55px;
+            border: 2px solid black;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .btn-login:active {
+            display: inline-block;
+            width: 165px;
+            height: 55px;
+            line-height: 55px;
+            border: 2px solid black;
+            border-radius: 10px;
+            text-align: center;
+            background-color: #cccccc;
+        }
+
+        .btn-register {
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            width: 165px;
+            height: 55px;
+            line-height: 55px;
+            border: 2px solid black;
+            border-radius: 10px;
+            text-align: center;
+            background-color: #f00;
+            color: #fff;
+        }
+
+        .btn-register:active {
+            position: absolute;
+            right: 0;
+            display: inline-block;
+            width: 165px;
+            height: 55px;
+            line-height: 55px;
+            border: 2px solid black;
+            border-radius: 10px;
+            text-align: center;
+            background-color: #CA1919;
+            color: #fff;
+        }
+
+        .t_back:hover {
+            color: #555555;
+        }
+
+        .t_span {
+            font-size: 25px;
+        }
+
+        .form-control {
+            display: block;
+            width: 300px;
+            height: 34px;
+            padding: 6px 12px;
+            margin: 0 auto;
+            font-size: 14px;
+            line-height: 1.428571429;
+            color: #555555;
+            vertical-align: middle;
+            background-color: #ffffff;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
+        .form-control:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+
+        .form-control:invalid {
+            border-color: #f00;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="nav">
+    <div class="logo">
+        <img th:src="@{/static/images/logo.png}">
+    </div>
+</div>
+
+<div id="index-view" class="center">
+    <img th:src="@{/static/images/index_title.png}">
+    <hr style="height: 4px;background-color: black"/>
+    <span>给予当下伙伴微笑帮助，让世界充满啊爱</span>
+    <img th:src="@{/static/images/biubiu.gif}" style="text-align: center">
+    <div style="position:relative;margin-top: 20px">
+        <div class="btn-login"><span class="t_span">登录</span></div>
+        <div class="btn-register"><span class="t_span">注册</span></div>
+    </div>
+</div>
+<div id="login-view" class="center" style="display: none">
+    <span class="t_back" style="font-size: 50px;font-weight: bold">&lt;登录</span>
+    <hr style="height: 4px;background-color: black"/>
+    <form>
+        <p style="font-size: 20px;position:relative;left: 40px">邮箱</p>
+        <input id="l-email" class="form-control" type="email">
+        <p style="font-size: 20px;position:relative;left: 40px">密码</p>
+        <input id="l-pwd" class="form-control" type="password">
+    </form>
+    <div style="position:relative;margin-top: 40px">
+        <div id="login" class="btn-login" style="width: 100%"><span class="t_span">登录</span></div>
+    </div>
+
+</div>
+
+<div id="register-view" class="center" style="display: none">
+    <span class="t_back" style="font-size: 50px;font-weight: bold">&lt;注册</span>
+    <hr style="height: 4px;background-color: black"/>
+    <form>
+        <p style="font-size: 20px;position:relative;left: 40px">邮箱</p>
+        <input class="form-control" type="email">
+        <p style="font-size: 20px;position:relative;left: 40px">密码</p>
+        <input class="form-control" type="password">
+        <p style="font-size: 20px;position:relative;left: 40px">邀请码</p>
+        <input class="form-control" type="text">
+    </form>
+    <div style="position:relative;margin-top: 40px">
+        <div class="btn-register" style="width: 100%"><span class="t_span">注册</span></div>
+    </div>
+
+</div>
+<div style="position:absolute;width: 99%;text-align: center;bottom: 20px">
+    <span style="color: #424242">copyright by xz.studio</span>
+</div>
+<script>
+    $(function () {
+        $(".btn-login").click(function () {
+            $("#index-view").hide(200)
+            $("#login-view").show(200)
+        })
+        $(".btn-register").click(function () {
+            $("#index-view").hide(200)
+            $("#register-view").show(200)
+        })
+        $(".t_back").click(function () {
+            $("#login-view").hide(200)
+            $("#register-view").hide(200)
+            $("#index-view").show(200)
+        })
+
+        $("#login").click(function () {
+            let email = $("#l-email").val()
+            let pwd = $("#l-pwd").val()
+            if (!isEmail(email)) {
+                alert("请输入正确的邮箱格式")
+                return
+            }
+            if (pwd.length < 6) {
+                alert("密码过短")
+                return
+            }
+            let user = {
+                email: email,
+                passwd: pwd
+            }
+            $.ajax({
+                url: "/login",
+                method: "POST",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(user),
+                success: function (res) {
+                    console.log(res)
+                    window.location.href = "/"
+                },
+                error: function (ex) {
+                    alert("登陆失败")
+                },
+            })
+        })
+    })
+
+    function isEmail(str) {
+        let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+        return reg.test(str);
+    }
+
+</script>
+</body>
+</html>

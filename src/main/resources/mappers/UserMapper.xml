@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xz.helpful.dao.UserMapper">
+    <select id="findAll" resultType="com.xz.helpful.pojo.User">
+        SELECT * from user
+    </select>
+    <select id="login" parameterType="com.xz.helpful.pojo.User" resultType="com.xz.helpful.pojo.User">
+       select u.id,u.name, u.email,u.create_time,u.mycode,u.code from `user` u where u.email = #{email} and u.passwd = #{passwd}
+    </select>
+</mapper>

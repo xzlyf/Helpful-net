@@ -1,0 +1,21 @@
+server:
+  servlet:
+    session:
+      timeout: PT168H
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/helpful-net?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+    username: root
+    password: xzlyf297
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/templates/   #模板路径，页面文件一般放在templates
+    suffix: .html                   #模板后缀
+    servlet:
+      content-type: text/html       #设置Content-type
+    encoding: utf-8                 #编码方式
+    cache: false                    #关闭缓存,每次都会重新加载页面,开发过程可以立即看到页面修改的结果
+  mvc:
+    static-path-pattern: /static/**
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml

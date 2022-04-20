@@ -1,0 +1,77 @@
+<!doctype html>
+<!--注意：引入thymeleaf模板标签的名称空间-->
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+    <title>互助网</title>
+    <style>
+        body {
+            /*所有元素不可选中*/
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+        }
+
+        img {
+            max-width: 80%;
+            height: auto
+        }
+
+        .nav {
+            width: 80%;
+            height: 80px;
+            padding: 10px;
+        }
+
+        .logo {
+            position: relative;
+            top: 20px;
+            left: 20px;
+            display: inline-block;
+        }
+
+        .center {
+            width: 400px;
+            height: 300px;
+            position: absolute;
+            padding: 5px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -70%);
+        }
+
+
+
+    </style>
+</head>
+<body>
+<div class="nav">
+    <div class="logo">
+        <img th:src="@{/static/images/logo.png}">
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        $(".btn-login").click(function () {
+            $("#index-view").hide(200)
+            $("#login-view").show(200)
+        })
+        $(".btn-register").click(function () {
+            $("#index-view").hide(200)
+            $("#register-view").show(200)
+        })
+        $(".t_back").click(function () {
+            $("#login-view").hide(200)
+            $("#register-view").hide(200)
+            $("#index-view").show(200)
+        })
+    })
+</script>
+</body>
+</html>

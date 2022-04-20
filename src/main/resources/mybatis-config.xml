@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置mybatis运行环境-->
+    <!--default=使用哪个配置源，这里使用dev的配置源-->
+    <environments default="dev">
+        <!--可配置多个配置源-->
+        <!--Debug环境-->
+        <environment id="dev">
+            <!--事物类型-->
+            <transactionManager type="JDBC"/>
+            <!--数据源-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/helpful-net?useUnicode=true&amp;characterEncoding=UTF-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="xzlyf297"/>
+            </dataSource>
+        </environment>
+        <!--正式环境-->
+        <environment id="release">
+            <!--事物类型-->
+            <transactionManager type="JDBC"/>
+            <!--数据源-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://192.168.0.1:3306/helpful-net?useUnicode=true&amp;characterEncoding=UTF-8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="xzlyf297"/>
+            </dataSource>
+        </environment>
+    </environments>
+</configuration>
