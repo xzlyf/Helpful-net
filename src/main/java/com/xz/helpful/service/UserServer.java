@@ -12,6 +12,9 @@ import java.util.List;
 public interface UserServer {
     List<User> findAll();
 
+    //校验账号密码是否符合规定
+    boolean verify(User user);
+
     User findByEmail(String email);
 
     UserVo findByEmailInfo(String email);

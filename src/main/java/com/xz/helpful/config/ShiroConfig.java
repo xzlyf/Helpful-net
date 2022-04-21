@@ -50,6 +50,7 @@ public class ShiroConfig {
         map.put("/", "anon");
         map.put("/login", "anon");
         map.put("/static/**", "anon");
+        map.put("/druid/**", "anon");//druid监控面板，测试用
         map.put("/**", "authc");
         //登录
         shiroFilterFactoryBean.setLoginUrl("/");

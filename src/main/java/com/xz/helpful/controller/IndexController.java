@@ -38,6 +38,10 @@ public class IndexController {
     @ResponseBody
     @PostMapping("/login")
     public Object login(@RequestBody User user) {
+        boolean verify = userServer.verify(user);
+        if (!verify){
+            return BaseVo.failed("账号或密码格式不正确");
+        }
 
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(
@@ -55,6 +59,13 @@ public class IndexController {
             return BaseVo.failed("没有权限");
         }
         return BaseVo.success(null);
+    }
+
+    @ResponseBody
+    @PostMapping("/register")
+    public Object register(@RequestBody User user) {
+
+        return null;
     }
 
     @GetMapping("/logout")

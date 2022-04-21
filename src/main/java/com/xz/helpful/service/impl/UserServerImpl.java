@@ -28,6 +28,20 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
+    public boolean verify(User user) {
+        if (user == null) {
+            return false;
+        }
+        if (!user.getEmail().matches("[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?")) {
+            return false;
+        }
+        if (user.getPasswd() == null) {
+            return false;
+        }
+        return user.getPasswd().length() >= 6;
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userMapper.findByEmail(email);
     }
@@ -39,7 +53,7 @@ public class UserServerImpl implements UserServer {
             return null;
         }
         Integer wallet = walletMapper.queryWallet(login.getId());
-        if (wallet==null){
+        if (wallet == null) {
             wallet = 0;
         }
         UserVo vo = new UserVo();
