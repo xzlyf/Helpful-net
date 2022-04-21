@@ -1,8 +1,10 @@
 package com.xz.helpful.config;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import org.apache.log4j.spi.Filter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -48,4 +50,5 @@ public class DruidConfig {
         bean.setUrlPatterns(Arrays.asList("/*"));
         return  bean;
     }
+
 }

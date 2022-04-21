@@ -30,7 +30,13 @@ public class IndexController {
     @GetMapping("/")
     public ModelAndView root(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index");
+        Subject subject = SecurityUtils.getSubject();
+        //已登录的用户直接重定向至home页面
+        if (subject.getPrincipal() == null) {
+            modelAndView.setViewName("index");
+        }else{
+            modelAndView.setViewName("redirect:/home");
+        }
         return modelAndView;
     }
 
@@ -39,7 +45,7 @@ public class IndexController {
     @PostMapping("/login")
     public Object login(@RequestBody User user) {
         boolean verify = userServer.verify(user);
-        if (!verify){
+        if (!verify) {
             return BaseVo.failed("账号或密码格式不正确");
         }
 
