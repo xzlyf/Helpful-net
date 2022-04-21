@@ -28,6 +28,11 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
+    public User findByEmail(String email) {
+        return userMapper.findByEmail(email);
+    }
+
+    @Override
     public UserVo login(User user) {
         User login = userMapper.login(user);
         if (login == null) {

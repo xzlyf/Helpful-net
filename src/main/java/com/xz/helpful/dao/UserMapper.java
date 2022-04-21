@@ -13,6 +13,8 @@ import java.util.List;
 public interface UserMapper {
     List<User> findAll();
 
+    User findByEmail(String email);
+
     User login(User user);
 
 }

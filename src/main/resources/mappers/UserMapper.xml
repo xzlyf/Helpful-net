@@ -7,4 +7,7 @@
     <select id="login" parameterType="com.xz.helpful.pojo.User" resultType="com.xz.helpful.pojo.User">
        select u.id,u.name, u.email,u.create_time,u.mycode,u.code from `user` u where u.email = #{email} and u.passwd = #{passwd}
     </select>
+    <select id="findByEmail" resultType="com.xz.helpful.pojo.User">
+        select * from user where email = #{email}
+    </select>
 </mapper>

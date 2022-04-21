@@ -10,7 +10,9 @@ import java.util.List;
  * @Date: 2022/4/20
  */
 public interface UserServer {
-     List<User> findAll();
+    List<User> findAll();
 
-     UserVo login(User user);
+    User findByEmail(String email);
+
+    UserVo login(User user);
 }

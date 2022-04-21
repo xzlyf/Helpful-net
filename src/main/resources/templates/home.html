@@ -22,7 +22,7 @@
         }
 
         .nav {
-            width: 80%;
+            width: 99%;
             height: 80px;
             padding: 10px;
         }
@@ -34,16 +34,63 @@
             display: inline-block;
         }
 
+        .user-tool {
+            position: relative;
+            display: inline-block;
+            right: 200px;
+            top: 20px;
+            float: right;
+        }
+
         .center {
-            width: 400px;
-            height: 300px;
+            width: 800px;
+            height: 400px;
             position: absolute;
             padding: 5px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -70%);
+            background-color: #555555;
         }
 
+        .center div {
+            text-align: center;
+        }
+
+        .btn_reception {
+            position: absolute;
+            left: 40px;
+            display: inline-block;
+            border: 3px solid black;
+            border-radius: 12px;
+            padding: 15px 25px 15px 25px;
+            font-size: 50px;
+            background-color: #fff100;
+            -moz-box-shadow: 5px 5px #000; /* 老的 Firefox */
+            box-shadow: 5px 5px #000;
+
+        }
+        .btn_reception:hover {
+            margin: 5px 5px 5px 5px;
+            box-shadow: 1px 1px #000;
+        }
+
+        .btn_publish {
+            position: absolute;
+            right: 40px;
+            display: inline-block;
+            border: 3px solid black;
+            border-radius: 12px;
+            padding: 15px 25px 15px 25px;
+            font-size: 50px;
+            background-color: #13B5B1;
+            -moz-box-shadow: 5px 5px #000; /* 老的 Firefox */
+            box-shadow: 5px 5px #000;
+        }
+        .btn_publish:hover {
+            margin: 5px 5px 5px 5px;
+            box-shadow: 1px 1px #000;
+        }
 
 
     </style>
@@ -52,6 +99,24 @@
 <div class="nav">
     <div class="logo">
         <img th:src="@{/static/images/logo.png}">
+    </div>
+    <div class="user-tool">
+        <span style="font-size: 20px;font-weight: bold">用户名</span>
+        <span style="margin-left: 25px;font-size: 20px;font-weight: bold;color: #f00">退出登录</span>
+    </div>
+</div>
+<div class="center">
+    <div>
+        <div>
+            <span  style="font-size: 35px;color: #f00;font-weight: bolder">188</span>
+        </div>
+        <div>
+            <span style="font-size: 18px;color: #000;font-weight: bold">当前可用积分</span>
+        </div>
+    </div>
+    <div style="margin-top: 100px">
+        <div class="btn_reception">接收任务</div>
+        <div class="btn_publish">发布任务</div>
     </div>
 </div>
 

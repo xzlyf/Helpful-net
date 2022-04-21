@@ -222,11 +222,12 @@
             $.ajax({
                 url: "/login",
                 method: "POST",
+                async: false,
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(user),
                 success: function (res) {
                     console.log(res)
-                    window.location.href = "/"
+                    window.location.href="/home";
                 },
                 error: function (ex) {
                     alert("登陆失败")
