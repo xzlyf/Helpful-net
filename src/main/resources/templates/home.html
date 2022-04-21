@@ -93,6 +93,23 @@
             box-shadow: 1px 1px #000;
         }
 
+        .btn_logout {
+            display: inline-block;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 3px 5px 3px 5px;
+            font-size: 15px;
+            color: #fff;
+            background-color: #f00;
+            text-decoration: none;
+        }
+
+        .btn_logout:hover {
+            box-shadow: 1px 1px #000;
+            background-color: #c41717;
+
+        }
+
         .notice {
             width: 500px;
             height: auto;
@@ -101,7 +118,8 @@
             left: 50%;
             transform: translateX(-50%);
         }
-        .notice p{
+
+        .notice p {
             font-size: 18px;
             font-weight: normal;
         }
@@ -114,8 +132,8 @@
         <img th:src="@{/static/images/logo.png}">
     </div>
     <div class="user-tool">
-        <span style="font-size: 20px;font-weight: bold">[[${info.name}]]</span>
-        <span style="margin-left: 25px;font-size: 20px;font-weight: bold;color: #f00">退出登录</span>
+        <span style="font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
+        <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>
 <div class="center">
@@ -134,27 +152,27 @@
 </div>
 
 <div class="notice">
-    <h2>●公告</h2>
-    <p>本站完全免费，不存在任何付费形式</p>
-    <p>本站与所有用户无任何利益关系，所有积分不能用金钱交易。</p>
-    <p>本站秉承相互帮助，不存在刷分、刷赞等违反互联网法规，
-所有流量均为真实用户 </p>
 </div>
 
 <script>
     $(function () {
-        $(".btn-login").click(function () {
-            $("#index-view").hide(200)
-            $("#login-view").show(200)
-        })
-        $(".btn-register").click(function () {
-            $("#index-view").hide(200)
-            $("#register-view").show(200)
-        })
-        $(".t_back").click(function () {
-            $("#login-view").hide(200)
-            $("#register-view").hide(200)
-            $("#index-view").show(200)
+        $.ajax({
+            url: "/event/notice",
+            method: "GET",
+            success: function (res) {
+                if (res.code === 1) {
+                    let htm = "<h2>●公告</h2>";
+                    for (let i = 0; i < res.data.length; i++) {
+                        htm += "<p>" + res.data[i].text + "</p>"
+                    }
+                    $(".notice").html(htm)
+                } else {
+                    $(".notice").css("display", "none")
+                }
+            },
+            error: function () {
+                $(".notice").css("display", "none")
+            }
         })
     })
 </script>

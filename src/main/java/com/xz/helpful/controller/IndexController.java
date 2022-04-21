@@ -58,10 +58,10 @@ public class IndexController {
     }
 
     @GetMapping("/logout")
-    public Object logout() {
+    public String logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return BaseVo.success(null);
+        return "index";
     }
 
     @GetMapping("/home")

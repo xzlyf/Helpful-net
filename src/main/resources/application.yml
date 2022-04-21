@@ -19,3 +19,5 @@ spring:
     static-path-pattern: /static/**
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰命名和下划线自动转换

@@ -208,14 +208,15 @@
         })
 
         $("#login").click(function () {
+            $("#tips").css("visibility", "hidden")
             let email = $("#l-email").val()
             let pwd = $("#l-pwd").val()
             if (!isEmail(email)) {
-                alert("请输入正确的邮箱格式")
+                $("#tips").css("visibility", "visible").text("请输入正确的邮箱格式")
                 return
             }
             if (pwd.length < 6) {
-                alert("密码过短")
+                $("#tips").css("visibility", "visible").text("密码过短")
                 return
             }
             let user = {
@@ -230,10 +231,10 @@
                 data: JSON.stringify(user),
                 success: function (res) {
                     console.log(res)
-                    if (res != null && res.code == 1) {
-                        window.location.href="/home";
-                    }else{
-                        $("#tips").css("visibility","visible").text(res.data)
+                    if (res.code === 1) {
+                        window.location.href = "/home";
+                    } else {
+                        $("#tips").css("visibility", "visible").text(res.data)
                         $("#l-pwd").val("")
                     }
 

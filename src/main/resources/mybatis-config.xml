@@ -3,6 +3,10 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <settings>
+        <!-- 使用驼峰命名法转换字段。 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
     <!--配置mybatis运行环境-->
     <!--default=使用哪个配置源，这里使用dev的配置源-->
     <environments default="dev">
