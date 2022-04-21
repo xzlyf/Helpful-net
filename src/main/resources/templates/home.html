@@ -114,14 +114,14 @@
         <img th:src="@{/static/images/logo.png}">
     </div>
     <div class="user-tool">
-        <span style="font-size: 20px;font-weight: bold">用户名</span>
+        <span style="font-size: 20px;font-weight: bold">[[${info.name}]]</span>
         <span style="margin-left: 25px;font-size: 20px;font-weight: bold;color: #f00">退出登录</span>
     </div>
 </div>
 <div class="center">
     <div>
         <div>
-            <span style="font-size: 35px;color: #f00;font-weight: bolder">0</span>
+            <span style="font-size: 35px;color: #f00;font-weight: bolder">[[${info.wallet}]]</span>
         </div>
         <div>
             <span style="font-size: 18px;color: #000;font-weight: bold">当前可用积分</span>

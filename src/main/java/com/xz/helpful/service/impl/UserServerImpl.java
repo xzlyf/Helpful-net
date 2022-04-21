@@ -33,12 +33,15 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public UserVo login(User user) {
-        User login = userMapper.login(user);
+    public UserVo findByEmailInfo(String email) {
+        User login = userMapper.findByEmail(email);
         if (login == null) {
             return null;
         }
         Integer wallet = walletMapper.queryWallet(login.getId());
+        if (wallet==null){
+            wallet = 0;
+        }
         UserVo vo = new UserVo();
         BeanUtils.copyProperties(login, vo);
         vo.setWallet(wallet);

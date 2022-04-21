@@ -19,7 +19,7 @@ public class BaseVo {
     }
 
     public static BaseVo success(Object data) {
-        return new BaseVo(0, "成功", data);
+        return new BaseVo(1, "成功", data);
     }
 
     public static BaseVo failed(Object data) {

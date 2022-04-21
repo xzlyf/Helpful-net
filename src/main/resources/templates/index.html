@@ -163,7 +163,10 @@
         <p style="font-size: 20px;position:relative;left: 40px">密码</p>
         <input id="l-pwd" class="form-control" type="password">
     </form>
-    <div style="position:relative;margin-top: 40px">
+    <div style="margin-top: 25px;text-align: center;visibility:hidden">
+        <span id="tips" style="font-weight: bold;color: #f00">0</span>
+    </div>
+    <div style="position:relative;margin-top: 25px">
         <div id="login" class="btn-login" style="width: 100%"><span class="t_span">登录</span></div>
     </div>
 
@@ -227,7 +230,13 @@
                 data: JSON.stringify(user),
                 success: function (res) {
                     console.log(res)
-                    window.location.href="/home";
+                    if (res != null && res.code == 1) {
+                        window.location.href="/home";
+                    }else{
+                        $("#tips").css("visibility","visible").text(res.data)
+                        $("#l-pwd").val("")
+                    }
+
                 },
                 error: function (ex) {
                     alert("登陆失败")

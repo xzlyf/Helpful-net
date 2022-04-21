@@ -14,5 +14,5 @@ public interface UserServer {
 
     User findByEmail(String email);
 
-    UserVo login(User user);
+    UserVo findByEmailInfo(String email);
 }

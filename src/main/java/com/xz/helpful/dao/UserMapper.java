@@ -15,6 +15,4 @@ public interface UserMapper {
 
     User findByEmail(String email);
 
-    User login(User user);
-
 }
