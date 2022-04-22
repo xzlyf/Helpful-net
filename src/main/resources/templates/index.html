@@ -36,7 +36,7 @@
 
         .center {
             width: 400px;
-            height: 300px;
+            height: 400px;
             position: absolute;
             padding: 5px;
             top: 50%;
@@ -150,11 +150,11 @@
     <span>给予当下伙伴微小帮助，让世界充满啊爱</span>
     <img th:src="@{/static/images/biubiu.gif}" style="text-align: center">
     <div style="position:relative;margin-top: 20px">
-        <div class="btn-login"><span class="t_span">登录</span></div>
-        <div class="btn-register"><span class="t_span">注册</span></div>
+        <div id="v-login" class="btn-login"><span class="t_span">登录</span></div>
+        <div id="v-register" class="btn-register"><span class="t_span">注册</span></div>
     </div>
 </div>
-<div id="login-view" class="center" style="display: none">
+<div id="login-view" class="center" style="display: none;">
     <span class="t_back" style="font-size: 50px;font-weight: bold">&lt;登录</span>
     <hr style="height: 4px;background-color: black"/>
     <form>
@@ -172,7 +172,7 @@
 
 </div>
 
-<div id="register-view" class="center" style="display: none">
+<div id="register-view" class="center" style="display: none;">
     <span class="t_back" style="font-size: 50px;font-weight: bold">&lt;注册</span>
     <hr style="height: 4px;background-color: black"/>
     <form>
@@ -184,20 +184,32 @@
         <input class="form-control" type="text">
     </form>
     <div style="position:relative;margin-top: 40px">
-        <div class="btn-register" style="width: 100%"><span class="t_span">注册</span></div>
+        <div id="register" class="btn-register" style="width: 100%"><span class="t_span">注册</span></div>
     </div>
 
 </div>
+<div id="confirm-view" class="center" style="display: none">
+    <span style="font-size: 30px;font-weight: bold">验证码已发至您的邮箱</span>
+    <hr style="height: 4px;background-color: black"/>
+    <form>
+        <p style="font-size: 20px;position:relative;left: 40px">验证码</p>
+        <input class="form-control" type="email">
+    </form>
+    <div style="position:relative;margin-top: 40px">
+        <div class="btn-register" style="width: 100%"><span class="t_span">完成注册</span></div>
+    </div>
+</div>
+
 <div style="position:absolute;width: 99%;text-align: center;bottom: 20px">
     <span style="color: #424242">copyright by xz.studio</span>
 </div>
 <script>
     $(function () {
-        $(".btn-login").click(function () {
+        $("#v-login").click(function () {
             $("#index-view").hide(200)
             $("#login-view").show(200)
         })
-        $(".btn-register").click(function () {
+        $("#v-register").click(function () {
             $("#index-view").hide(200)
             $("#register-view").show(200)
         })
@@ -205,6 +217,11 @@
             $("#login-view").hide(200)
             $("#register-view").hide(200)
             $("#index-view").show(200)
+        })
+
+        $("#register").click(function () {
+            $("#register-view").hide(200)
+            $("#confirm-view").show(200)
         })
 
         $("#login").click(function () {
@@ -232,7 +249,8 @@
                 success: function (res) {
                     console.log(res)
                     if (res.code === 1) {
-                        window.location.href = "/home";
+                        // window.location.href = "/home";
+                        window.location.replace("/home");
                     } else {
                         $("#tips").css("visibility", "visible").text(res.data)
                         $("#l-pwd").val("")
