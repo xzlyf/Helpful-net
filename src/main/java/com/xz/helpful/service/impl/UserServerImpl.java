@@ -8,6 +8,7 @@ import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.CaptchaService;
 import com.xz.helpful.service.UserServer;
+import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RandomUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +27,7 @@ public class UserServerImpl implements UserServer {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private WalletMapper walletMapper;
+    private WalletServer walletServer;
     @Autowired
     private CaptchaService captchaService;
     @Autowired
@@ -62,7 +63,7 @@ public class UserServerImpl implements UserServer {
         if (login == null) {
             return null;
         }
-        Integer wallet = walletMapper.queryWallet(login.getId());
+        Integer wallet = walletServer.queryWallet(login.getId());
         if (wallet == null) {
             wallet = 0;
         }

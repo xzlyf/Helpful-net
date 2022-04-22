@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.WalletMapper">
 
-    <!--查询最新一条钱包数据-->
     <select id="queryWallet" resultType="java.lang.Integer">
-        select remain from wallet where user_id = #{userId} order by finish_time desc limit 0,1;
+        select sum(order_pay) from wallet where user_id = #{userId}
     </select>
 </mapper>
