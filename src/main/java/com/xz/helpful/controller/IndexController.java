@@ -2,6 +2,7 @@ package com.xz.helpful.controller;
 
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
+import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
 import org.apache.shiro.SecurityUtils;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @Author: xz
@@ -34,7 +36,7 @@ public class IndexController {
         //已登录的用户直接重定向至home页面
         if (subject.getPrincipal() == null) {
             modelAndView.setViewName("index");
-        }else{
+        } else {
             modelAndView.setViewName("redirect:/home");
         }
         return modelAndView;
@@ -68,10 +70,33 @@ public class IndexController {
     }
 
     @ResponseBody
-    @PostMapping("/register")
-    public Object register(@RequestBody User user) {
+    @PostMapping("/verify")
+    public Object verify(HttpSession session, @RequestBody RegisterVo registerVo) {
+        //存入session，校验邮件验证码时会用到
+        registerVo.setSession(session.getId());
+        return userServer.verify(registerVo);
+    }
 
-        return null;
+    @ResponseBody
+    @PostMapping("/register")
+    public Object register(HttpSession session,
+                           @RequestParam String email,
+                           @RequestParam String code) {
+        BaseVo vo = userServer.register(email, code, session.getId());
+        //注册成功后完成登录操作
+        if (vo.getCode() == 1) {
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(email, (String) vo.getData());
+            vo.setData(null);
+            try {
+                //进行验证，这里可以捕获异常，然后返回对应信息
+                subject.login(usernamePasswordToken);
+            } catch (UnknownAccountException e) {
+                return BaseVo.success("自动登录失败", 3);
+            }
+        }
+        return vo;
+
     }
 
     @GetMapping("/logout")

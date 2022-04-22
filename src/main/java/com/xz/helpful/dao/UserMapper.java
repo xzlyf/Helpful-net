@@ -15,4 +15,6 @@ public interface UserMapper {
 
     User findByEmail(String email);
 
+    Integer save(User user);
+
 }

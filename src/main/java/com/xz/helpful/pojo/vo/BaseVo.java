@@ -21,6 +21,9 @@ public class BaseVo {
     public static BaseVo success(Object data) {
         return new BaseVo(1, "成功", data);
     }
+    public static BaseVo success(Object data,int code) {
+        return new BaseVo(code, "成功", data);
+    }
 
     public static BaseVo failed(Object data) {
         return new BaseVo(-1, "失败", data);
@@ -29,7 +32,9 @@ public class BaseVo {
     public static BaseVo failed(Object data, String msg) {
         return new BaseVo(-1, msg, data);
     }
-
+    public static BaseVo failed(Object data, int code) {
+        return new BaseVo(code, "失败", data);
+    }
     public static BaseVo failed(Object data, String msg, int code) {
         return new BaseVo(code, msg, data);
     }

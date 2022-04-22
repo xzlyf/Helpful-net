@@ -177,14 +177,26 @@
     <hr style="height: 4px;background-color: black"/>
     <form>
         <p style="font-size: 20px;position:relative;left: 40px">邮箱</p>
-        <input class="form-control" type="email">
+        <input id="r-email" class="form-control" type="email">
         <p style="font-size: 20px;position:relative;left: 40px">密码</p>
-        <input class="form-control" type="password">
+        <input id="r-pwd" class="form-control" type="password">
         <p style="font-size: 20px;position:relative;left: 40px">邀请码</p>
-        <input class="form-control" type="text">
+        <input id="r-code" class="form-control" type="text">
+        <input id="token" value="" type="hidden" name="token">
     </form>
-    <div style="position:relative;margin-top: 40px">
-        <div id="register" class="btn-register" style="width: 100%"><span class="t_span">注册</span></div>
+    <div style="position:relative;left: 40px">
+        <p style="font-size: 20px;">验证码</p>
+        <a href="javascript:void(0);" title="点击更换验证码" tabindex="-1" style="text-decoration: none;">
+            <img style="vertical-align:middle;height: 48px" src="" alt="更换验证码" id="imgVerify" onclick="getVerify(this)">
+        </a>
+        <input id="verify-code" class="form-control" type="text"
+               style="width: 80px;height: 36px;vertical-align:middle;display: inline-block">
+    </div>
+    <div style="margin-top: 15px;text-align: center;visibility:hidden">
+        <span id="tips-r" style="font-weight: bold;color: #f00">0</span>
+    </div>
+    <div style="position:relative;margin-top: 20px">
+        <div id="verify" class="btn-register" style="width: 100%"><span class="t_span">注册</span></div>
     </div>
 
 </div>
@@ -193,16 +205,17 @@
     <hr style="height: 4px;background-color: black"/>
     <form>
         <p style="font-size: 20px;position:relative;left: 40px">验证码</p>
-        <input class="form-control" type="email">
+        <input id="h-code" class="form-control" type="text">
+        <input id="h-email" value="" type="hidden" name="email">
     </form>
-    <div style="position:relative;margin-top: 40px">
-        <div class="btn-register" style="width: 100%"><span class="t_span">完成注册</span></div>
+    <div style="margin-top: 15px;text-align: center;">
+        <span id="tips-h">验证码有效期为5分钟。</span>
+    </div>
+    <div style="position:relative;margin-top: 25px">
+        <div id="submit" class="btn-register" style="width: 100%"><span class="t_span">完成注册</span></div>
     </div>
 </div>
 
-<div style="position:absolute;width: 99%;text-align: center;bottom: 20px">
-    <span style="color: #424242">copyright by xz.studio</span>
-</div>
 <script>
     $(function () {
         $("#v-login").click(function () {
@@ -212,6 +225,8 @@
         $("#v-register").click(function () {
             $("#index-view").hide(200)
             $("#register-view").show(200)
+            let imgVerify = $("#imgVerify").get(0);
+            getVerify(imgVerify);
         })
         $(".t_back").click(function () {
             $("#login-view").hide(200)
@@ -219,9 +234,92 @@
             $("#index-view").show(200)
         })
 
-        $("#register").click(function () {
-            $("#register-view").hide(200)
-            $("#confirm-view").show(200)
+        $("#verify").click(function () {
+            let tips = $("#tips-r")
+            tips.css("visibility", "hidden")
+            let email = $("#r-email").val()
+            let pwd = $("#r-pwd").val()
+            if (!isEmail(email)) {
+                tips.css("visibility", "visible").text("请输入正确的邮箱格式")
+                return
+            }
+            if (pwd.length < 6) {
+                tips.css("visibility", "visible").text("密码过短")
+                return
+            }
+            let token = $("#token").val()
+            if (token.length === 0) {
+                tips.css("visibility", "visible").text("请刷新验证码")
+                return
+            }
+            let verify = $("#verify-code").val()
+            if (verify.length < 4) {
+                tips.css("visibility", "visible").text("请输入验证码")
+                return
+            }
+            let code = $("#r-code").val()
+            let data = {
+                verifyCode: verify,
+                token: token,
+                user: {
+                    email: email,
+                    passwd: pwd,
+                    code: code,
+                }
+            }
+            $.ajax({
+                url: "/verify",
+                method: "POST",
+                contentType: "application/json;charset=UTF-8",
+                data: JSON.stringify(data),
+                success: function (res) {
+                    console.log(res)
+                    if (res.code === 1) {
+                        $("#register-view").hide(200)
+                        $("#confirm-view").show(200)
+                        $("#h-email").val(email)
+                        return
+                    }
+                    tips.css("visibility", "visible").text(res.data)
+                },
+                error: function () {
+                    alert("致命错误，请稍后重试")
+                }
+
+            })
+
+        })
+        $("#submit").click(function () {
+            let email = $("#h-email").val();
+            let code = $("#h-code").val()
+            $.ajax({
+                url: "/register",
+                method: "POST",
+                data: {
+                    email: email,
+                    code: code
+                },
+                success: function (res) {
+                    console.log(res)
+                    if (res.code === 1) {
+                        //完成注册，跳转/home
+                        window.location.replace("/home");
+                    } else if (res.code === 2) {
+                        //邮箱已注册，跳转/index
+                        alert("邮箱已被注册")
+                        window.location.replace("/index");
+                    } else if (res.code === 3) {
+                        // 自动登录失败
+                        alert("注册成功")
+                        window.location.replace("/index");
+                    } else {
+                        $("#tips-h").text(res.data)
+                    }
+                },
+                error: function () {
+                    alert("致命错误，请稍后重试")
+                }
+            })
         })
 
         $("#login").click(function () {
@@ -267,6 +365,17 @@
     function isEmail(str) {
         let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
         return reg.test(str);
+    }
+
+    function getVerify(obj) {
+        $.ajax({
+            type: "GET",
+            url: "/event/captcha",
+            success: function (res) {
+                obj.src = "data:image/jpeg;base64," + res.img;
+                $("#token").val(res.token);
+            }
+        });
     }
 
 </script>

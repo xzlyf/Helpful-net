@@ -49,7 +49,10 @@ public class ShiroConfig {
         map.put("/logout", "logout");
         map.put("/", "anon");
         map.put("/login", "anon");
+        map.put("/register", "anon");
+        map.put("/verify", "anon");
         map.put("/static/**", "anon");
+        map.put("/event/**", "anon");
         map.put("/druid/**", "anon");//druid监控面板，测试用
         map.put("/**", "authc");
         //登录
