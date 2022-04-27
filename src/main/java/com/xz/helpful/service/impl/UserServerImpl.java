@@ -1,7 +1,6 @@
 package com.xz.helpful.service.impl;
 
 import com.xz.helpful.dao.UserMapper;
-import com.xz.helpful.dao.WalletMapper;
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
@@ -11,9 +10,13 @@ import com.xz.helpful.service.UserServer;
 import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RandomUtil;
 import com.xz.helpful.utils.RedisUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.List;
  */
 @Service
 public class UserServerImpl implements UserServer {
+    private static final Logger log = LoggerFactory.getLogger(UserServerImpl.class);
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -63,7 +67,7 @@ public class UserServerImpl implements UserServer {
         if (login == null) {
             return null;
         }
-        Integer wallet = walletServer.queryWallet(login.getId());
+        Integer wallet = walletServer.queryMoneyByUserId(login.getId());
         if (wallet == null) {
             wallet = 0;
         }
@@ -99,6 +103,7 @@ public class UserServerImpl implements UserServer {
 
         //TODO 发送邮件验证码。。。
         String code = RandomUtil.getRandomNum(4);
+        log.info("邮箱：" + registerVo.getUser().getEmail() + "\t验证码：" + code);//todo debug
         registerVo.setVerifyCode(code);//移除原先人机验证码，替换成邮箱验证码供后面使用
         //把待注册的信息写入redis，email作为key,绑定session请求
         redisUtil.set(registerVo.getUser().getEmail(), registerVo);
@@ -108,6 +113,7 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
+    @Transactional
     public BaseVo register(String email, String code, String session) {
         //校验邮件验证码
         if (!redisUtil.hasKey(email)) {
@@ -127,7 +133,11 @@ public class UserServerImpl implements UserServer {
         registerVo.getUser().setMycode(RandomUtil.getRandomNum(6));
         try {
             userMapper.save(registerVo.getUser());
+            //主键已获取registerVo.getUser().getId()
+            walletServer.initWallet(registerVo.getUser().getId());
         } catch (Exception e) {
+            //手动事务回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return BaseVo.failed("邮箱已注册！", 2);
         }
         return BaseVo.success(registerVo.getUser().getPasswd());

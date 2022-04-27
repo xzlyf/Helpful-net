@@ -13,10 +13,10 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -30,7 +30,7 @@ public class IndexController {
     private UserServer userServer;
 
     @GetMapping("/")
-    public ModelAndView root(HttpServletRequest request) {
+    public ModelAndView root() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         //已登录的用户直接重定向至home页面
@@ -79,10 +79,12 @@ public class IndexController {
 
     @ResponseBody
     @PostMapping("/register")
+    @Transactional(rollbackFor = Exception.class)
     public Object register(HttpSession session,
                            @RequestParam String email,
                            @RequestParam String code) {
-        BaseVo vo = userServer.register(email, code, session.getId());
+        BaseVo vo = null;
+        vo = userServer.register(email, code, session.getId());
         //注册成功后完成登录操作
         if (vo.getCode() == 1) {
             Subject subject = SecurityUtils.getSubject();

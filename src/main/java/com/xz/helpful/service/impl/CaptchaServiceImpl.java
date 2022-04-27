@@ -49,6 +49,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     //生成captcha验证码
     @Override
     public Map<String, Object> captchaCreator() throws IOException {
+        //todo 解决大量刷新验证码问题，大量验证码占用redis存储，解决方案，和session绑定，刷新销毁上次的验证码
         //生成文字验证码
         String text = producer.createText();
         //生成文字对应的图片验证码

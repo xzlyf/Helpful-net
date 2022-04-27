@@ -16,6 +16,6 @@ public class User {
     private String passwd;
     private String code;//使用的邀请码
     private String mycode;//自己的邀请码
-    private Date create_time;
-    private Date update_time;
+    private Date createTime;
+    private Date updateTime;
 }

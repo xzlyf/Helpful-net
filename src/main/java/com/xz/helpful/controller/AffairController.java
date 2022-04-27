@@ -51,7 +51,7 @@ public class AffairController {
      * 校验验证码
      */
     @PostMapping("/verify")
-    public Object login(String token,String code) {
+    public Object verify(String token,String code) {
         boolean isOk = captchaService.versifyCaptcha(token, code);
         if (!isOk) {
             return BaseVo.failed("验证码校验失败请重试");

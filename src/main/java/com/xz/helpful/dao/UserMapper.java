@@ -15,6 +15,12 @@ public interface UserMapper {
 
     User findByEmail(String email);
 
+    /**
+     * 新建用户
+     *
+     * @param user 用户信息
+     * @return 主键id
+     */
     Integer save(User user);
 
 }

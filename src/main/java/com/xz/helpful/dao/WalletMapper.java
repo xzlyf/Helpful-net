@@ -8,7 +8,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface WalletMapper {
+    void insertWallet(Integer userId, Integer money);
 
-    Integer queryWallet(Integer userId);
+    Integer queryMoneyByUserId(Integer userId);
 
+    Integer queryMoneyById(Integer id);
+
+    void updateMoney(int userId, int money);
 }
