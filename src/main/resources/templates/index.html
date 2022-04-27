@@ -273,7 +273,6 @@
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(data),
                 success: function (res) {
-                    console.log(res)
                     if (res.code === 1) {
                         $("#register-view").hide(200)
                         $("#confirm-view").show(200)
@@ -300,7 +299,6 @@
                     code: code
                 },
                 success: function (res) {
-                    console.log(res)
                     if (res.code === 1) {
                         //完成注册，跳转/home
                         window.location.replace("/home");
@@ -345,7 +343,6 @@
                 contentType: "application/json;charset=UTF-8",
                 data: JSON.stringify(user),
                 success: function (res) {
-                    console.log(res)
                     if (res.code === 1) {
                         // window.location.href = "/home";
                         window.location.replace("/home");

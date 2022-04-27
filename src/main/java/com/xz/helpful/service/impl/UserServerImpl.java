@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -114,17 +115,17 @@ public class UserServerImpl implements UserServer {
 
     @Override
     @Transactional
-    public BaseVo register(String email, String code, String session) {
+    public User register(String email, String code, String session) throws IOException {
         //校验邮件验证码
         if (!redisUtil.hasKey(email)) {
-            return BaseVo.failed("邮件验证码已过期，请重新发送");
+            throw new IOException("邮件验证码已过期，请重新发送");
         }
         RegisterVo registerVo = (RegisterVo) redisUtil.get(email);
         if (!session.equalsIgnoreCase(registerVo.getSession())) {
-            return BaseVo.failed("非法请求");
+            throw new IOException("非法请求");
         }
         if (!code.equalsIgnoreCase(registerVo.getVerifyCode())) {
-            return BaseVo.failed("验证码错误");
+            throw new IOException("验证码错误");
         }
         //验证完成后删除redis
         redisUtil.del(email);
@@ -133,13 +134,16 @@ public class UserServerImpl implements UserServer {
         registerVo.getUser().setMycode(RandomUtil.getRandomNum(6));
         try {
             userMapper.save(registerVo.getUser());
+        } catch (Exception e) {
+            throw new IOException("邮箱已注册");
+        }
+        try {
             //主键已获取registerVo.getUser().getId()
             walletServer.initWallet(registerVo.getUser().getId());
         } catch (Exception e) {
             //手动事务回滚
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return BaseVo.failed("邮箱已注册！", 2);
         }
-        return BaseVo.success(registerVo.getUser().getPasswd());
+        return registerVo.getUser();
     }
 }

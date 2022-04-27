@@ -5,6 +5,7 @@ import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,5 +26,5 @@ public interface UserServer {
     BaseVo verify(RegisterVo registerVo);
 
     //验证邮箱验证码并注册
-    BaseVo register(String email,String code,String session);
+    User register(String email,String code,String session) throws IOException;
 }

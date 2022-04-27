@@ -14,10 +14,12 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * @Author: xz
@@ -83,22 +85,26 @@ public class IndexController {
     public Object register(HttpSession session,
                            @RequestParam String email,
                            @RequestParam String code) {
-        BaseVo vo = null;
-        vo = userServer.register(email, code, session.getId());
+        User user = null;
+        try {
+            user = userServer.register(email, code, session.getId());
+        } catch (IOException e) {
+            return BaseVo.failed(e.getMessage());
+        }
         //注册成功后完成登录操作
-        if (vo.getCode() == 1) {
+        if (user != null) {
             Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(email, (String) vo.getData());
-            vo.setData(null);
+            UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(email, user.getPasswd());
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 subject.login(usernamePasswordToken);
             } catch (UnknownAccountException e) {
                 return BaseVo.success("自动登录失败", 3);
             }
+            return BaseVo.success("注册成功");
+        } else {
+            return BaseVo.failed("注册失败，请稍后重试");
         }
-        return vo;
-
     }
 
     @GetMapping("/logout")
