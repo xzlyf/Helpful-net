@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.ObjectUtils;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -79,15 +80,15 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public BaseVo verify(RegisterVo registerVo) {
+    public BaseVo verify(HttpSession session,RegisterVo registerVo) {
         boolean verify = verify(registerVo.getUser());
         if (!verify) {
             return BaseVo.failed("邮箱或密码不符合规范");
         }
-        if (ObjectUtils.isEmpty(registerVo.getToken()) || ObjectUtils.isEmpty(registerVo.getVerifyCode())) {
+        if (ObjectUtils.isEmpty(registerVo.getVerifyCode())) {
             return BaseVo.failed("验证码不符合规范");
         }
-        boolean isOk = captchaService.versifyCaptcha(registerVo.getToken(), registerVo.getVerifyCode());
+        boolean isOk = captchaService.versifyCaptcha(session, registerVo.getVerifyCode());
         if (!isOk) {
             return BaseVo.failed("验证码校验失败请重试");
         }
@@ -102,10 +103,13 @@ public class UserServerImpl implements UserServer {
             return BaseVo.success(0);
         }
 
+
         //TODO 发送邮件验证码。。。
         String code = RandomUtil.getRandomNum(4);
         log.info("邮箱：" + registerVo.getUser().getEmail() + "\t验证码：" + code);//todo debug
         registerVo.setVerifyCode(code);//移除原先人机验证码，替换成邮箱验证码供后面使用
+        //存入session，校验邮件验证码时会用到
+        registerVo.setSession(session.getId());
         //把待注册的信息写入redis，email作为key,绑定session请求
         redisUtil.set(registerVo.getUser().getEmail(), registerVo);
         //邮箱验证码与5分钟后过期，1分钟内不可重发

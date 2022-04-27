@@ -5,11 +5,11 @@ import com.xz.helpful.service.CaptchaService;
 import com.xz.helpful.utils.RedisUtil;
 import com.xz.helpful.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,33 +23,16 @@ import java.util.Map;
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
     @Autowired
-    private UUIDUtil uuidUtil;
-    @Autowired
     private RedisUtil redisUtil;
     @Autowired
     private DefaultKaptcha producer;
     //session过期时间 60秒
     private final Integer TIMEOUT = 60;
 
-    //UUID为key, 验证码为Value放在Redis中
-    @Override
-    public Map<String, Object> createToken(String captcha) {
-        //生成一个token
-        String key = uuidUtil.getUUID32();
-        //生成验证码对应的token  以token为key  验证码为value存在redis中
-        redisUtil.set(key, captcha);
-        //设置验证码过期时间
-        redisUtil.expire(key, TIMEOUT);
-        Map<String, Object> map = new HashMap<>();
-        map.put("token", key);
-        map.put("expire", TIMEOUT);
-        return map;
-    }
 
     //生成captcha验证码
     @Override
-    public Map<String, Object> captchaCreator() throws IOException {
-        //todo 解决大量刷新验证码问题，大量验证码占用redis存储，解决方案，和session绑定，刷新销毁上次的验证码
+    public Map<String, Object> captchaCreator(HttpSession session) throws IOException {
         //生成文字验证码
         String text = producer.createText();
         //生成文字对应的图片验证码
@@ -59,20 +42,27 @@ public class CaptchaServiceImpl implements CaptchaService {
         ImageIO.write(image, "jpg", outputStream);
         //对写出的字节数组进行Base64编码 ==> 用于传递8比特字节码
         BASE64Encoder encoder = new BASE64Encoder();
-        //生成token
-        Map<String, Object> token = createToken(text);
-        token.put("img", encoder.encode(outputStream.toByteArray()));
-        return token;
+        //返回数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("img", encoder.encode(outputStream.toByteArray()));
+        data.put("expire",TIMEOUT);
+        //存入redis
+        if (redisUtil.hasKey(session.getId())) {
+            redisUtil.del(session.getId());
+        }
+        redisUtil.set(session.getId(), text);
+        redisUtil.expire(session.getId(), TIMEOUT);
+        return data;
     }
 
     //验证输入的验证码是否正确
     @Override
-    public boolean versifyCaptcha(String token, String inputCode) {
+    public boolean versifyCaptcha(HttpSession session,String inputCode) {
         //根据前端传回的token在redis中找对应的value
-        if (redisUtil.hasKey(token)) {
+        if (redisUtil.hasKey(session.getId())) {
             //验证通过, 删除对应的key
-            if (redisUtil.get(token).equals(inputCode)) {
-                redisUtil.del(token);
+            if (redisUtil.get(session.getId()).equals(inputCode)) {
+                redisUtil.del(session.getId());
                 return true;
             } else {
                 return false;

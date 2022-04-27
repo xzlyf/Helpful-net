@@ -5,6 +5,7 @@ import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface UserServer {
     UserVo findByEmailInfo(String email);
 
     //验证人机，并验证邮箱是否注册，完成验证后发送验证码邮件，并把用户数据存入redis
-    BaseVo verify(RegisterVo registerVo);
+    BaseVo verify(HttpSession session,RegisterVo registerVo);
 
     //验证邮箱验证码并注册
     User register(String email,String code,String session) throws IOException;

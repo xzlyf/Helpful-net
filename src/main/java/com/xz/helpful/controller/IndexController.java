@@ -14,7 +14,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -74,9 +73,7 @@ public class IndexController {
     @ResponseBody
     @PostMapping("/verify")
     public Object verify(HttpSession session, @RequestBody RegisterVo registerVo) {
-        //存入session，校验邮件验证码时会用到
-        registerVo.setSession(session.getId());
-        return userServer.verify(registerVo);
+        return userServer.verify(session, registerVo);
     }
 
     @ResponseBody

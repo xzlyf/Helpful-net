@@ -182,7 +182,6 @@
         <input id="r-pwd" class="form-control" type="password">
         <p style="font-size: 20px;position:relative;left: 40px">邀请码</p>
         <input id="r-code" class="form-control" type="text">
-        <input id="token" value="" type="hidden" name="token">
     </form>
     <div style="position:relative;left: 40px">
         <p style="font-size: 20px;">验证码</p>
@@ -247,11 +246,6 @@
                 tips.css("visibility", "visible").text("密码过短")
                 return
             }
-            let token = $("#token").val()
-            if (token.length === 0) {
-                tips.css("visibility", "visible").text("请刷新验证码")
-                return
-            }
             let verify = $("#verify-code").val()
             if (verify.length < 4) {
                 tips.css("visibility", "visible").text("请输入验证码")
@@ -260,7 +254,6 @@
             let code = $("#r-code").val()
             let data = {
                 verifyCode: verify,
-                token: token,
                 user: {
                     email: email,
                     passwd: pwd,
@@ -370,7 +363,6 @@
             url: "/event/captcha",
             success: function (res) {
                 obj.src = "data:image/jpeg;base64," + res.img;
-                $("#token").val(res.token);
             }
         });
     }

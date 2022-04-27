@@ -10,7 +10,6 @@ import lombok.Data;
 @Data
 public class RegisterVo {
     private String verifyCode;
-    private String token;
     private String session;
     private User user;
 }
