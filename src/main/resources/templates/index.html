@@ -6,33 +6,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script type="text/javascript" th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <title>互助网</title>
     <style>
-        body {
-            /*所有元素不可选中*/
-            -moz-user-select: none;
-            -khtml-user-select: none;
-            user-select: none;
-        }
-
-        img {
-            max-width: 80%;
-            height: auto
-        }
-
-        .nav {
-            width: 80%;
-            height: 80px;
-            padding: 10px;
-        }
-
-        .logo {
-            position: relative;
-            top: 20px;
-            left: 20px;
-            display: inline-block;
-        }
 
         .center {
             width: 400px;
@@ -140,15 +117,15 @@
 <body>
 <div class="nav">
     <div class="logo">
-        <img th:src="@{/static/images/logo.png}">
+        <img th:src="@{/images/logo.png}">
     </div>
 </div>
 
 <div id="index-view" class="center">
-    <img th:src="@{/static/images/index_title.png}">
+    <img th:src="@{/images/index_title.png}">
     <hr style="height: 4px;background-color: black"/>
     <span>给予当下伙伴微小帮助，让世界充满啊爱</span>
-    <img th:src="@{/static/images/biubiu.gif}" style="text-align: center">
+    <img th:src="@{/images/biubiu.gif}" style="text-align: center">
     <div style="position:relative;margin-top: 20px">
         <div id="v-login" class="btn-login"><span class="t_span">登录</span></div>
         <div id="v-register" class="btn-register"><span class="t_span">注册</span></div>
@@ -364,7 +341,7 @@
             success: function (res) {
                 if (res.code === 1) {
                     obj.src = "data:image/jpeg;base64," + res.data.img;
-                }else{
+                } else {
                     alert(res.data)
                 }
             }

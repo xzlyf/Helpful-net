@@ -4,9 +4,7 @@ import com.xz.helpful.shiro.UserRealm;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -46,15 +44,21 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
+        map.put("/**", "authc");
         map.put("/logout", "logout");
         map.put("/", "anon");
         map.put("/login", "anon");
         map.put("/register", "anon");
         map.put("/verify", "anon");
-        map.put("/static/**", "anon");
+        //event事件接口公开访问
         map.put("/event/**", "anon");
-        map.put("/druid/**", "anon");//druid监控面板，测试用
-        map.put("/**", "authc");
+        //druid监控面板，测试用
+        map.put("/druid/**", "anon");
+        //静态资源访问
+        map.put("/css/**", "anon");
+        map.put("/js/**", "anon");
+        map.put("/images/**", "anon");
+        map.put("/favicon.ico", "anon");
         //登录
         shiroFilterFactoryBean.setLoginUrl("/");
         //首页

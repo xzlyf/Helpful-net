@@ -32,7 +32,7 @@ spring:
     encoding: utf-8                 #编码方式
     cache: false                    #关闭缓存,每次都会重新加载页面,开发过程可以立即看到页面修改的结果
   mvc:
-    static-path-pattern: /static/**
+    static-path-pattern: /**
   #Redis配置
   redis:
     host: localhost

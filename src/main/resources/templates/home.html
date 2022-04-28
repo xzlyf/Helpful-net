@@ -6,33 +6,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script type="text/javascript" th:src="@{/static/js/jquery-3.6.0.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <title>互助网</title>
     <style>
-        body {
-            /*所有元素不可选中*/
-            -moz-user-select: none;
-            -khtml-user-select: none;
-            user-select: none;
-        }
-
-        img {
-            max-width: 80%;
-            height: auto
-        }
-
-        .nav {
-            width: 99%;
-            height: 80px;
-            padding: 10px;
-        }
-
-        .logo {
-            position: relative;
-            top: 20px;
-            left: 20px;
-            display: inline-block;
-        }
 
         .user-tool {
             position: relative;
@@ -155,7 +132,7 @@
 <body>
 <div class="nav">
     <div class="logo">
-        <img th:src="@{/static/images/logo.png}">
+        <img th:src="@{/images/logo.png}">
     </div>
     <div class="user-tool">
         <span style="font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
