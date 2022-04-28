@@ -362,7 +362,11 @@
             type: "GET",
             url: "/event/captcha",
             success: function (res) {
-                obj.src = "data:image/jpeg;base64," + res.img;
+                if (res.code === 1) {
+                    obj.src = "data:image/jpeg;base64," + res.data.img;
+                }else{
+                    alert(res.data)
+                }
             }
         });
     }

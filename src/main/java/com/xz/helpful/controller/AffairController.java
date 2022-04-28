@@ -1,19 +1,18 @@
 package com.xz.helpful.controller;
 
+import com.xz.helpful.annotation.LimitRequest;
 import com.xz.helpful.pojo.Notice;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.service.CaptchaService;
 import com.xz.helpful.service.NoticeServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: xz
@@ -44,8 +43,9 @@ public class AffairController {
      * 刷新验证码
      */
     @GetMapping("/captcha")
-    public Map<String, Object> captcha(HttpSession session) throws IOException {
-        return captchaService.captchaCreator(session);
+    @LimitRequest(count = 5)
+    public Object captcha(HttpSession session) throws IOException {
+        return BaseVo.success(captchaService.captchaCreator(session));
     }
 
     ///**
