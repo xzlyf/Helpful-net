@@ -2,7 +2,14 @@ package com.xz.helpful.service;
 
 import com.xz.helpful.pojo.Task;
 
+import java.util.List;
+
 public interface TaskService {
+    List<Task> findAll();
+
+    /**
+     * 根据任务id查询任务
+     */
     Task findById(Integer id);
 
     /**

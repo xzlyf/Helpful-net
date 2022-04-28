@@ -15,5 +15,24 @@
         <img th:src="@{/images/logo.png}">
     </div>
 </div>
+
+<script>
+    $(function () {
+        getTaskList()
+    })
+
+    function getTaskList() {
+        $.ajax({
+            url:"/taskhall/get",
+            method:"GET",
+            success:function (res) {
+                console.log(res)
+            },
+            error:function () {
+                alert("请求失败")
+            }
+        })
+    }
+</script>
 </body>
 </html>

@@ -44,13 +44,13 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
-        map.put("/**", "authc");
+
         map.put("/logout", "logout");
         map.put("/", "anon");
         map.put("/login", "anon");
         map.put("/register", "anon");
         map.put("/verify", "anon");
-        //event事件接口公开访问
+        //AffairController接口公开访问
         map.put("/event/**", "anon");
         //druid监控面板，测试用
         map.put("/druid/**", "anon");
@@ -59,6 +59,7 @@ public class ShiroConfig {
         map.put("/js/**", "anon");
         map.put("/images/**", "anon");
         map.put("/favicon.ico", "anon");
+        map.put("/**", "authc");
         //登录
         shiroFilterFactoryBean.setLoginUrl("/");
         //首页

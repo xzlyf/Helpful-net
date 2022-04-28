@@ -11,4 +11,10 @@
         from tasklist
         where id = #{id}
     </select>
+    <select id="findAll" resultType="com.xz.helpful.pojo.Task">
+        select task_type, task_pay, task_from, create_time, task_desc, task_url
+        from tasklist
+        where is_enable = 1
+          and is_hidden = 0
+    </select>
 </mapper>
