@@ -70,12 +70,18 @@ public class IndexController {
         return BaseVo.success(null);
     }
 
+    /**
+     * 人机验证码验证接口（携带注册信息）
+     */
     @ResponseBody
     @PostMapping("/verify")
     public Object verify(HttpSession session, @RequestBody RegisterVo registerVo) {
         return userServer.verify(session, registerVo);
     }
 
+    /**
+     * 邮件验证接口
+     */
     @ResponseBody
     @PostMapping("/register")
     @Transactional(rollbackFor = Exception.class)
@@ -124,6 +130,13 @@ public class IndexController {
         }
         modelAndView.setViewName("home");
         modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
+
+    @GetMapping("/receive")
+    public ModelAndView receiveTask(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("receive");
         return modelAndView;
     }
 
