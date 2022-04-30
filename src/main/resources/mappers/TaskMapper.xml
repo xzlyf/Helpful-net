@@ -17,4 +17,11 @@
         where is_enable = 1
           and is_hidden = 0
     </select>
+    <select id="getOne" resultType="com.xz.helpful.pojo.Task">
+        SELECT *
+        FROM tasklist AS t1
+                 JOIN (SELECT ROUND(RAND() * (SELECT MAX(id) FROM tasklist)) AS id) AS t2
+        WHERE t1.id >= t2.id
+        ORDER BY t1.id LIMIT 1;
+    </select>
 </mapper>

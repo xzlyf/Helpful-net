@@ -24,6 +24,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Task getOne() {
+        //todo 随机获取一任务，任务完成后写入filter表
+        return taskMapper.getOne();
+    }
+
+    @Override
+    public void finishOne(Integer userId, Integer taskId) {
+        //写入filter任务过滤表
+        //用户积分增加
+        //失败回滚
+    }
+
+    @Override
     public void updateTaskEnable(Integer id, Boolean on) {
         taskMapper.updateTaskEnable(id, on ? 1 : 0);
     }

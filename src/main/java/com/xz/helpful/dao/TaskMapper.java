@@ -9,7 +9,9 @@ import java.util.List;
 public interface TaskMapper {
     Task findById(Integer id);
 
-    void updateTaskEnable(Integer id, Integer enable);
-
     List<Task> findAll();
+
+    Task getOne();
+
+    void updateTaskEnable(Integer id, Integer enable);
 }

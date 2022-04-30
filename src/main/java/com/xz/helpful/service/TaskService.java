@@ -13,6 +13,16 @@ public interface TaskService {
     Task findById(Integer id);
 
     /**
+     * 随机获取一个任务
+     */
+    Task getOne();
+
+    /**
+     * 完成一个任务
+     */
+    void finishOne(Integer userId,Integer taskId);
+
+    /**
      * 设置任务启用状态
      * @param id 任务id
      * @param on true 开启， false 关闭
