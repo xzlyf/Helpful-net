@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class HelpfulApplicationTests {
 
 
@@ -19,6 +19,14 @@ class HelpfulApplicationTests {
     @Test
     void contextLoads() {
         walletServer.initWallet(2);
+    }
+
+    @Test
+    void textMain(){
+        String st = "11@qq.com";
+        String st2 = "22@qq.com";
+        System.out.println(st.hashCode());
+        System.out.println(st2.hashCode());
     }
 
 }

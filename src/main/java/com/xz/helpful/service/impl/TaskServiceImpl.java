@@ -25,8 +25,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task getOne() {
-        //todo 随机获取一任务，任务完成后写入filter表
-        return taskMapper.getOne();
+        List<Task> tasks = taskMapper.getMore(10);
+        return null;
     }
 
     @Override
