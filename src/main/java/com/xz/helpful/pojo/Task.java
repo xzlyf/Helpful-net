@@ -2,10 +2,11 @@ package com.xz.helpful.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class Task {
+public class Task implements Serializable {
     private Integer id;
     private Integer taskType;
     private Integer taskPay;

@@ -14,8 +14,9 @@ public interface TaskService {
 
     /**
      * 随机获取一个任务
+     * @param userId 用户id
      */
-    Task getOne();
+    Task getOne(Integer userId);
 
     /**
      * 完成一个任务
