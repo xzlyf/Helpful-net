@@ -1,5 +1,6 @@
 package com.xz.helpful;
 
+import com.xz.helpful.pojo.Task;
 import com.xz.helpful.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ class HelpfulApplicationTests {
     TaskService taskService;
     @Test
     void contextLoads() {
-        taskService.getOne(25);
+        Task one = taskService.getOne(25);
+        System.out.println(one.toString());
     }
 
     @Test

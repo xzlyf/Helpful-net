@@ -17,6 +17,8 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private RedisUtil redisUtil;
 
+    public static final String REDIS_TASK_KEY = "task_list";
+
     @Override
     public List<Task> findAll() {
         return taskMapper.findAll();
@@ -31,16 +33,34 @@ public class TaskServiceImpl implements TaskService {
     public Task getOne(Integer userId) {
         //以用户email的hashcode查询redis，是否存缓存。没有重新拉去数据库，并缓存到redis供下次使用
         String userKey = String.valueOf(userId);
-        List<Task> tasks = ConvertUtil.castList(redisUtil.get(userKey), Task.class);
+        //List<Task> tasks = ConvertUtil.castList(redisUtil.get(userKey), Task.class);
+        //if (tasks == null) {
+        //    //redis没有查询到数据，重新去sql拉取n条未执行的任务
+        //    tasks = taskMapper.getNotInFilterTask(25, 10);
+        //    //并存入redis
+        //    redisUtil.set(userKey, tasks);
+        //}
+        ////刷新存活时间5分钟
+        //redisUtil.expire(userKey, 300);
+
+        List<Task> tasks = ConvertUtil.castList(redisUtil.hget(REDIS_TASK_KEY, userKey), Task.class);
         if (tasks == null) {
-            //redis没有查询到数据，重新去sql拉取n条未执行的任务
-            tasks = taskMapper.getNotInFilterTask(25, 10);
-            //并存入redis
-            redisUtil.set(userKey, tasks);
+            //缓存空，查询数据库，保存至缓存，重新去sql拉取n条未执行的任务
+            tasks = taskMapper.getNotInFilterTask(userId, 2);
         }
-        //刷新存活时间5分钟
-        redisUtil.expire(userKey, 300);
-        return null;
+        //取出一条数据,并更新redis
+        Task target = null;
+        if (tasks.size() > 0) {
+            target = tasks.remove(0);
+            redisUtil.hset(REDIS_TASK_KEY, userKey, tasks);
+            //刷新存活时间5分钟
+            redisUtil.expire(REDIS_TASK_KEY, 300);
+        }
+        //清理redis
+        if (tasks.size() == 0) {
+            redisUtil.hdel(REDIS_TASK_KEY, userKey);
+        }
+        return target;
     }
 
     @Override
