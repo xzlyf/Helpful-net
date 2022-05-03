@@ -15,6 +15,8 @@ public interface UserMapper {
 
     User findByEmail(String email);
 
+    Integer findUserIdByEmail(String email);
+
     /**
      * 新建用户
      *

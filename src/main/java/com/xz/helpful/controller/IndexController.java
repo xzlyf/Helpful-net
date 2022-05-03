@@ -1,10 +1,12 @@
 package com.xz.helpful.controller;
 
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
+import com.xz.helpful.utils.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -29,6 +31,8 @@ import java.io.IOException;
 public class IndexController {
     @Autowired
     private UserServer userServer;
+    @Autowired
+    private RedisUtil redisUtil;
 
     @GetMapping("/")
     public ModelAndView root() {
@@ -60,6 +64,10 @@ public class IndexController {
         try {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
+            //存入Redis绑定email和用户id
+            Integer userId = userServer.findUserIdByEmail(user.getEmail());
+            redisUtil.hset(RedisKey.REDIS_USER_ID, user.getEmail(), userId);
+
         } catch (UnknownAccountException e) {
             return BaseVo.failed("用户名不存在");
         } catch (AuthenticationException e) {
@@ -101,6 +109,8 @@ public class IndexController {
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 subject.login(usernamePasswordToken);
+                //存入Redis绑定email和用户id
+                redisUtil.hset(RedisKey.REDIS_USER_ID, user.getEmail(), user.getId());
             } catch (UnknownAccountException e) {
                 return BaseVo.success("自动登录失败", 3);
             }
@@ -134,7 +144,7 @@ public class IndexController {
     }
 
     @GetMapping("/receive")
-    public ModelAndView receiveTask(){
+    public ModelAndView receiveTask() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("receive");
         return modelAndView;

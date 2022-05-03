@@ -22,8 +22,9 @@
     })
 
     function getTaskList() {
+        let url = "/taskhall/get?r="+Math.random();
         $.ajax({
-            url:"/taskhall/get",
+            url:url,
             method:"GET",
             success:function (res) {
                 console.log(res)

@@ -14,4 +14,7 @@
         from user
         where email = #{email}
     </select>
+    <select id="findUserIdByEmail" resultType="java.lang.Integer">
+        select id from user where email = #{email}
+    </select>
 </mapper>

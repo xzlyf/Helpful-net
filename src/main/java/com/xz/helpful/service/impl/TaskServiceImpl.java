@@ -1,6 +1,7 @@
 package com.xz.helpful.service.impl;
 
 import com.xz.helpful.dao.TaskMapper;
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.service.TaskService;
 import com.xz.helpful.utils.ConvertUtil;
@@ -17,7 +18,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     private RedisUtil redisUtil;
 
-    public static final String REDIS_TASK_KEY = "task_list";
 
     @Override
     public List<Task> findAll() {
@@ -32,18 +32,30 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task getOne(Integer userId) {
         //以用户email的hashcode查询redis，是否存缓存。没有重新拉去数据库，并缓存到redis供下次使用
-        String userKey = String.valueOf(userId);
-        //List<Task> tasks = ConvertUtil.castList(redisUtil.get(userKey), Task.class);
-        //if (tasks == null) {
-        //    //redis没有查询到数据，重新去sql拉取n条未执行的任务
-        //    tasks = taskMapper.getNotInFilterTask(25, 10);
-        //    //并存入redis
-        //    redisUtil.set(userKey, tasks);
-        //}
-        ////刷新存活时间5分钟
-        //redisUtil.expire(userKey, 300);
+        String userKey = RedisKey.REDIS_TASK_KEY + userId;
 
-        List<Task> tasks = ConvertUtil.castList(redisUtil.hget(REDIS_TASK_KEY, userKey), Task.class);
+
+        /*方案一*/
+        List<Task> tasks = ConvertUtil.castList(redisUtil.get(userKey), Task.class);
+        if (tasks == null) {
+            //redis没有查询到数据，重新去sql拉取n条未执行的任务
+            tasks = taskMapper.getNotInFilterTask(userId, 10);
+
+        }
+        Task target = null;
+        if (tasks.size() > 0) {
+            //移出第一个任务，其余的保存在redis
+            target = tasks.remove(0);
+            redisUtil.set(userKey, tasks);
+            redisUtil.expire(userKey, 300);
+        }
+        //如果等于tasks等于0直接删除redis
+        if (tasks.size() == 0) {
+            redisUtil.del(userKey);
+        }
+
+       /* 方案二
+       List<Task> tasks = ConvertUtil.castList(redisUtil.hget(REDIS_TASK_KEY, userKey), Task.class);
         if (tasks == null) {
             //缓存空，查询数据库，保存至缓存，重新去sql拉取n条未执行的任务
             tasks = taskMapper.getNotInFilterTask(userId, 2);
@@ -60,6 +72,8 @@ public class TaskServiceImpl implements TaskService {
         if (tasks.size() == 0) {
             redisUtil.hdel(REDIS_TASK_KEY, userKey);
         }
+        */
+
         return target;
     }
 
