@@ -7,7 +7,20 @@
     <link rel="stylesheet" th:href="@{/css/task-view.css}">
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <style>
+        .main {
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
 
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        tr,td,th{
+            padding: 10px;
+            border: 2px solid black;
+        }
     </style>
 </head>
 <body>
@@ -17,10 +30,23 @@
     </div>
 </div>
 
-<div>
-    <div id="task-view">
-
-    </div>
+<div class="main">
+    <table>
+        <tr>
+            <td>
+                <div>
+                    <span>返回</span>
+                    <span>观看任务</span>
+                    <span>教程</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="task-view"></div>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <script>
