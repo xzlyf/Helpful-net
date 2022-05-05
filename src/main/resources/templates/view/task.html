@@ -1,10 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="task-view">
+    <div>
+        <h1>[[${task.taskDesc}]]</h1>
+    </div>
+    <div class="info-view">
+        <div>
+            <b>积分：</b>
+            <span>[[${task.taskPay}]]</span>
+        </div>
+        <div>
+            <b>任务来至：</b>
+            <span>[[${task.taskFrom}]]</span>
+        </div>
+    </div>
+    <div class="controller-bar">
+        <span class="btn-re">接受</span>
+        <span class="btn-next">跳过</span>
+    </div>
+</div>

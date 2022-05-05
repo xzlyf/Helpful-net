@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>互助网-任务大厅</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/task-view.css}">
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <style>
 
@@ -16,21 +17,29 @@
     </div>
 </div>
 
+<div>
+    <div id="task-view">
+
+    </div>
+</div>
+
 <script>
     $(function () {
         getTaskList()
     })
 
     function getTaskList() {
-        let url = "/taskhall/get?r="+Math.random();
+        let url = "/taskhall/get?r=" + Math.random();
         $.ajax({
-            url:url,
-            method:"GET",
-            success:function (res) {
+            url: url,
+            method: "GET",
+            success: function (res) {
                 console.log(res)
+                $("#task-view").html(res)
             },
-            error:function () {
-                alert("请求失败")
+            error: function () {
+                // alert("请求失败")
+                console.log("请求失败")
             }
         })
     }
