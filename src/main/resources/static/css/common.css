@@ -22,3 +22,7 @@ img {
     left: 20px;
     display: inline-block;
 }
+
+.disable {
+    pointer-events: none;
+}
