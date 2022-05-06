@@ -17,10 +17,22 @@
             margin: 0 auto;
             border-collapse: collapse;
         }
-        tr,td,th{
-            padding: 10px;
-            border: 2px solid black;
+
+        /*边框和内边距*/
+        tr, td, th {
+            /*padding: 10px;*/
+            /*border: 2px solid black;*/
         }
+
+        .flag {
+            font-size: xx-large;
+            font-weight: 1000;
+        }
+        a:hover{
+            color: #555555;
+        }
+
+
     </style>
 </head>
 <body>
@@ -34,16 +46,23 @@
     <table>
         <tr>
             <td>
-                <div>
-                    <span>返回</span>
-                    <span>观看任务</span>
-                    <span>教程</span>
-                </div>
+                <span class="flag" onclick="back()"><a>&lt;返回</a></span>
+            </td>
+            <td style="text-align: right;font-style: italic;">
+                <span class="flag">观看<span style="color: #f00">任务</span></span>
             </td>
         </tr>
         <tr>
-            <td>
+            <td colspan="2">
                 <div id="task-view"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 20px">
+                <div class="task-view">
+                    <span class="flag" style="font-size: large">☑️使用教程</span>
+                    <p>点击"接受"后,会打开一个新的窗口,等待时间结束,关闭即可完成任务</p>
+                </div>
             </td>
         </tr>
     </table>
@@ -53,6 +72,9 @@
     $(function () {
         getTaskList()
     })
+    function back() {
+        window.history.back()
+    }
 
     function getTaskList() {
         let url = "/taskhall/get?r=" + Math.random();
