@@ -1,4 +1,4 @@
-<div class="task-view">
+<div class="task-view" xmlns:th="http://www.thymeleaf.org">
     <div>
         <h1>[[${task.taskDesc}]]</h1>
     </div>
@@ -11,9 +11,15 @@
             <b>任务来至：</b>
             <span>[[${task.taskFrom}]]</span>
         </div>
+        <div>
+            <b>任务进度：</b>
+            <span>0%</span>
+        </div>
     </div>
     <div class="controller-bar">
-        <span class="btn-re">接受</span>
-        <span class="btn-next" onclick="getTaskList()">跳过</span>
+        <span class="btn-re" onclick="newWindows(this)">接受</span>
+        <span class="btn-next" onclick="getTaskList(this)">跳过</span>
     </div>
+    <input id="remote_url" type="hidden" th:value="${task.taskUrl}">
+    <input id="remote_id" type="hidden" th:value="${task.id}">
 </div>

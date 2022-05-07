@@ -158,7 +158,7 @@
 </div>
 
 <script>
-    $(function () {
+    function getNotices() {
         $.ajax({
             url: "/event/notice",
             method: "GET",
@@ -177,6 +177,9 @@
                 $(".notice").css("display", "none")
             }
         })
+    }
+    $(function () {
+        getNotices()
     })
 </script>
 </body>

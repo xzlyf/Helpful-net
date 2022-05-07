@@ -13,6 +13,31 @@
             position: relative;
         }
 
+        .user-tool {
+            position: relative;
+            display: inline-block;
+            right: 200px;
+            top: 20px;
+            float: right;
+        }
+        .btn_logout {
+            display: inline-block;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 3px 5px 3px 5px;
+            font-size: 15px;
+            color: #fff;
+            background-color: #f00;
+            text-decoration: none;
+        }
+
+        .btn_logout:hover {
+            box-shadow: 1px 1px #000;
+            background-color: #c41717;
+            color: white;
+
+        }
+
         table {
             margin: 0 auto;
             border-collapse: collapse;
@@ -28,7 +53,8 @@
             font-size: xx-large;
             font-weight: 1000;
         }
-        a:hover{
+
+        a:hover {
             color: #555555;
         }
 
@@ -39,6 +65,10 @@
 <div class="nav">
     <div class="logo">
         <img th:src="@{/images/logo.png}">
+    </div>
+    <div class="user-tool">
+        <span style="font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
+        <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>
 
@@ -62,6 +92,8 @@
                 <div class="task-view">
                     <span class="flag" style="font-size: large">☑️使用教程</span>
                     <p>点击"接受"后,会打开一个新的窗口,等待时间结束,关闭即可完成任务</p>
+                    <p>秉承互助精神，你完成任务获取的积分，可用于发布任务消耗积分。</p>
+                    <p>这是一个互助的循环！</p>
                 </div>
             </td>
         </tr>
@@ -72,24 +104,52 @@
     $(function () {
         getTaskList()
     })
+
     function back() {
         window.history.back()
     }
 
-    function getTaskList() {
+    function getTaskList(obj) {
+        $(obj).addClass("disable")
         let url = "/taskhall/get?r=" + Math.random();
         $.ajax({
             url: url,
             method: "GET",
-            success: function (res) {
-                console.log(res)
-                $("#task-view").html(res)
+            success: function (result, status, xhr) {
+                $(obj).removeClass("disable")
+                // console.log("result=" + result)
+                // console.log("status=" + status)
+                // console.log("状态码=" + xhr.status)
+                $("#task-view").html(result)
             },
             error: function () {
-                // alert("请求失败")
-                console.log("请求失败")
-            }
+                $(obj).removeClass("disable")
+                alert("请求失败")
+                // console.log("请求失败")
+            },
         })
+    }
+
+    function newWindows(obj) {
+        url = $("#remote_url").val()
+        taskId = $("#remote_id").val()
+        let btn = $(obj);
+        btn.addClass("disable")
+
+
+        const w = window.open(url + "?autoplay=1", "b-windows", "width=600,height=400,top=0,left=0,toolbar=no,menubar=no,location=no,status=no")
+        const loop = setInterval(function () {
+            if (w && w.closed) {
+                console.log('我被关闭了')
+                btn.removeClass("disable")
+                clearInterval(loop);
+                checkTaskDone(taskId)
+            }
+        }, 1000)
+    }
+
+    function checkTaskDone(taskId) {
+
     }
 </script>
 </body>

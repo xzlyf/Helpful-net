@@ -323,7 +323,7 @@
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify(user),
             success: function (res) {
-                hideLoading("#btLogin", "登录")
+                hideLoading(obj, "登录")
 
                 if (res.code === 1) {
                     // window.location.href = "/home";
@@ -335,7 +335,7 @@
 
             },
             error: function (ex) {
-                hideLoading("#btLogin", "登录")
+                hideLoading(obj, "登录")
                 alert("登陆失败")
             },
         })

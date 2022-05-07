@@ -146,7 +146,16 @@ public class IndexController {
     @GetMapping("/receive")
     public ModelAndView receiveTask() {
         ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findByEmailInfo(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
         modelAndView.setViewName("receive");
+        modelAndView.addObject("info", userInfo);
         return modelAndView;
     }
 
