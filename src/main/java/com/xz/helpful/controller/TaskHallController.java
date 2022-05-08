@@ -12,14 +12,11 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * 任务大厅接口
@@ -48,7 +45,7 @@ public class TaskHallController {
             return modelAndView;
         }
         //1、从redis根据email取出userID
-        Integer userId = (Integer) redisUtil.hget(RedisKey.REDIS_USER_ID, email);
+        Integer userId = (Integer) redisUtil.get(RedisKey.REDIS_USER_ID+email);
         //2、没有取到让用户重新登录(或取数据库)
         if (userId == null) {
             userId = userServer.findUserIdByEmail(email);

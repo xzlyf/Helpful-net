@@ -66,7 +66,7 @@ public class IndexController {
             subject.login(usernamePasswordToken);
             //存入Redis绑定email和用户id
             Integer userId = userServer.findUserIdByEmail(user.getEmail());
-            redisUtil.hset(RedisKey.REDIS_USER_ID, user.getEmail(), userId);
+            redisUtil.set(RedisKey.REDIS_USER_ID + user.getEmail(), userId);
 
         } catch (UnknownAccountException e) {
             return BaseVo.failed("用户名不存在");
@@ -110,7 +110,7 @@ public class IndexController {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 subject.login(usernamePasswordToken);
                 //存入Redis绑定email和用户id
-                redisUtil.hset(RedisKey.REDIS_USER_ID, user.getEmail(), user.getId());
+                redisUtil.set(RedisKey.REDIS_USER_ID + user.getEmail(), user.getId());
             } catch (UnknownAccountException e) {
                 return BaseVo.success("自动登录失败", 3);
             }
@@ -123,7 +123,12 @@ public class IndexController {
     @GetMapping("/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
+        String em = subject.getPrincipal().toString();
         subject.logout();
+        //清除redis保留的用户信息
+        if (em != null) {
+            redisUtil.del(RedisKey.REDIS_USER_ID);
+        }
         return "index";
     }
 

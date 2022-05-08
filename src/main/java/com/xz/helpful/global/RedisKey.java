@@ -5,8 +5,8 @@ package com.xz.helpful.global;
  */
 public class RedisKey {
     //任务列表+userId
-    public static final String REDIS_TASK_KEY = "task_list_";
+    public static final String REDIS_TASK_KEY = "user:task:";
 
     //用户邮箱绑定id
-    public static final String REDIS_USER_ID = "emailAndId";
+    public static final String REDIS_USER_ID = "user:email:";
 }
