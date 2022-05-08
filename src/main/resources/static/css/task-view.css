@@ -18,13 +18,13 @@
 
 .progress-bar {
     display: flex;
-    white-space: nowrap
+    white-space: nowrap;
 }
 
 .progress-bar-view {
     width: 0%;
     display: inline-block;
-    background-color: cornflowerblue
+    background-color: cornflowerblue;
 }
 
 .controller-bar {

@@ -2,9 +2,11 @@ package com.xz.helpful.controller;
 
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
+import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.service.TaskService;
 import com.xz.helpful.service.UserServer;
 import com.xz.helpful.utils.RedisUtil;
+import com.xz.helpful.utils.UUIDUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -30,6 +33,8 @@ public class TaskHallController {
     private RedisUtil redisUtil;
     @Autowired
     private UserServer userServer;
+    @Autowired
+    private UUIDUtil uuidUtil;
 
     @RequestMapping("/get")
     public ModelAndView getRandom() {
@@ -62,12 +67,28 @@ public class TaskHallController {
         return modelAndView;
     }
 
+    /**
+     * 记录任务开始，任务结束返回随机码，通过该随机码来判断完成任务
+     */
     @ResponseBody
     @GetMapping("/startTask")
-    public Object startTask() throws InterruptedException {
-        //res.setContentType("application/json;charset=utf-8");
-        Thread.sleep(5000);
-        return "测试:"+System.currentTimeMillis();
+    public Object startTask(HttpSession session,String taskId) throws InterruptedException {
+        Thread.sleep(15000);
+        String r = uuidUtil.getUUID32();
+        //做校验用
+        //session.setAttribute("taskId",taskId);
+        //session.setAttribute("r",r);
+        return BaseVo.success(r);
+    }
+
+    /**
+     * 校验任务
+     * @param r startTask返回的随机值
+     */
+    @ResponseBody
+    @GetMapping("/doneTask")
+    public Object doneTask(String r){
+        return null;
     }
 
 }
