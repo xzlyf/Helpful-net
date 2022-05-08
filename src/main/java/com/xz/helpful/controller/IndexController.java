@@ -14,6 +14,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,11 @@ public class IndexController {
     @Autowired
     private RedisUtil redisUtil;
 
+    /**
+     * 根目录跳转
+     * 已登录：跳转/home
+     * 未登录：跳转/index
+     */
     @GetMapping("/")
     public ModelAndView root() {
         ModelAndView modelAndView = new ModelAndView();
@@ -47,7 +53,32 @@ public class IndexController {
         return modelAndView;
     }
 
+    /**
+     * home目录，要求已登录用户才能访问
+     */
+    @GetMapping("/home")
+    public ModelAndView home(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findByEmailInfo(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        //todo 解决sessio过期时间
+        //刷新session过期时间
+        //session.setMaxInactiveInterval(30000);
+        //System.out.println("============session存活时间"+session.getCreationTime());
+        modelAndView.setViewName("home");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
 
+    /**
+     * 登录接口
+     */
     @ResponseBody
     @PostMapping("/login")
     public Object login(@RequestBody User user) {
@@ -120,6 +151,9 @@ public class IndexController {
         }
     }
 
+    /**
+     * 退出登录接口
+     */
     @GetMapping("/logout")
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
@@ -132,22 +166,10 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/home")
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findByEmailInfo(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
-        modelAndView.setViewName("home");
-        modelAndView.addObject("info", userInfo);
-        return modelAndView;
-    }
 
+    /**
+     * 跳转任务大厅
+     */
     @GetMapping("/receive")
     public ModelAndView receiveTask() {
         ModelAndView modelAndView = new ModelAndView();

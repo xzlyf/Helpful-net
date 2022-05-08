@@ -106,14 +106,14 @@
     let w = null;
 
     $(function () {
-        getTaskList()
+        getTask()
     })
 
     function back() {
         window.history.back()
     }
 
-    function getTaskList(obj) {
+    function getTask(obj) {
         $(obj).addClass("disable")
         let url = "/taskhall/get?r=" + Math.random();
         $.ajax({
@@ -144,6 +144,7 @@
                 newWindows(obj)
             },
             success: function (res) {
+                console.log(res)
                 if (res.code === 1) {
                     if (w) {
                         w.close();
@@ -151,10 +152,16 @@
                     }
                 } else {
                     alert("错误代码：" + res.code)
+                    if (w) {
+                        w.close();
+                    }
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 alert("与服务器通信失败，请检查网络")
+                if (w) {
+                    w.close();
+                }
             },
 
         })
@@ -165,10 +172,13 @@
             url: "/taskhall/doneTask?r=" + r,
             method: "get",
             success: function (res) {
-
+                if (res.code===1){
+                    //net task
+                    getTask();
+                }
             },
             error: function () {
-
+                console.log("校验失败")
             }
         })
     }

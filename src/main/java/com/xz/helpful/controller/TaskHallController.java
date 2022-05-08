@@ -59,6 +59,7 @@ public class TaskHallController {
     public Object startTask(HttpSession session,String taskId) throws InterruptedException {
         Thread.sleep(15000);
         String r = uuidUtil.getUUID32();
+        //todo 校验任务
         //做校验用
         //session.setAttribute("taskId",taskId);
         //session.setAttribute("r",r);
