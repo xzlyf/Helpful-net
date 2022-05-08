@@ -16,6 +16,17 @@
     font-size: large;
 }
 
+.progress-bar {
+    display: flex;
+    white-space: nowrap
+}
+
+.progress-bar-view {
+    width: 0%;
+    display: inline-block;
+    background-color: cornflowerblue
+}
+
 .controller-bar {
     text-align: center;
     justify-content: space-between;

@@ -8,6 +8,7 @@
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <style>
         .main {
+            margin-top: 50px;
             width: 100%;
             height: 500px;
             position: relative;
@@ -20,6 +21,7 @@
             top: 20px;
             float: right;
         }
+
         .btn_logout {
             display: inline-block;
             border: 2px solid black;
@@ -101,6 +103,8 @@
 </div>
 
 <script>
+    let w = null;
+
     $(function () {
         getTaskList()
     })
@@ -130,26 +134,48 @@
         })
     }
 
+    function startTask(obj) {
+        let taskId = $("#remote_id").val()
+        $.ajax({
+            url: "/taskhall/startTask?taskId="+taskId,
+            method: "get",
+            timeout: 30000,
+            beforeSend:function () {
+                newWindows(obj)
+            },
+            success: function (res) {
+                console.log("success:")
+                console.log(res)
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("error"+errorThrown)
+            },
+            complete:function () {
+                console.log("complete")
+                w.close();
+            }
+
+        })
+    }
+
     function newWindows(obj) {
-        url = $("#remote_url").val()
-        taskId = $("#remote_id").val()
+        let url = $("#remote_url").val()
         let btn = $(obj);
         btn.addClass("disable")
-
-
-        const w = window.open(url + "?autoplay=1", "b-windows", "width=600,height=400,top=0,left=0,toolbar=no,menubar=no,location=no,status=no")
+        updateProgress(1)
+        w = window.open(url + "?autoplay=1", "b-windows", "width=600,height=400,top=0,left=0,toolbar=no,menubar=no,location=no,status=no")
         const loop = setInterval(function () {
             if (w && w.closed) {
                 console.log('我被关闭了')
                 btn.removeClass("disable")
                 clearInterval(loop);
-                checkTaskDone(taskId)
+                w = null
             }
         }, 1000)
     }
-
-    function checkTaskDone(taskId) {
-
+    function updateProgress(progress) {
+        $("#progress").css("width","100%")
+        $("#progress_num").text("100%")
     }
 </script>
 </body>

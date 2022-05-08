@@ -11,13 +11,14 @@
             <b>任务来至：</b>
             <span>[[${task.taskFrom}]]</span>
         </div>
-        <div>
+        <div class="progress-bar">
             <b>任务进度：</b>
-            <span>0%</span>
+            <span id="progress" class="progress-bar-view">&nbsp;</span>
+            <span id="progress_num">0%</span>
         </div>
     </div>
     <div class="controller-bar">
-        <span class="btn-re" onclick="newWindows(this)">接受</span>
+        <span class="btn-re" onclick="startTask(this)">接受</span>
         <span class="btn-next" onclick="getTaskList(this)">跳过</span>
     </div>
     <input id="remote_url" type="hidden" th:value="${task.taskUrl}">
