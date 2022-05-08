@@ -38,7 +38,7 @@
         WHERE id not in (
             select task_id
             from taskfilter
-            where user_id = #{userId}
+            where user_email = #{email}
         )
           and t1.id >= (RAND() * (SELECT MAX(id) FROM tasklist)) limit #{size};
 
