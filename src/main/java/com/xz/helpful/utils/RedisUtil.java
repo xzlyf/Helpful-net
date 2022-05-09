@@ -607,5 +607,20 @@ public class RedisUtil {
         }
     }
 
+    /**
+     * key("*")
+     * @param patterm
+     * @return
+     */
+    public Set<String> keys(String patterm) {
+        try {
+            Set<String> keys = redisTemplate.keys(patterm);
+            return keys;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
 

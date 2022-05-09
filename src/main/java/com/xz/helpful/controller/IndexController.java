@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -57,7 +58,7 @@ public class IndexController {
      * home目录，要求已登录用户才能访问
      */
     @GetMapping("/home")
-    public ModelAndView home(HttpSession session) {
+    public ModelAndView home(HttpSession session, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -67,10 +68,6 @@ public class IndexController {
             modelAndView.setViewName("index");
             return modelAndView;
         }
-        //todo 解决sessio过期时间
-        //刷新session过期时间
-        //session.setMaxInactiveInterval(30000);
-        //System.out.println("============session存活时间"+session.getCreationTime());
         modelAndView.setViewName("home");
         modelAndView.addObject("info", userInfo);
         return modelAndView;

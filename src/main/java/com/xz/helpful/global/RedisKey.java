@@ -9,4 +9,7 @@ public class RedisKey {
 
     //用户邮箱绑定id
     public static final String REDIS_USER_ID = "user:email:";
+
+    //Session key
+    public static final String REDIS_SESSION_ID = "session:id:";
 }

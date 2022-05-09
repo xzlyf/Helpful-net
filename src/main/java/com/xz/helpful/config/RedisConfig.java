@@ -2,7 +2,9 @@ package com.xz.helpful.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xz.helpful.utils.MyRedisSerializer;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -43,7 +45,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         jacksonSeial.setObjectMapper(om);
 
         // 值采用json序列化
-        template.setValueSerializer(jacksonSeial);
+        //template.setValueSerializer(jacksonSeial);//todo 暂不使用jackson的反序列化，使用jdk原生序列号，这样shiro session反序列化不会异常
+        template.setValueSerializer(new MyRedisSerializer());
         //使用StringRedisSerializer来序列化和反序列化redis的key值
         template.setKeySerializer(new StringRedisSerializer());
 
