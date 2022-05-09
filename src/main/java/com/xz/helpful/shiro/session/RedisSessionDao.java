@@ -1,11 +1,6 @@
 package com.xz.helpful.shiro.session;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xz.helpful.global.RedisKey;
-import com.xz.helpful.utils.ConvertUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
@@ -22,7 +17,7 @@ import java.util.Set;
  * @author XiaoZe
  * @email czr2001@outlook.com
  * @date 2022/5/9 15:47
- *
+ * <p>
  * 重写session 增删改查，与redis接入
  */
 @Service
@@ -83,7 +78,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
     @Override
     public Collection<Session> getActiveSessions() {
         Set<Session> sessions = new HashSet<>();
-        Set<String> keys = redisUtil.keys(RedisKey.REDIS_SESSION_ID+"*");
+        Set<String> keys = redisUtil.keys(RedisKey.REDIS_SESSION_ID + "*");
         if (keys != null && keys.size() > 0) {
             for (String key : keys) {
                 Session s = (Session) redisUtil.get(key);

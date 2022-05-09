@@ -67,7 +67,7 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
-        securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager());//注释这里关闭自定义redisTemplate
         return securityManager;
     }
 

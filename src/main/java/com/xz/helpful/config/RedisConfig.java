@@ -2,9 +2,9 @@ package com.xz.helpful.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xz.helpful.utils.MyRedisSerializer;
+import com.xz.helpful.serializer.FastJson2JsonRedisSerializer;
+import com.xz.helpful.serializer.MyRedisSerializer;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +34,34 @@ public class RedisConfig extends CachingConfigurerSupport {
         // 配置连接工厂
         template.setConnectionFactory(factory);
 
+
+        customRedisSerializer(template);//使用字节码序列化,可以解决SimpleSession反序列化异常的问题
+        //jackson2JsonRedisSerializer(template);//使用jackson序列化
+        //fastjson2fastJsonRedisSerializer(template);//使用fastjson序列化;
+
+        //使用StringRedisSerializer来序列化和反序列化redis的key值
+        template.setKeySerializer(new StringRedisSerializer());
+        // 设置hash key 和value序列化模式
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.afterPropertiesSet();
+
+        return template;
+    }
+
+    /**
+     * 使用字节码方式进行序列化和反序列化
+     */
+    private void customRedisSerializer(RedisTemplate<String, Object> template){
+        MyRedisSerializer serializer = new MyRedisSerializer();
+        template.setValueSerializer(serializer);//暂不使用自定义字节码序列化
+        template.setHashValueSerializer(serializer);
+
+    }
+
+    /**
+     * 使用Jackson来进行序列化和反序列化
+     */
+    private void jackson2JsonRedisSerializer(RedisTemplate<String, Object> template) {
         //使用Jackson2JsonRedisSerializer来序列化和反序列化redis的value值（默认使用JDK的序列化方式）
         Jackson2JsonRedisSerializer jacksonSeial = new Jackson2JsonRedisSerializer(Object.class);
 
@@ -45,17 +73,18 @@ public class RedisConfig extends CachingConfigurerSupport {
         jacksonSeial.setObjectMapper(om);
 
         // 值采用json序列化
-        //template.setValueSerializer(jacksonSeial);//todo 暂不使用jackson的反序列化，使用jdk原生序列号，这样shiro session反序列化不会异常
-        template.setValueSerializer(new MyRedisSerializer());
-        //使用StringRedisSerializer来序列化和反序列化redis的key值
-        template.setKeySerializer(new StringRedisSerializer());
-
-        // 设置hash key 和value序列化模式
-        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(jacksonSeial);
         template.setHashValueSerializer(jacksonSeial);
-        template.afterPropertiesSet();
+    }
 
-        return template;
+    /**
+     * 使用fastJson来进行序列化和反序列化
+     */
+    private void fastjson2fastJsonRedisSerializer(RedisTemplate<String, Object> template) {
+        FastJson2JsonRedisSerializer<Object> fastSerializer = new FastJson2JsonRedisSerializer<>(Object.class);
+        template.setValueSerializer(fastSerializer);//fastJson序列化
+        template.setHashValueSerializer(fastSerializer);
+
     }
 
     /**

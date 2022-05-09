@@ -1,4 +1,4 @@
-package com.xz.helpful.utils;
+package com.xz.helpful.serializer;
 
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
