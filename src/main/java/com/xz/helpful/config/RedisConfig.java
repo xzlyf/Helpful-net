@@ -62,8 +62,8 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setConnectionFactory(factory);
 
 
-        customRedisSerializer(template);//使用字节码序列化,可以解决SimpleSession反序列化异常的问题
-        //jackson2JsonRedisSerializer(template);//使用jackson序列化
+        //customRedisSerializer(template);//使用字节码序列化,可以解决SimpleSession反序列化异常的问题
+        jackson2JsonRedisSerializer(template);//使用jackson序列化
         //fastjson2fastJsonRedisSerializer(template);//使用fastjson序列化;
 
         //使用StringRedisSerializer来序列化和反序列化redis的key值

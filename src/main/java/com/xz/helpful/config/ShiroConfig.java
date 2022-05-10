@@ -67,7 +67,14 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
-        securityManager.setSessionManager(sessionManager());//注释这里关闭自定义redisTemplate,关闭后上面的session过期将不会生效
+       /*
+        @function securityManager.setSessionManager(sessionManager());
+        如果要开启这个，就要使用字节码来进行反序列化等操作，不可以使用json反序列化
+        注释这里关闭自定义redisTemplate,关闭后上面的session过期将不会生效
+        如果开启了时不时会报这个异常：java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
+        暂时不知怎么解决
+        */
+        //securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
