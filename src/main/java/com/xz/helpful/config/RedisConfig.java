@@ -5,11 +5,17 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xz.helpful.serializer.FastJson2JsonRedisSerializer;
 import com.xz.helpful.serializer.MyRedisSerializer;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -20,15 +26,36 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching //开启注解
 public class RedisConfig extends CachingConfigurerSupport {
+    @Value("${spring.redis.database}")
+    private Integer REDIS_DB;
+    @Value("${spring.redis.port}")
+    private Integer REDIS_PORT;
+    @Value("${spring.redis.host}")
+    private String REDIS_HOST;
+
+    /**
+     * lettuce 连接工厂
+     */
+    @Bean
+    public LettuceConnectionFactory lettuceConnectionFactory() {
+        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+        redisStandaloneConfiguration.setDatabase(REDIS_DB);
+        redisStandaloneConfiguration.setHostName(REDIS_HOST);
+        redisStandaloneConfiguration.setPort(REDIS_PORT);
+        //redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
+
+        LettuceClientConfiguration.LettuceClientConfigurationBuilder lettuceClientConfigurationBuilder = LettuceClientConfiguration.builder();
+        LettuceConnectionFactory factory = new LettuceConnectionFactory(redisStandaloneConfiguration,
+                lettuceClientConfigurationBuilder.build());
+        return factory;
+    }
 
     /**
      * retemplate相关配置
-     *
-     * @param factory
-     * @return
+     * @param factory @Qualifier("lettuceConnectionFactory") 自动装配 lettuceConnectionFactory的对象
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+    public RedisTemplate<String, Object> redisTemplate(@Qualifier("lettuceConnectionFactory") RedisConnectionFactory factory) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // 配置连接工厂
@@ -51,7 +78,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     /**
      * 使用字节码方式进行序列化和反序列化
      */
-    private void customRedisSerializer(RedisTemplate<String, Object> template){
+    private void customRedisSerializer(RedisTemplate<String, Object> template) {
         MyRedisSerializer serializer = new MyRedisSerializer();
         template.setValueSerializer(serializer);//暂不使用自定义字节码序列化
         template.setHashValueSerializer(serializer);
