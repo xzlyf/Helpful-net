@@ -41,7 +41,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
     protected Serializable doCreate(Session session) {
         Serializable sessionId = this.generateSessionId(session);
         this.assignSessionId(session, sessionId);
-        redisUtil.set(RedisKey.REDIS_SESSION_ID + session.getId(), session, expireTime);
+        redisUtil.set(RedisKey.REDIS_SHIRO_SESSION + session.getId(), session, expireTime);
         return sessionId;
     }
 
@@ -51,7 +51,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
         if (sessionId == null) {
             return null;
         }
-        return (Session) redisUtil.get(RedisKey.REDIS_SESSION_ID + sessionId);
+        return (Session) redisUtil.get(RedisKey.REDIS_SHIRO_SESSION + sessionId);
     }
 
     //更新session
@@ -61,7 +61,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
             return;
         }
         session.setTimeout(expireTime * 1000);
-        redisUtil.set(RedisKey.REDIS_SESSION_ID + session.getId(), session, expireTime);
+        redisUtil.set(RedisKey.REDIS_SHIRO_SESSION + session.getId(), session, expireTime);
 
     }
 
@@ -71,14 +71,14 @@ public class RedisSessionDao extends AbstractSessionDAO {
         if (session == null) {
             return;
         }
-        redisUtil.del(RedisKey.REDIS_SESSION_ID + session.getId());
+        redisUtil.del(RedisKey.REDIS_SHIRO_SESSION + session.getId());
     }
 
     //获取所有活跃的Session
     @Override
     public Collection<Session> getActiveSessions() {
         Set<Session> sessions = new HashSet<>();
-        Set<String> keys = redisUtil.keys(RedisKey.REDIS_SESSION_ID + "*");
+        Set<String> keys = redisUtil.keys(RedisKey.REDIS_SHIRO_SESSION + "*");
         if (keys != null && keys.size() > 0) {
             for (String key : keys) {
                 Session s = (Session) redisUtil.get(key);

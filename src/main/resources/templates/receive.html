@@ -144,11 +144,10 @@
                 newWindows(obj)
             },
             success: function (res) {
-                console.log(res)
                 if (res.code === 1) {
                     if (w) {
                         w.close();
-                        doneTask(res.data)
+                        doneTask(taskId, res.data)
                     }
                 } else {
                     alert("错误代码：" + res.code)
@@ -167,18 +166,19 @@
         })
     }
 
-    function doneTask(r) {
+    function doneTask(taskId, r) {
         $.ajax({
-            url: "/taskhall/doneTask?r=" + r,
+            url: "/taskhall/doneTask?taskId=" + taskId + "&r=" + r,
             method: "get",
             success: function (res) {
-                if (res.code===1){
-                    //net task
+                if (res.code === 1) {
                     getTask();
+                }else{
+                    alert(res.data)
                 }
             },
             error: function () {
-                console.log("校验失败")
+                console.log("当前与服务器连接失败，请稍后重试！")
             }
         })
     }

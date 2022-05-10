@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -56,24 +57,36 @@ public class TaskHallController {
      */
     @ResponseBody
     @GetMapping("/startTask")
-    public Object startTask(HttpSession session,String taskId) throws InterruptedException {
+    public Object startTask(HttpSession session,
+                            @RequestParam String taskId) throws InterruptedException {
         Thread.sleep(15000);
         String r = uuidUtil.getUUID32();
-        //todo 校验任务
-        //做校验用
-        //session.setAttribute("taskId",taskId);
-        //session.setAttribute("r",r);
+        //存入uuid，做校验用，60秒后过期
+        redisUtil.set(RedisKey.REDIS_TASK_CHECK + session.getId() + taskId, r, 60);
         return BaseVo.success(r);
     }
 
     /**
      * 校验任务
-     * @param r startTask返回的随机值
+     *
+     * @param taskId 任务id
+     * @param r      startTask返回的随机值
      */
     @ResponseBody
     @GetMapping("/doneTask")
-    public Object doneTask(String r){
-        return null;
+    public Object doneTask(HttpSession session,
+                           @RequestParam String taskId,
+                           @RequestParam String r) {
+        String key = RedisKey.REDIS_TASK_CHECK + session.getId() + taskId;
+        String remote = (String) redisUtil.get(key);
+        if (remote == null) {
+            return BaseVo.failed("校验已过期", -2);
+        }
+        if (!remote.equals(r)) {
+            return BaseVo.failed("校验失败");
+        }
+        redisUtil.del(key);
+        return BaseVo.success("校验成功");
     }
 
 }

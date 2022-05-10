@@ -46,8 +46,7 @@ public class TaskServiceImpl implements TaskService {
         if (tasks.size() > 0) {
             //移出第一个任务，其余的保存在redis
             target = tasks.remove(0);
-            redisUtil.set(userKey, tasks);
-            redisUtil.expire(userKey, 300);
+            redisUtil.set(userKey, tasks,300);
         }
         //如果等于tasks等于0直接删除redis
         if (tasks.size() == 0) {
