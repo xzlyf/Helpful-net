@@ -55,7 +55,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @param factory @Qualifier("lettuceConnectionFactory") 自动装配 lettuceConnectionFactory的对象
      */
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(@Qualifier("lettuceConnectionFactory") RedisConnectionFactory factory) {
+    public RedisTemplate<String, Object> redisTemplate(@Qualifier("lettuceConnectionFactory") LettuceConnectionFactory factory) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // 配置连接工厂
