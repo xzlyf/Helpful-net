@@ -2,6 +2,7 @@ package com.xz.helpful.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * @Date: 2022/4/20
  */
 @Data
-public class User {
+public class User implements Serializable {
     private int id;
     private String name;
     private String email;

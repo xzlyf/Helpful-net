@@ -35,7 +35,7 @@ public class ShiroConfig {
 
     @Bean
     public RedisSessionDao getRedisSessionDao() {
-        final int TIMEOUT = 60 * 60 * 24 * 3;//session过期时间 7 天
+        final int TIMEOUT = 60 * 60 * 24 * 3;//session过期时间 n 天
         return new RedisSessionDao(TIMEOUT);
     }
 
@@ -67,7 +67,7 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
-        securityManager.setSessionManager(sessionManager());//注释这里关闭自定义redisTemplate
+        securityManager.setSessionManager(sessionManager());//注释这里关闭自定义redisTemplate,关闭后上面的session过期将不会生效
         return securityManager;
     }
 

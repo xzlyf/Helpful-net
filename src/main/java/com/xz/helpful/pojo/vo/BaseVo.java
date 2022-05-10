@@ -2,12 +2,14 @@ package com.xz.helpful.pojo.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: xz
  * @Date: 2022/4/20
  */
 @Data
-public class BaseVo {
+public class BaseVo implements Serializable {
     private int code;
     private String msg;
     private Object data;

@@ -14,13 +14,13 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -42,7 +42,7 @@ public class IndexController {
      * 未登录：跳转/index
      */
     @GetMapping("/")
-    public ModelAndView root() {
+    public ModelAndView root(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         //已登录的用户直接重定向至home页面
@@ -58,7 +58,9 @@ public class IndexController {
      * home目录，要求已登录用户才能访问
      */
     @GetMapping("/home")
-    public ModelAndView home(HttpSession session, HttpServletRequest request) {
+    public ModelAndView home(HttpSession session,
+                             HttpServletRequest request,
+                             HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -78,7 +80,8 @@ public class IndexController {
      */
     @ResponseBody
     @PostMapping("/login")
-    public Object login(@RequestBody User user) {
+    public Object login(HttpSession session,
+                        @RequestBody User user) {
         boolean verify = userServer.verify(user);
         if (!verify) {
             return BaseVo.failed("账号或密码格式不正确");
@@ -92,9 +95,10 @@ public class IndexController {
         try {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
-            //存入Redis绑定email和用户id
+            //session绑定用户的email和id
             Integer userId = userServer.findUserIdByEmail(user.getEmail());
-            redisUtil.set(RedisKey.REDIS_USER_ID + user.getEmail(), userId);
+            session.setAttribute(RedisKey.SESSION_USER_ID, userId);
+            session.setAttribute(RedisKey.SESSION_USER_EMAIL, user.getEmail());
 
         } catch (UnknownAccountException e) {
             return BaseVo.failed("用户名不存在");
@@ -137,8 +141,9 @@ public class IndexController {
             try {
                 //进行验证，这里可以捕获异常，然后返回对应信息
                 subject.login(usernamePasswordToken);
-                //存入Redis绑定email和用户id
-                redisUtil.set(RedisKey.REDIS_USER_ID + user.getEmail(), user.getId());
+                //session绑定用户的email和id
+                session.setAttribute(RedisKey.SESSION_USER_ID, user.getId());
+                session.setAttribute(RedisKey.SESSION_USER_EMAIL, user.getEmail());
             } catch (UnknownAccountException e) {
                 return BaseVo.success("自动登录失败", 3);
             }
@@ -152,14 +157,9 @@ public class IndexController {
      * 退出登录接口
      */
     @GetMapping("/logout")
-    public String logout() {
+    public String logout(HttpSession session) {
         Subject subject = SecurityUtils.getSubject();
-        String em = subject.getPrincipal().toString();
         subject.logout();
-        //清除redis保留的用户信息
-        if (em != null) {
-            redisUtil.del(RedisKey.REDIS_USER_ID);
-        }
         return "index";
     }
 

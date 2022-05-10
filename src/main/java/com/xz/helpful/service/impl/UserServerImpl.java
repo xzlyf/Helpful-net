@@ -1,6 +1,7 @@
 package com.xz.helpful.service.impl;
 
 import com.xz.helpful.dao.UserMapper;
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
@@ -103,7 +104,7 @@ public class UserServerImpl implements UserServer {
         }
 
         //查询是否近期发送过验证码
-        boolean has = redisUtil.hasKey(registerVo.getUser().getEmail());
+        boolean has = redisUtil.hasKey(getRedisKey(registerVo.getUser().getEmail()));
         if (has) {
             return BaseVo.success(0);
         }
@@ -115,10 +116,8 @@ public class UserServerImpl implements UserServer {
         registerVo.setVerifyCode(code);//移除原先人机验证码，替换成邮箱验证码供后面使用
         //存入session，校验邮件验证码时会用到
         registerVo.setSession(session.getId());
-        //把待注册的信息写入redis，email作为key,绑定session请求
-        redisUtil.set(registerVo.getUser().getEmail(), registerVo);
-        //邮箱验证码与5分钟后过期，1分钟内不可重发
-        redisUtil.expire(registerVo.getUser().getEmail(), 60 * 5);
+        //把待注册的信息写入redis，email作为key,绑定session请求 , 邮箱验证码与5分钟后过期，1分钟内不可重发
+        redisUtil.set(getRedisKey(registerVo.getUser().getEmail()), registerVo,60*5);
         return BaseVo.success(60);
     }
 
@@ -126,18 +125,18 @@ public class UserServerImpl implements UserServer {
     @Transactional
     public User register(String email, String code, String session) throws IOException {
         //校验邮件验证码
-        if (!redisUtil.hasKey(email)) {
+        if (!redisUtil.hasKey(getRedisKey(email))) {
             throw new IOException("邮件验证码已过期，请重新发送");
         }
-        RegisterVo registerVo = (RegisterVo) redisUtil.get(email);
+        RegisterVo registerVo = (RegisterVo) redisUtil.get(getRedisKey(email));
         if (!session.equalsIgnoreCase(registerVo.getSession())) {
-            throw new IOException("非法请求");
+            throw new IOException("非法请求");//session不一致
         }
         if (!code.equalsIgnoreCase(registerVo.getVerifyCode())) {
             throw new IOException("验证码错误");
         }
         //验证完成后删除redis
-        redisUtil.del(email);
+        redisUtil.del(getRedisKey(email));
 
         registerVo.getUser().setName("互助侠" + RandomUtil.getRandomNum(6));
         registerVo.getUser().setMycode(RandomUtil.getRandomNum(6));
@@ -154,5 +153,13 @@ public class UserServerImpl implements UserServer {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
         return registerVo.getUser();
+    }
+
+    /**
+     * 返回redis的key
+     * @param k 后缀
+     */
+    private String getRedisKey(String k){
+        return RedisKey.REDIS_VERIFY_email+k;
     }
 }

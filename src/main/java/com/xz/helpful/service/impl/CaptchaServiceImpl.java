@@ -1,9 +1,9 @@
 package com.xz.helpful.service.impl;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.service.CaptchaService;
 import com.xz.helpful.utils.RedisUtil;
-import com.xz.helpful.utils.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sun.misc.BASE64Encoder;
@@ -45,24 +45,23 @@ public class CaptchaServiceImpl implements CaptchaService {
         //返回数据
         Map<String, Object> data = new HashMap<>();
         data.put("img", encoder.encode(outputStream.toByteArray()));
-        data.put("expire",TIMEOUT);
+        data.put("expire", TIMEOUT);
         //存入redis
-        if (redisUtil.hasKey(session.getId())) {
-            redisUtil.del(session.getId());
+        if (redisUtil.hasKey(getKey(session.getId()))) {
+            redisUtil.del(getKey(session.getId()));
         }
-        redisUtil.set(session.getId(), text);
-        redisUtil.expire(session.getId(), TIMEOUT);
+        redisUtil.set(getKey(session.getId()), text,TIMEOUT);
         return data;
     }
 
     //验证输入的验证码是否正确
     @Override
-    public boolean versifyCaptcha(HttpSession session,String inputCode) {
+    public boolean versifyCaptcha(HttpSession session, String inputCode) {
         //根据前端传回的token在redis中找对应的value
-        if (redisUtil.hasKey(session.getId())) {
+        if (redisUtil.hasKey(getKey(session.getId()))) {
             //验证通过, 删除对应的key
-            if (redisUtil.get(session.getId()).equals(inputCode)) {
-                redisUtil.del(session.getId());
+            if (redisUtil.get(getKey(session.getId())).equals(inputCode)) {
+                redisUtil.del(getKey(session.getId()));
                 return true;
             } else {
                 return false;
@@ -70,5 +69,13 @@ public class CaptchaServiceImpl implements CaptchaService {
         } else {
             return false;
         }
+    }
+
+    /**
+     * 返回redis的key
+     * @param k 后缀
+     */
+    private String getKey(String k) {
+        return RedisKey.REDIS_VERIFY_robot + k;
     }
 }
