@@ -1,6 +1,7 @@
 package com.xz.helpful.shiro.session;
 
 import com.xz.helpful.global.RedisKey;
+import com.xz.helpful.utils.RedisShiroUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
@@ -22,10 +23,10 @@ import java.util.Set;
  */
 @Service
 public class RedisSessionDao extends AbstractSessionDAO {
-    //Session过期时间,单位180（秒）
+    //默认过期时间，单位180（秒）
     private long expireTime = 180L;
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisShiroUtil redisUtil;
 
     public RedisSessionDao() {
         super();

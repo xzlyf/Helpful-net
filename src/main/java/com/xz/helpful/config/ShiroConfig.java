@@ -33,6 +33,10 @@ public class ShiroConfig {
         return new UserRealm();
     }
 
+    /**
+     * 获取自定义SessionDao，并设置过期时间
+     * @return
+     */
     @Bean
     public RedisSessionDao getRedisSessionDao() {
         final int TIMEOUT = 60 * 60 * 24 * 3;//session过期时间 n 天
@@ -74,7 +78,7 @@ public class ShiroConfig {
         如果开启了时不时会报这个异常：java.lang.IllegalStateException: LettuceConnectionFactory was destroyed and cannot be used anymore
         暂时不知怎么解决
         */
-        //securityManager.setSessionManager(sessionManager());
+        securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
 
