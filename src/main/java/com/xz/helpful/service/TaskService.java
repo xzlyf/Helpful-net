@@ -21,7 +21,7 @@ public interface TaskService {
     /**
      * 完成一个任务
      */
-    void finishOne(Integer userId,Integer taskId);
+    void finishOne(String email,Integer userId,Integer taskId) throws RuntimeException;
 
     /**
      * 设置任务启用状态

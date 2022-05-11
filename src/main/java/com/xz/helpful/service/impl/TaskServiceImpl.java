@@ -1,13 +1,20 @@
 package com.xz.helpful.service.impl;
 
+import com.xz.helpful.dao.TaskFilterMapper;
 import com.xz.helpful.dao.TaskMapper;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.service.TaskService;
+import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.ConvertUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -17,7 +24,13 @@ public class TaskServiceImpl implements TaskService {
     private TaskMapper taskMapper;
     @Autowired
     private RedisUtil redisUtil;
-
+    @Autowired
+    private TaskFilterMapper filterMapper;
+    @Autowired
+    private WalletServer walletServer;
+    //事务管理器
+    @Autowired
+    private DataSourceTransactionManager dataSourceTransactionManager;
 
     @Override
     public List<Task> findAll() {
@@ -76,11 +89,20 @@ public class TaskServiceImpl implements TaskService {
         return target;
     }
 
+    /**
+     * 完成一个任务并获取奖励
+     * 开启事务管理，失败回滚
+     *
+     */
     @Override
-    public void finishOne(Integer userId, Integer taskId) {
-        //写入filter任务过滤表
-        //用户积分增加
-        //失败回滚
+    @Transactional
+    public void finishOne(String email,Integer userId, Integer taskId) throws RuntimeException{
+            //写入filter任务过滤表
+            filterMapper.insert(email,taskId);
+            //用户积分增加
+            walletServer.updateMoney(userId,taskId);
+            //扣去发布者的积分
+
     }
 
     @Override

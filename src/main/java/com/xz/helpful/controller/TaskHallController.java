@@ -11,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,8 +75,9 @@ public class TaskHallController {
      */
     @ResponseBody
     @GetMapping("/doneTask")
+    @Transactional(rollbackFor = Exception.class)
     public Object doneTask(HttpSession session,
-                           @RequestParam String taskId,
+                           @RequestParam Integer taskId,
                            @RequestParam String r) {
         String key = RedisKey.REDIS_TASK_CHECK + session.getId() + taskId;
         String remote = (String) redisUtil.get(key);
@@ -84,6 +86,16 @@ public class TaskHallController {
         }
         if (!remote.equals(r)) {
             return BaseVo.failed("校验失败");
+        }
+        String email = (String) session.getAttribute(RedisKey.SESSION_USER_EMAIL);
+        Integer userId = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
+        if (email == null || userId==null) {
+            return BaseVo.failed("登录已过期",-1);
+        }
+        try {
+            taskService.finishOne(email,userId,taskId);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
         redisUtil.del(key);
         return BaseVo.success("校验成功");

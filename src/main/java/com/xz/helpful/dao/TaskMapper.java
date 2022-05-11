@@ -13,12 +13,6 @@ public interface TaskMapper {
 
     List<Task> findAll();
 
-    /*随机取出一条数据*/
-    Task getOne();
-
-    /*随机取出n条数据*/
-    List<Task> getMore(Integer size);
-
     /*随机取出n条数据，并且通过filter.task_id过滤已执行的任务，只返回n条未执行的任务*/
     List<Task> getNotInFilterTask(String email,Integer size);
 

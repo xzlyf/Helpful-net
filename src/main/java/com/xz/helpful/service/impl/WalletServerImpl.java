@@ -66,7 +66,7 @@ public class WalletServerImpl implements WalletServer {
         //更新任务创建者的余额
         walletMapper.updateMoney(task.getTaskFrom(), moneyByAuthor - task.getTaskPay());
         if (moneyByAuthor - task.getTaskPay() < 0) {
-            //创建者余额耗尽，任务关闭
+            //创建者余额耗尽，任务关闭 //todo 不应该在此操作taskService的业务
             taskService.updateTaskEnable(task.getId(), false);
         }
     }
