@@ -93,25 +93,20 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public void finishOne(String email, Integer userId, Integer taskId) throws RuntimeException {
         Task task = findById(taskId);
-        //写入filter任务过滤表
-        filterMapper.insert(email, taskId);
         if (task == null) {
             //抛出异常，事务回滚
             throw new RuntimeException("任务不存在");
         }
-        if (task.getIsEnable() == 0) {
-            throw new RuntimeException("任务已关闭");
-        }
+        //写入filter任务过滤表
+        filterMapper.insert(email, task.getId());
         //写入订单
         orderService.addOrder(userId, task.getId());
         //更新用户余额
-        int money = walletServer.queryMoneyByUserId(userId);
-        walletServer.updateMoneyByUserId(userId, money + task.getTaskPay());
-        //查询用户创建者余额
-        int moneyByAuthor = walletServer.queryMoneyByUserId(task.getTaskFrom());
+        walletServer.updateMoneyByUserId(userId, +task.getTaskPay());
         //更新任务创建者的余额
-        walletServer.updateMoneyByUserId(task.getTaskFrom(), moneyByAuthor - task.getTaskPay());
-        if (moneyByAuthor - task.getTaskPay() < 0) {
+        walletServer.updateMoneyByUserId(task.getTaskFrom(), -task.getTaskPay());
+        Integer taskFromWallet = walletServer.queryMoneyByUserId(task.getTaskFrom());
+        if (taskFromWallet <= 0) {
             //创建者余额耗尽，任务关闭
             updateTaskEnable(task.getId(), false);
         }

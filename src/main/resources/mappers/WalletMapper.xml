@@ -5,9 +5,14 @@
         insert into wallet (money, user_id)
         values (#{money}, #{userId})
     </insert>
-    <update id="updateMoney">
+    <update id="addMoney">
         update wallet
-        set money = #{money}
+        set money = money + #{money}
+        where user_id = #{userId}
+    </update>
+    <update id="subMoney">
+        update wallet
+        set money = money - #{money}
         where user_id = #{userId}
     </update>
 

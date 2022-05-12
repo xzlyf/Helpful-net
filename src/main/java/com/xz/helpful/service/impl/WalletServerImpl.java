@@ -1,9 +1,6 @@
 package com.xz.helpful.service.impl;
 
 import com.xz.helpful.dao.WalletMapper;
-import com.xz.helpful.pojo.Task;
-import com.xz.helpful.service.OrderService;
-import com.xz.helpful.service.TaskService;
 import com.xz.helpful.service.WalletServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +27,12 @@ public class WalletServerImpl implements WalletServer {
     }
 
     @Override
-    public Integer updateMoneyByUserId(Integer userId,Integer money) {
-        return walletMapper.updateMoney(userId,money);
+    public void updateMoneyByUserId(Integer userId, Integer money) {
+        if (money > 0) {
+            walletMapper.addMoney(userId, money);
+        } else {
+            walletMapper.subMoney(userId, Math.abs(money));
+        }
     }
 
 }

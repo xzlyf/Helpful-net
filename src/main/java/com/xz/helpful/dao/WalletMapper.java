@@ -14,5 +14,13 @@ public interface WalletMapper {
 
     Integer queryMoneyById(Integer id);
 
-    Integer updateMoney(int userId, int money);
+    /**
+     * 增加money，返回更新后的值
+     */
+    Integer addMoney(int userId, int money);
+
+    /**
+     * 减去money，返回更新后的值
+     */
+    Integer subMoney(int userId, int money);
 }

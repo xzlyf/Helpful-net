@@ -95,7 +95,8 @@ public class TaskHallController {
             return BaseVo.failed("登录已过期",-1);
         }
         try {
-            taskService.finishOne(email,userId,taskId);
+            long start = System.currentTimeMillis();
+            long end = System.currentTimeMillis();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }

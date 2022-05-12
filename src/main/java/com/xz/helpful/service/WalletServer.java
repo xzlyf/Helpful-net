@@ -19,6 +19,11 @@ public interface WalletServer {
     Integer queryMoneyByUserId(Integer userId);
 
 
-    Integer updateMoneyByUserId(Integer userId, Integer money);
+    /**
+     * 在原值上加减，不用先查积分
+     * @param userId userId
+     * @param money 整数加，负数减
+     */
+    void updateMoneyByUserId(Integer userId, Integer money);
 
 }
