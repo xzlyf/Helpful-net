@@ -7,6 +7,7 @@ import com.xz.helpful.service.TaskService;
 import com.xz.helpful.service.UserServer;
 import com.xz.helpful.utils.RedisUtil;
 import com.xz.helpful.utils.UUIDUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 /**
  * 任务大厅接口
  */
+@Slf4j
 @Controller
 @RequestMapping("/taskhall")
 public class TaskHallController {
@@ -60,7 +62,7 @@ public class TaskHallController {
     @GetMapping("/startTask")
     public Object startTask(HttpSession session,
                             @RequestParam String taskId) throws InterruptedException {
-        Thread.sleep(15000);
+        Thread.sleep(5000);
         String r = uuidUtil.getUUID32();
         //存入uuid，做校验用，60秒后过期
         redisUtil.set(RedisKey.REDIS_TASK_CHECK + session.getId() + taskId, r, 60);

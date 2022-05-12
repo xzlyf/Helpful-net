@@ -18,12 +18,7 @@ public interface WalletServer {
      */
     Integer queryMoneyByUserId(Integer userId);
 
-    Integer queryMoneyById(Integer id);
 
-    /**
-     * 计入一笔交易，同时写入订单
-     *
-     * @return
-     */
-    void updateMoney(int userId, int taskId);
+    Integer updateMoneyByUserId(Integer userId, Integer money);
+
 }

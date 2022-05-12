@@ -4,17 +4,14 @@ import com.xz.helpful.dao.TaskFilterMapper;
 import com.xz.helpful.dao.TaskMapper;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
+import com.xz.helpful.service.OrderService;
 import com.xz.helpful.service.TaskService;
 import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.ConvertUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -28,9 +25,8 @@ public class TaskServiceImpl implements TaskService {
     private TaskFilterMapper filterMapper;
     @Autowired
     private WalletServer walletServer;
-    //事务管理器
     @Autowired
-    private DataSourceTransactionManager dataSourceTransactionManager;
+    private OrderService orderService;
 
     @Override
     public List<Task> findAll() {
@@ -59,7 +55,7 @@ public class TaskServiceImpl implements TaskService {
         if (tasks.size() > 0) {
             //移出第一个任务，其余的保存在redis
             target = tasks.remove(0);
-            redisUtil.set(userKey, tasks,300);
+            redisUtil.set(userKey, tasks, 300);
         }
         //如果等于tasks等于0直接删除redis
         if (tasks.size() == 0) {
@@ -92,16 +88,33 @@ public class TaskServiceImpl implements TaskService {
     /**
      * 完成一个任务并获取奖励
      * 开启事务管理，失败回滚
-     *
      */
     @Override
     @Transactional
-    public void finishOne(String email,Integer userId, Integer taskId) throws RuntimeException{
-            //写入filter任务过滤表
-            filterMapper.insert(email,taskId);
-            //用户积分增加
-            walletServer.updateMoney(userId,taskId);
-            //扣去发布者的积分
+    public void finishOne(String email, Integer userId, Integer taskId) throws RuntimeException {
+        Task task = findById(taskId);
+        //写入filter任务过滤表
+        filterMapper.insert(email, taskId);
+        if (task == null) {
+            //抛出异常，事务回滚
+            throw new RuntimeException("任务不存在");
+        }
+        if (task.getIsEnable() == 0) {
+            throw new RuntimeException("任务已关闭");
+        }
+        //写入订单
+        orderService.addOrder(userId, task.getId());
+        //更新用户余额
+        int money = walletServer.queryMoneyByUserId(userId);
+        walletServer.updateMoneyByUserId(userId, money + task.getTaskPay());
+        //查询用户创建者余额
+        int moneyByAuthor = walletServer.queryMoneyByUserId(task.getTaskFrom());
+        //更新任务创建者的余额
+        walletServer.updateMoneyByUserId(task.getTaskFrom(), moneyByAuthor - task.getTaskPay());
+        if (moneyByAuthor - task.getTaskPay() < 0) {
+            //创建者余额耗尽，任务关闭
+            updateTaskEnable(task.getId(), false);
+        }
 
     }
 

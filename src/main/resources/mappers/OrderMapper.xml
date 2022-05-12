@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.OrderMapper">
     <insert id="addOrder">
-        insert into order (userId, task_id)
+        insert into `order` (user_id, task_id)
         values (#{userId}, #{taskId})
     </insert>
 </mapper>

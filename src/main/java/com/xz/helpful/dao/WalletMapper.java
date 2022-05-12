@@ -14,5 +14,5 @@ public interface WalletMapper {
 
     Integer queryMoneyById(Integer id);
 
-    void updateMoney(int userId, int money);
+    Integer updateMoney(int userId, int money);
 }
