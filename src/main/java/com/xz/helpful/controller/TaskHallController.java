@@ -49,9 +49,15 @@ public class TaskHallController {
         }
         //开始取任务
         Task one = taskService.getOne(email);
-        //使用view页面返回html
-        modelAndView.setViewName("view/task");
-        modelAndView.addObject("task", one);
+        //没有任务了
+        if (one==null){
+            modelAndView.setViewName("view/task-error");
+            modelAndView.addObject("msg", "暂时没有新的任务了，休息下再来吧~");
+        }else{
+            //使用view页面返回html
+            modelAndView.setViewName("view/task");
+            modelAndView.addObject("task", one);
+        }
         return modelAndView;
     }
 
@@ -91,16 +97,15 @@ public class TaskHallController {
         }
         String email = (String) session.getAttribute(RedisKey.SESSION_USER_EMAIL);
         Integer userId = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
-        if (email == null || userId==null) {
-            return BaseVo.failed("登录已过期",-1);
+        if (email == null || userId == null) {
+            return BaseVo.failed("登录已过期", -1);
         }
         try {
-            long start = System.currentTimeMillis();
-            long end = System.currentTimeMillis();
+            taskService.finishOne(email, userId, taskId);
+            redisUtil.del(key);
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-        redisUtil.del(key);
         return BaseVo.success("校验成功");
     }
 

@@ -5,6 +5,7 @@
     <title>互助网-任务大厅</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/task-view.css}">
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/edge/css/common/ui/Loading.css">
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <style>
         .main {
@@ -167,18 +168,24 @@
     }
 
     function doneTask(taskId, r) {
+        $("#controller-bar").css("display", "none")
+        $("#verify-bar").css("display", "")
         $.ajax({
             url: "/taskhall/doneTask?taskId=" + taskId + "&r=" + r,
             method: "get",
             success: function (res) {
                 if (res.code === 1) {
                     getTask();
-                }else{
+                } else {
                     alert(res.data)
                 }
             },
             error: function () {
                 console.log("当前与服务器连接失败，请稍后重试！")
+            },
+            complete: function () {
+                $("#controller-bar").css("display", "")
+                $("#verify-bar").css("display", "none")
             }
         })
     }
