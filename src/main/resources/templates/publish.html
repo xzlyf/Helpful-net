@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>互助网-发布任务</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/task-view.css}">
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/edge/css/common/ui/Input.css">
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/edge/css/common/ui/Button.css">
+    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/edge/css/common/ui/Placeholder.css">
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <style>
+        .main {
+            margin-top: 50px;
+            width: 100%;
+            height: 500px;
+            position: relative;
+        }
+
+        .user-tool {
+            position: relative;
+            display: inline-block;
+            right: 200px;
+            top: 20px;
+            float: right;
+        }
+
+        .user-tool span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn_logout {
+            display: inline-block;
+            border: 2px solid black;
+            border-radius: 8px;
+            padding: 3px 5px 3px 5px;
+            font-size: 15px;
+            color: #fff;
+            background-color: #f00;
+            text-decoration: none;
+        }
+
+        .btn_logout:hover {
+            box-shadow: 1px 1px #000;
+            background-color: #c41717;
+            color: white;
+
+        }
+
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        /*边框和内边距*/
+        tr, td, th {
+            padding: 20px;
+            /*border: 2px solid black;*/
+        }
+
+        .flag {
+            font-size: xx-large;
+            font-weight: 1000;
+        }
+
+        a:hover {
+            color: #555555;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="nav">
+    <div class="logo">
+        <img th:src="@{/images/logo.png}">
+    </div>
+    <div class="user-tool">
+        <span>积分：</span>
+        <span id="wallet" style="color: #f00">[[${info.wallet}]]</span>
+        <span style="margin: 0 30px">[[${info.name}]]</span>
+        <a href="/logout" class="btn_logout">退出登录</a>
+    </div>
+</div>
+
+<div class="main">
+    <table>
+        <tr>
+            <td>
+                <span class="flag" onclick="back()"><a>&lt;返回</a></span>
+            </td>
+            <td style="text-align: right;font-style: italic;">
+                <span class="flag">发布任务</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center">
+                <div>
+                    <input id="i-bv" class="ui-input" placeholder="视频bv号">
+                    <button class="ui-button" onclick="checkBV()">检查视频</button>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding-top: 20px">
+                <div class="task-view">
+                    <span class="flag" style="font-size: large">☑️使用教程</span>
+                    <p>点击"接受"后,会打开一个新的窗口,等待时间结束,关闭即可完成任务</p>
+                    <p>秉承互助精神，你完成任务获取的积分，可用于发布任务消耗积分。</p>
+                    <p>这是一个互助的循环！</p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function checkBV() {
+        let bvView = $("#i-bv");
+        let bv = bvView.val()
+        if (!bv) {
+            bvView.attr("is-error", "")
+            return
+        } else {
+            bvView.removeAttr("is-error")
+        }
+        $(".ui-button").addClass("loading")
+        $.ajax({
+            url: "/taskManager/checkBV?bv=" + bv + "&r=" + Math.random(),
+            method: "get",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                alert("当前与服务器通信失败，请稍后重试！")
+            },
+            complete: function () {
+                $(".ui-button").removeClass("loading")
+            }
+        })
+    }
+</script>
+</body>
+</html>

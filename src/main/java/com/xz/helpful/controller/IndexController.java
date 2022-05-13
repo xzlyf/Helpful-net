@@ -183,4 +183,20 @@ public class IndexController {
         return modelAndView;
     }
 
+    @GetMapping("/publish")
+    public ModelAndView publishTask(){
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        modelAndView.setViewName("publish");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
+
 }
