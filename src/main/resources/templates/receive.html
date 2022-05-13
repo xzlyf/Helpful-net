@@ -23,6 +23,11 @@
             float: right;
         }
 
+        .user-tool span {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
         .btn_logout {
             display: inline-block;
             border: 2px solid black;
@@ -70,7 +75,9 @@
         <img th:src="@{/images/logo.png}">
     </div>
     <div class="user-tool">
-        <span style="font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
+        <span>积分：</span>
+        <span id="wallet" style="color: #f00">[[${info.wallet}]]</span>
+        <span style="margin: 0 30px">[[${info.name}]]</span>
         <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>
@@ -87,7 +94,20 @@
         </tr>
         <tr>
             <td colspan="2">
-                <div id="task-view"></div>
+                <div class="task-view" >
+                   <div class="info-view">
+
+                   </div>
+                    <div id="controller-bar">
+                        <span class="btn-re" onclick="startTask(this)">接受</span>
+                        <span class="btn-next" onclick="getTask(this)">跳过</span>
+                    </div>
+                    <div id="verify-bar" style="display: none">
+                        <span><ui-loading rows="3" style="--color:black">正在验证...<ui-dot></ui-dot></ui-loading></span>
+                    </div>
+
+                </div>
+
             </td>
         </tr>
         <tr>
@@ -125,7 +145,7 @@
                 // console.log("result=" + result)
                 // console.log("status=" + status)
                 // console.log("状态码=" + xhr.status)
-                $("#task-view").html(result)
+                $(".info-view").html(result)
             },
             error: function () {
                 $(obj).removeClass("disable")

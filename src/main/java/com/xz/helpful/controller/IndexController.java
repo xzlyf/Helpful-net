@@ -64,12 +64,12 @@ public class IndexController {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findByEmailInfo(email);
-        if (userInfo == null) {
+        if (email == null) {
             subject.logout();
             modelAndView.setViewName("index");
             return modelAndView;
         }
+        UserVo userInfo = userServer.findInfoByEmail(email);
         modelAndView.setViewName("home");
         modelAndView.addObject("info", userInfo);
         return modelAndView;
@@ -172,7 +172,7 @@ public class IndexController {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findByEmailInfo(email);
+        UserVo userInfo = userServer.findInfoByEmail(email);
         if (userInfo == null) {
             subject.logout();
             modelAndView.setViewName("index");

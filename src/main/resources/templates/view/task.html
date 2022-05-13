@@ -1,29 +1,28 @@
-<div class="task-view" xmlns:th="http://www.thymeleaf.org">
+<div>
+    <h1>[[${task.taskDesc}]]</h1>
+</div>
+<div>
     <div>
-        <h1>[[${task.taskDesc}]]</h1>
+        <b>积分：</b>
+        <span>[[${task.taskPay}]]</span>
     </div>
-    <div class="info-view">
-        <div>
-            <b>积分：</b>
-            <span>[[${task.taskPay}]]</span>
-        </div>
-        <div>
-            <b>任务来至：</b>
-            <span>[[${task.taskFrom}]]</span>
-        </div>
-        <div class="progress-bar">
-            <b>任务进度：</b>
-            <span id="progress" class="progress-bar-view">&nbsp;</span>
-            <span id="progress_num">0%</span>
-        </div>
+    <div>
+        <b>任务来至：</b>
+        <span>[[${task.taskFrom}]]</span>
     </div>
-    <div id="controller-bar">
-        <span class="btn-re" onclick="startTask(this)">接受</span>
-        <span class="btn-next" onclick="getTask(this)">跳过</span>
+    <div class="progress-bar">
+        <b>任务进度：</b>
+        <span id="progress" class="progress-bar-view">&nbsp;</span>
+        <span id="progress_num">0%</span>
     </div>
-    <div id="verify-bar" style="display: none">
-        <span><ui-loading rows="3" style="--color:black">正在验证...<ui-dot></ui-dot></ui-loading></span>
-    </div>
+</div>
+<div xmlns:th="http://www.thymeleaf.org">
     <input id="remote_url" type="hidden" th:value="${task.taskUrl}">
     <input id="remote_id" type="hidden" th:value="${task.id}">
 </div>
+<script>
+    $(function () {
+        let wallet = [[${wallet}]]
+        $("#wallet").text(wallet)
+    })
+</script>

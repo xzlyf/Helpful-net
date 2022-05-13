@@ -4,7 +4,7 @@ import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.service.TaskService;
-import com.xz.helpful.service.UserServer;
+import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RedisUtil;
 import com.xz.helpful.utils.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +33,12 @@ public class TaskHallController {
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
-    private UserServer userServer;
+    private WalletServer walletServer;
     @Autowired
     private UUIDUtil uuidUtil;
 
     @RequestMapping("/get")
-    public ModelAndView getRandom() {
+    public ModelAndView getRandom(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -50,13 +50,18 @@ public class TaskHallController {
         //开始取任务
         Task one = taskService.getOne(email);
         //没有任务了
-        if (one==null){
+        if (one == null) {
             modelAndView.setViewName("view/task-error");
             modelAndView.addObject("msg", "暂时没有新的任务了，休息下再来吧~");
-        }else{
+        } else {
             //使用view页面返回html
             modelAndView.setViewName("view/task");
             modelAndView.addObject("task", one);
+        }
+        Integer id = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
+        if (id != null) {
+            Integer wallet = walletServer.queryMoneyByUserId(id);
+            modelAndView.addObject("wallet", wallet);
         }
         return modelAndView;
     }
@@ -68,7 +73,7 @@ public class TaskHallController {
     @GetMapping("/startTask")
     public Object startTask(HttpSession session,
                             @RequestParam String taskId) throws InterruptedException {
-        Thread.sleep(5000);
+        Thread.sleep(15000);
         String r = uuidUtil.getUUID32();
         //存入uuid，做校验用，60秒后过期
         redisUtil.set(RedisKey.REDIS_TASK_CHECK + session.getId() + taskId, r, 60);

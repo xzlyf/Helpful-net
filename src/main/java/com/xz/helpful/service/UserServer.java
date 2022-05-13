@@ -21,7 +21,7 @@ public interface UserServer {
 
     User findByEmail(String email);
 
-    UserVo findByEmailInfo(String email);
+    UserVo findInfoByEmail(String email);
 
     //根据邮箱查询用户id
     Integer findUserIdByEmail(String email);

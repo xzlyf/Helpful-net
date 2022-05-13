@@ -65,7 +65,7 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public UserVo findByEmailInfo(String email) {
+    public UserVo findInfoByEmail(String email) {
         User login = userMapper.findByEmail(email);
         if (login == null) {
             return null;
