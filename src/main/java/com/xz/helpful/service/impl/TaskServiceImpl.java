@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task getOne(String email) {
+    public Task getOne(Integer userId, String email) {
         //以用户email的hashcode查询redis，是否存缓存。没有重新拉去数据库，并缓存到redis供下次使用
         String userKey = RedisKey.REDIS_TASK_KEY + email;
 
@@ -49,7 +49,7 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = ConvertUtil.castList(redisUtil.get(userKey), Task.class);
         if (tasks == null) {
             //redis没有查询到数据，重新去sql拉取n条未执行的任务
-            tasks = taskMapper.getNotInFilterTask(email, 10);
+            tasks = taskMapper.getNotInFilterTask(userId, email, 10);
 
         }
         Task target = null;

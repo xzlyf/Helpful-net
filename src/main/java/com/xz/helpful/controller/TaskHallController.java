@@ -1,6 +1,5 @@
 package com.xz.helpful.controller;
 
-import com.xz.helpful.annotation.LimitRequest;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.pojo.vo.BaseVo;
@@ -9,8 +8,6 @@ import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RedisUtil;
 import com.xz.helpful.utils.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 任务大厅接口
@@ -45,15 +40,15 @@ public class TaskHallController {
     //@LimitRequest(count = 8,time = 60000)
     public Object getRandom(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        if (email == null) {
+        String email = (String) session.getAttribute(RedisKey.SESSION_USER_EMAIL);
+        Integer userId = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
+        if (email == null || userId == null) {
             modelAndView.setViewName("view/task-error");
             modelAndView.addObject("msg", "未登录");
             return modelAndView;
         }
         //开始取任务
-        Task one = taskService.getOne(email);
+        Task one = taskService.getOne(userId, email);
         //没有任务了
         if (one == null) {
             modelAndView.setViewName("view/task-error");

@@ -17,7 +17,7 @@ public interface TaskService {
      * 随机获取一个任务
      * @param email 用户email
      */
-    Task getOne(String email);
+    Task getOne(Integer userId,String email);
 
     /**
      * 完成一个任务

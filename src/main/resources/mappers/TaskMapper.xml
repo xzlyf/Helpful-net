@@ -30,6 +30,7 @@
             from taskfilter
             where user_email = #{email}
         )
+          and t1.task_from != #{userId}
           and t1.id >= (RAND() * (SELECT MAX(id) FROM tasklist)) limit #{size};
     </select>
 
