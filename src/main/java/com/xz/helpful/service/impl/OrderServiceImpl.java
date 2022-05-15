@@ -20,7 +20,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Integer addOrder(int userId, int taskId) {
-        return orderMapper.addOrder(userId,taskId);
+    public Integer addOrder(int userId, int taskId,String payType) {
+        return orderMapper.addOrder(userId,taskId,payType);
     }
 }

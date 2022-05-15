@@ -616,8 +616,7 @@ public class RedisShiroUtil {
      */
     public Set<String> keys(String patterm) {
         try {
-            Set<String> keys = redisShiroTemplate.keys(patterm);
-            return keys;
+            return redisShiroTemplate.keys(patterm);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

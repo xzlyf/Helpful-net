@@ -2,16 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.OrderMapper">
     <insert id="addOrder">
-        insert into `order` (user_id, task_id)
-        values (#{userId}, #{taskId})
+        insert into `order` (user_id, task_id,`type`)
+        values (#{userId}, #{taskId},#{payType})
     </insert>
     <select id="findAll" resultType="com.xz.helpful.pojo.vo.OrderVo">
-        select o.id, u.name as done_user, uf.name as from_user, p.name as task_type, t.task_pay,t.task_desc, o.create_time
+        select o.id,
+               o.type as pay_type,
+               u.name  as done_user,
+               uf.name as from_user,
+               p.name  as task_type,
+               t.task_pay,
+               t.task_desc,
+               o.create_time
         from `order` o
                  left join tasklist t on o.task_id = t.id
                  left join task_type p on t.task_type = p.id
                  left join `user` u on o.user_id = u.id
                  left join `user` uf on t.task_from = uf.id
-        where o.user_id = #{userId}
+        where o.user_id = #{userId} limit 0,100
     </select>
 </mapper>

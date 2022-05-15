@@ -17,6 +17,7 @@ public class OrderVo implements Serializable {
     private String fromUser;
     private String taskType;
     private Integer taskPay;
+    private String payType;
     private String taskDesc;
     /*
     JsonFormat注解是jackson的注解。

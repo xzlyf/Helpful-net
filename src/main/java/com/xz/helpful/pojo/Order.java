@@ -8,5 +8,4 @@ public class Order implements Serializable {
     private Integer userId;
     private Integer taskId;
     private Date createTime;
-    private Date updateTime;
 }

@@ -48,6 +48,10 @@ spring:
         max-wait: -1ms
         max-idle: 2
         min-idle: 0
+      cluster:
+        refresh:
+          adaptive: true
+          period: 60
 
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
