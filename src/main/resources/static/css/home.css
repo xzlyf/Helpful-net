@@ -1,34 +1,6 @@
-.user-tool {
-    position: relative;
-    display: inline-block;
-    right: 200px;
-    top: 20px;
-    float: right;
-}
 
-.user-menu {
-    list-style-type: none;
-    text-align: center;
-    display: inline;
-    font-size: 20px;
-    font-weight: bold;
-    margin-right: 20px;
-}
 
-.user-menu li {
-    display: inline;
-    margin-left: 20px;
-}
 
-.user-menu a {
-    text-decoration: none;
-    color: #000;
-
-}
-.user-menu a:hover {
-    color: #f00;
-
-}
 
 .center {
     width: 800px;

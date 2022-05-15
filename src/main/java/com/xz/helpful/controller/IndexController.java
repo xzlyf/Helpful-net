@@ -183,6 +183,9 @@ public class IndexController {
         return modelAndView;
     }
 
+    /**
+     * 发布任务
+     */
     @GetMapping("/publish")
     public ModelAndView publishTask(){
         ModelAndView modelAndView = new ModelAndView();
@@ -195,6 +198,22 @@ public class IndexController {
             return modelAndView;
         }
         modelAndView.setViewName("publish");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
+
+    @GetMapping("/history")
+    public ModelAndView history(){
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        modelAndView.setViewName("history");
         modelAndView.addObject("info", userInfo);
         return modelAndView;
     }

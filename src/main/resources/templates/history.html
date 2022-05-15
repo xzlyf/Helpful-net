@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>互助网-历史记录</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+          integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="nav">
+    <div class="logo">
+        <a href="/"><img th:src="@{/images/logo.png}"></a>
+    </div>
+    <div class="user-tool">
+        <ul class="user-menu">
+            <li><a href="/">主页</a></li>
+            <li><a href="/history">任务记录</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">使用帮助</a></li>
+        </ul>
+        <span style=" font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
+        <a href="/logout" class="btn_logout">退出登录</a>
+    </div>
+</div>
+
+<div style="width: 800px;margin: 50px auto;">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>受托人</th>
+            <th>委托人</th>
+            <th>任务类型</th>
+            <th>任务积分</th>
+            <th>任务简述</th>
+            <th>完成时间</th>
+        </tr>
+        </thead>
+        <tbody id="history-view">
+        </tbody>
+    </table>
+</div>
+<script>
+
+    $(function () {
+        findAll()
+    })
+
+    function findAll() {
+        $.ajax({
+            url: "/order/findAll",
+            method: "GET",
+            success: function (res) {
+                if (res.code === 1) {
+                    let html = "";
+                    let data = res.data;
+                    for (let i = 0; i < data.length ; i++) {
+                        html +=
+                            "<tr>" +
+                            "<td>"+data[i].doneUser+"</td>" +
+                            "<td>"+data[i].fromUser+"</td>" +
+                            "<td>"+data[i].taskType+"</td>" +
+                            "<td>"+data[i].taskPay+"</td>" +
+                            "<td>"+data[i].taskDesc+"</td>" +
+                            "<td>"+data[i].createTime+"</td>" +
+                            "</tr>"
+                    }
+                    $("#history-view").html(html)
+                } else {
+                    alert(res.data)
+                }
+            },
+            error: function () {
+                alert("当前与服务器连接失败，请稍后重试！")
+            }
+        })
+    }
+</script>
+</body>
+</html>

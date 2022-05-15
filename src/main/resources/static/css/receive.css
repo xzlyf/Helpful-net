@@ -18,23 +18,6 @@
     font-weight: bold;
 }
 
-.btn_logout {
-    display: inline-block;
-    border: 2px solid black;
-    border-radius: 8px;
-    padding: 3px 5px 3px 5px;
-    font-size: 15px;
-    color: #fff;
-    background-color: #f00;
-    text-decoration: none;
-}
-
-.btn_logout:hover {
-    box-shadow: 1px 1px #000;
-    background-color: #c41717;
-    color: white;
-
-}
 
 table {
     margin: 0 auto;

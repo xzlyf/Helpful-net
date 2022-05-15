@@ -26,3 +26,51 @@ img {
 .disable {
     pointer-events: none;
 }
+.user-tool {
+    position: relative;
+    display: inline-block;
+    right: 200px;
+    top: 20px;
+    float: right;
+}
+
+.user-menu {
+    list-style-type: none;
+    text-align: center;
+    display: inline;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.user-menu li {
+    display: inline;
+    margin-left: 20px;
+}
+
+.user-menu a {
+    text-decoration: none;
+    color: #000;
+
+}
+.user-menu a:hover {
+    color: #f00;
+
+}
+.btn_logout {
+    display: inline-block;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 3px 5px 3px 5px;
+    font-size: 15px;
+    color: #fff;
+    background-color: #f00;
+    text-decoration: none;
+}
+
+.btn_logout:hover {
+    box-shadow: 1px 1px #000;
+    background-color: #c41717;
+    color: white;
+
+}
