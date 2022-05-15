@@ -7,135 +7,22 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <title>互助网</title>
-    <style>
-
-        .user-tool {
-            position: relative;
-            display: inline-block;
-            right: 200px;
-            top: 20px;
-            float: right;
-        }
-
-        .center {
-            width: 800px;
-            height: 400px;
-            position: relative;
-            padding: 5px;
-            margin-top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .center a {
-            color: black;
-            text-decoration: none;
-        }
-
-        /*正常的未被访问过的链接*/
-        .center a:link {
-            text-decoration: none;
-        }
-
-        /*已经访问过的链接*/
-        .center a:visited {
-            text-decoration: none;
-        }
-
-        /*鼠标划过(停留)的链接*/
-        .center a:hover {
-            text-decoration: none;
-        }
-
-        /* 正在点击的链接*/
-        .center a:active {
-            text-decoration: none;
-
-        }
-
-        .center div {
-            text-align: center;
-        }
-
-        .btn_reception {
-            position: absolute;
-            left: 40px;
-            display: inline-block;
-            border: 3px solid black;
-            border-radius: 12px;
-            padding: 15px 25px 15px 25px;
-            font-size: 50px;
-            background-color: #fff100;
-            -moz-box-shadow: 5px 5px #000; /* 老的 Firefox */
-            box-shadow: 5px 5px #000;
-
-        }
-
-        .btn_reception:hover {
-            margin: 5px 5px 5px 5px;
-            box-shadow: 1px 1px #000;
-        }
-
-        .btn_publish {
-            position: absolute;
-            right: 40px;
-            display: inline-block;
-            border: 3px solid black;
-            border-radius: 12px;
-            padding: 15px 25px 15px 25px;
-            font-size: 50px;
-            background-color: #13B5B1;
-            -moz-box-shadow: 5px 5px #000; /* 老的 Firefox */
-            box-shadow: 5px 5px #000;
-        }
-
-        .btn_publish:hover {
-            margin: 5px -5px 0px 0px;
-            box-shadow: 1px 1px #000;
-        }
-
-        .btn_logout {
-            display: inline-block;
-            border: 2px solid black;
-            border-radius: 8px;
-            padding: 3px 5px 3px 5px;
-            font-size: 15px;
-            color: #fff;
-            background-color: #f00;
-            text-decoration: none;
-        }
-
-        .btn_logout:hover {
-            box-shadow: 1px 1px #000;
-            background-color: #c41717;
-
-        }
-
-        .notice {
-            width: 500px;
-            height: auto;
-            position: relative;
-            padding: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .notice p {
-            font-size: 18px;
-            font-weight: normal;
-        }
-
-    </style>
 </head>
 <body>
 <div class="nav">
     <div class="logo">
-        <img th:src="@{/images/logo.png}">
+        <a href="/"><img th:src="@{/images/logo.png}"></a>
     </div>
     <div class="user-tool">
-        <span style="font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
+        <ul class="user-menu">
+            <li><a href="#">任务记录</a></li>
+            <li><a href="#">任务管理</a></li>
+            <li><a href="#">使用帮助</a></li>
+        </ul>
+        <span style=" font-size: 20px;font-weight: bold;margin-right: 20px">[[${info.name}]]</span>
         <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>
@@ -178,6 +65,7 @@
             }
         })
     }
+
     $(function () {
         getNotices()
     })
