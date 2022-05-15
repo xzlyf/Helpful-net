@@ -2,8 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.TaskMapper">
     <insert id="insert">
-        insert into tasklist (task_type, task_pay, task_from, is_enable, is_hidden, task_desc, task_url, task_mid,task_img)
-        values (#{taskType}, #{taskPay}, #{taskFrom}, #{isEnable}, #{isHidden}, #{taskDesc}, #{taskUrl}, #{taskMid},#{taskImg});
+        insert into tasklist (task_type, task_pay, task_from, is_enable, is_hidden, task_desc, task_url, task_mid,
+                              task_img)
+        values (#{taskType}, #{taskPay}, #{taskFrom}, #{isEnable}, #{isHidden}, #{taskDesc}, #{taskUrl}, #{taskMid},
+                #{taskImg});
     </insert>
     <update id="updateTaskEnable">
         update tasklist
@@ -22,16 +24,25 @@
           and is_hidden = 0
     </select>
     <!--随机取出n条数据，并且通过filter.task_id过滤已执行的任务，只返回n条未执行的任务-->
-    <select id="getNotInFilterTask" resultType="com.xz.helpful.pojo.Task">
-        SELECT *
+    <select id="getNotInFilterTask" resultType="com.xz.helpful.pojo.vo.TaskVo">
+        SELECT t1.id  as task_id,
+               u.name as from_user,
+               p.name as type_name,
+               t1.task_type,
+               t1.task_desc,
+               t1.task_pay,
+               t1.task_url,
+               t1.task_img
         FROM tasklist as t1
-        WHERE id not in (
-            select task_id
-            from taskfilter
+                 left join task_type p on t1.task_type = p.id
+                 left join `user` u on t1.task_from = u.id
+        WHERE t1.id not in (
+            select tf.task_id
+            from taskfilter tf
             where user_email = #{email}
         )
           and t1.task_from != #{userId}
-          and t1.id >= (RAND() * (SELECT MAX(id) FROM tasklist)) limit #{size};
+          and t1.id >= (RAND() * (SELECT MAX(tt.id) FROM tasklist tt)) limit #{size};
     </select>
 
 </mapper>

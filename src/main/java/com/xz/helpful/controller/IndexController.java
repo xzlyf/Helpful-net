@@ -218,4 +218,20 @@ public class IndexController {
         return modelAndView;
     }
 
+    @GetMapping("/manager")
+    public ModelAndView manager(){
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        modelAndView.setViewName("taskManager");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
+
 }

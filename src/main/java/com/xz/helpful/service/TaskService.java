@@ -2,6 +2,7 @@ package com.xz.helpful.service;
 
 import com.xz.helpful.pojo.BiliMovie;
 import com.xz.helpful.pojo.Task;
+import com.xz.helpful.pojo.vo.TaskVo;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface TaskService {
      * 随机获取一个任务
      * @param email 用户email
      */
-    Task getOne(Integer userId,String email);
+    TaskVo getOne(Integer userId, String email);
 
     /**
      * 完成一个任务

@@ -8,7 +8,7 @@
     </div>
     <div>
         <b>任务来至：</b>
-        <span>[[${task.taskFrom}]]</span>
+        <span>[[${task.fromUser}]]</span>
     </div>
     <div class="progress-bar">
         <b>任务进度：</b>
@@ -18,7 +18,7 @@
 </div>
 <div xmlns:th="http://www.thymeleaf.org">
     <input id="remote_url" type="hidden" th:value="${task.taskUrl}">
-    <input id="remote_id" type="hidden" th:value="${task.id}">
+    <input id="remote_id" type="hidden" th:value="${task.taskId}">
 </div>
 <script>
     $(function () {

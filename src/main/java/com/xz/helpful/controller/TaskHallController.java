@@ -1,8 +1,8 @@
 package com.xz.helpful.controller;
 
 import com.xz.helpful.global.RedisKey;
-import com.xz.helpful.pojo.Task;
 import com.xz.helpful.pojo.vo.BaseVo;
+import com.xz.helpful.pojo.vo.TaskVo;
 import com.xz.helpful.service.TaskService;
 import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RedisUtil;
@@ -48,7 +48,7 @@ public class TaskHallController {
             return modelAndView;
         }
         //开始取任务
-        Task one = taskService.getOne(userId, email);
+        TaskVo one = taskService.getOne(userId, email);
         //没有任务了
         if (one == null) {
             //modelAndView.setViewName("view/task-error");
