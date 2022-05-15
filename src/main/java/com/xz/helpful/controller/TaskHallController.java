@@ -1,5 +1,6 @@
 package com.xz.helpful.controller;
 
+import com.xz.helpful.annotation.LimitRequest;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.pojo.vo.BaseVo;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 任务大厅接口
@@ -38,7 +41,9 @@ public class TaskHallController {
     private UUIDUtil uuidUtil;
 
     @RequestMapping("/get")
-    public ModelAndView getRandom(HttpSession session) {
+    @ResponseBody
+    //@LimitRequest(count = 8,time = 60000)
+    public Object getRandom(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -53,6 +58,7 @@ public class TaskHallController {
         if (one == null) {
             modelAndView.setViewName("view/task-error");
             modelAndView.addObject("msg", "暂时没有新的任务了，休息下再来吧~");
+            return modelAndView;
         } else {
             //使用view页面返回html
             modelAndView.setViewName("view/task");

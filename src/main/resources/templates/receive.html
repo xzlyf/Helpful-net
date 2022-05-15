@@ -99,10 +99,10 @@
         </tr>
         <tr>
             <td colspan="2">
-                <div class="task-view" >
-                   <div class="info-view">
+                <div class="task-view">
+                    <div class="info-view">
 
-                   </div>
+                    </div>
                     <div id="controller-bar">
                         <span class="btn-re" onclick="startTask(this)">接受</span>
                         <span class="btn-next" onclick="getTask(this)">跳过</span>
@@ -144,10 +144,11 @@
             method: "GET",
             success: function (result, status, xhr) {
                 $(obj).removeClass("disable")
-                // console.log("result=" + result)
-                // console.log("status=" + status)
-                // console.log("状态码=" + xhr.status)
-                $(".info-view").html(result)
+                if (result.code === -1) {
+                    alert(result.data)
+                } else {
+                    $(".info-view").html(result)
+                }
             },
             error: function () {
                 $(obj).removeClass("disable")
