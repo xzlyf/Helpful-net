@@ -62,6 +62,11 @@
             font-weight: 1000;
         }
 
+        .flag a {
+            text-decoration: none;
+            color: #000;
+        }
+
         a:hover {
             color: #555555;
         }
@@ -86,7 +91,7 @@
     <table>
         <tr>
             <td>
-                <span class="flag" onclick="back()"><a>&lt;返回</a></span>
+                <span class="flag"><a href="/">&lt;返回</a></span>
             </td>
             <td style="text-align: right;font-style: italic;">
                 <span class="flag">观看<span style="color: #f00">任务</span></span>
@@ -130,9 +135,6 @@
         getTask()
     })
 
-    function back() {
-        window.history.back()
-    }
 
     function getTask(obj) {
         $(obj).addClass("disable")

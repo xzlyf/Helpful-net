@@ -120,7 +120,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createOne(Integer userId, BiliMovie biliMovie) {
+    public void createOne(Integer userId, BiliMovie biliMovie) throws Exception {
         Task task = new Task();
         task.setTaskType(2);
         task.setTaskPay(1);

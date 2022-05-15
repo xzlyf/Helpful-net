@@ -19,5 +19,5 @@ public interface TaskMapper {
 
     void updateTaskEnable(Integer id, Integer enable);
 
-    Integer insert(Task task);
+    Integer insert(Task task) throws Exception;
 }

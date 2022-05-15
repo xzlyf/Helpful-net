@@ -92,7 +92,12 @@ public class TaskController {
             modelAndView.addObject("msg", "身份验证失败，请重新登录");
             return modelAndView;
         }
-        taskService.createOne(userId, data);
+        try {
+            taskService.createOne(userId, data);
+        }catch (Exception e){
+            modelAndView.addObject("msg", "任务已存在，请勿发布已存在的任务！");
+            return modelAndView;
+        }
         modelAndView.addObject("msg", "任务发布成功");
         return modelAndView;
     }
