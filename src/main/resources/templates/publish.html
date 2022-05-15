@@ -152,6 +152,26 @@
             }
         })
     }
+    function affirm() {
+        $("#btn-affirm").addClass("loading")
+        $.ajax({
+            url: "/taskManager/affirmBV",
+            method: "get",
+            success: function (res) {
+                if (res.code === -1) {
+                    alert(res.data)
+                } else {
+                    $("#task-check").html(res);
+                }
+            },
+            error: function () {
+                alert("当前与服务器通信失败，请稍后重试！")
+            },
+            complete: function () {
+                $("#btn-affirm").removeClass("loading")
+            }
+        })
+    }
 </script>
 </body>
 </html>

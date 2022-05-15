@@ -120,6 +120,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void createOne(BiliMovie biliMovie) {
+    public void createOne(Integer userId, BiliMovie biliMovie) {
+        Task task = new Task();
+        task.setTaskType(2);
+        task.setTaskPay(1);
+        task.setTaskFrom(userId);
+        task.setIsEnable(1);
+        task.setIsHidden(0);
+        task.setTaskDesc(biliMovie.getTitle());
+        //https://href.li/?https://www.bilibili.com/video/BV1fr4y1W79k
+        String url = "https://href.li/?https://www.bilibili.com/video/" + biliMovie.getBvid();
+        task.setTaskUrl(url);
+        task.setTaskMid(biliMovie.getBvid());
+        task.setTaskImg(biliMovie.getPic());
+        taskMapper.insert(task);
     }
 }

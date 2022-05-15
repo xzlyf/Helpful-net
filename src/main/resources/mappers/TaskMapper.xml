@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.TaskMapper">
     <insert id="insert">
-        
+        insert into tasklist (task_type, task_pay, task_from, is_enable, is_hidden, task_desc, task_url, task_mid,task_img)
+        values (#{taskType}, #{taskPay}, #{taskFrom}, #{isEnable}, #{isHidden}, #{taskDesc}, #{taskUrl}, #{taskMid},#{taskImg});
     </insert>
     <update id="updateTaskEnable">
         update tasklist

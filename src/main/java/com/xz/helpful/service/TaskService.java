@@ -34,5 +34,5 @@ public interface TaskService {
     /**
      * 创建一个任务
      */
-    void createOne(BiliMovie biliMovie);
+    void createOne(Integer userId,BiliMovie biliMovie);
 }

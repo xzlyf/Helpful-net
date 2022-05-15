@@ -19,5 +19,5 @@ public interface TaskMapper {
 
     void updateTaskEnable(Integer id, Integer enable);
 
-    Integer insert(BiliMovie entity);
+    Integer insert(Task task);
 }
