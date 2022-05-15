@@ -51,9 +51,10 @@ public class TaskHallController {
         Task one = taskService.getOne(userId, email);
         //没有任务了
         if (one == null) {
-            modelAndView.setViewName("view/task-error");
-            modelAndView.addObject("msg", "暂时没有新的任务了，休息下再来吧~");
-            return modelAndView;
+            //modelAndView.setViewName("view/task-error");
+            //modelAndView.addObject("msg", "暂时没有新的任务了，休息下再来吧~");
+            //return modelAndView;
+            return BaseVo.failed("暂时没有新的任务了，休息下再来吧~");
         } else {
             //使用view页面返回html
             modelAndView.setViewName("view/task");
