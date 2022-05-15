@@ -3,6 +3,7 @@ package com.xz.helpful.service.impl;
 import com.xz.helpful.dao.TaskFilterMapper;
 import com.xz.helpful.dao.TaskMapper;
 import com.xz.helpful.global.RedisKey;
+import com.xz.helpful.pojo.BiliMovie;
 import com.xz.helpful.pojo.Task;
 import com.xz.helpful.service.OrderService;
 import com.xz.helpful.service.TaskService;
@@ -116,5 +117,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public void updateTaskEnable(Integer id, Boolean on) {
         taskMapper.updateTaskEnable(id, on ? 1 : 0);
+    }
+
+    @Override
+    public void createOne(BiliMovie biliMovie) {
     }
 }

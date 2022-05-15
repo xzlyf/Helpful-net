@@ -1,5 +1,6 @@
 package com.xz.helpful.service;
 
+import com.xz.helpful.pojo.BiliMovie;
 import com.xz.helpful.pojo.Task;
 
 import java.util.List;
@@ -29,4 +30,9 @@ public interface TaskService {
      * @param on true 开启， false 关闭
      */
     void updateTaskEnable(Integer id, Boolean on);
+
+    /**
+     * 创建一个任务
+     */
+    void createOne(BiliMovie biliMovie);
 }

@@ -3,7 +3,10 @@ package com.xz.helpful.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xz.helpful.annotation.LimitRequest;
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.BiliMovie;
+import com.xz.helpful.service.TaskService;
+import com.xz.helpful.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -28,6 +33,10 @@ public class TaskController {
     public static final String BILI_MOVIE_INFO = "http://api.bilibili.com/x/web-interface/view?bvid=";
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private RedisUtil redisUtil;
+    @Autowired
+    private TaskService taskService;
 
     /**
      * bilibili api 获取视频信息 ：http://api.bilibili.com/x/web-interface/view?bvid=
@@ -36,13 +45,14 @@ public class TaskController {
      */
     @GetMapping("/checkBV")
     @ResponseBody
-    @LimitRequest(count = 8,time = 60000)
-    public Object checkBV(@RequestParam String bv) {
+    @LimitRequest(count = 8, time = 60000)
+    public Object checkBV(HttpSession session, @RequestParam String bv) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("view/task-error");
 
         ResponseEntity<String> responseEntity;
         try {
+            //通过bili api获取视频信息
             responseEntity = restTemplate.getForEntity(BILI_MOVIE_INFO + bv, String.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,8 +70,23 @@ public class TaskController {
             modelAndView.addObject("msg", "数据源解析失败！");
             return modelAndView;
         }
+        //存入session,待用户确认，60秒后过期
+        redisUtil.set(RedisKey.REDIS_USER_TEMP + session.getId(), data, 60);
         modelAndView.setViewName("view/task-check");
         modelAndView.addObject("info", data);
         return modelAndView;
+    }
+
+    @GetMapping("/affirmBV")
+    @LimitRequest(count = 8, time = 30000)
+    public Object affirmBV(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("view/task-error");
+        BiliMovie data = (BiliMovie) redisUtil.get(RedisKey.REDIS_USER_TEMP + session.getId());
+        if (data == null) {
+            modelAndView.addObject("msg", "发布失败，请重试！");
+            return modelAndView;
+        }
+        return null;
     }
 }

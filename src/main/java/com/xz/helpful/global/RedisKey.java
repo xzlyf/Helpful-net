@@ -14,6 +14,8 @@ public class RedisKey {
     public static final String REDIS_TASK_KEY = "user:task:";
     //任务校验用
     public static final String REDIS_TASK_CHECK = "user:task:check:";
+    //用户缓存
+    public static final String REDIS_USER_TEMP = "user:temp:";
     //shiro session key
     public static final String REDIS_SHIRO_SESSION = "session:id:";
     //人机验证码

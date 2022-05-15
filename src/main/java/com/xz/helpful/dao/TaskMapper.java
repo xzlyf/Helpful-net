@@ -1,5 +1,6 @@
 package com.xz.helpful.dao;
 
+import com.xz.helpful.pojo.BiliMovie;
 import com.xz.helpful.pojo.Task;
 import org.apache.ibatis.annotations.MapKey;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface TaskMapper {
     List<Task> getNotInFilterTask(String email,Integer size);
 
     void updateTaskEnable(Integer id, Integer enable);
+
+    Integer insert(BiliMovie entity);
 }
