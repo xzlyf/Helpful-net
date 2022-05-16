@@ -107,7 +107,6 @@ public class TaskServiceImpl implements TaskService {
         walletServer.updateMoneyByUserId(userId, +task.getTaskPay());
         //更新任务创建者的余额
         walletServer.updateMoneyByUserId(task.getTaskFrom(), -task.getTaskPay());
-        orderService.addOrder(task.getTaskFrom(), task.getId(),"-");
         Integer taskFromWallet = walletServer.queryMoneyByUserId(task.getTaskFrom());
         if (taskFromWallet <= 0) {
             //创建者余额耗尽，任务关闭
