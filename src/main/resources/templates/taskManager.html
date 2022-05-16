@@ -7,16 +7,16 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>互助网-任务管理</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/widget-switch.css}">
     <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <style>
-        .master-width{
+        .master-width {
             width: 80%;
             margin: 0 auto;
         }
+
         .main {
             padding: 20px;
             display: flex;
@@ -91,33 +91,12 @@
     </div>
 </div>
 <div class="alert alert-info master-width" role="alert"><strong style="font-size: large">所有任务</strong></div>
-<div class="main master-width">
-    <div class="task">
-        <div class="switch-input">
-            <input id="turn" type="checkbox" onclick="onChange(this)" alt="开关任务"/><label for="turn"></label>
-        </div>
-        <p><strong>BV1oT4y1671T</strong></p>
-        <p>历史书太小 装不下一个人波澜壮阔的一生 历史书又太大 装下了华夏上下五千年</p>
-        <img src="http://i0.hdslb.com/bfs/archive/a29d0b8b081b1ffe90aca727543b528c5cdb4f9d.jpg">
-        <div>
-            <span><strong>创建时间：</strong></span>
-            <span>2020/02/20 22:22:22</span>
-            <br/>
-            <span><strong>任务类型：</strong></span>
-            <span>观看任务</span>
-            <br/>
-            <span><strong>积分：</strong></span>
-            <span>1</span>
-        </div>
-        <div class="controller-plane">
-            <a href="#">修改</a>
-            <a href="#">删除</a>
-        </div>
-    </div>
+<div id="main-view" class="main master-width">
+
 </div>
 <script>
     $(function () {
-        // findAll()
+        findAll()
     })
 
     function findAll() {
@@ -125,6 +104,34 @@
             url: "/taskManager/findAll",
             success: function (res) {
                 console.log(res)
+                if (res.code !== 1) {
+                    alert(res.data)
+                    return
+                }
+                let data = res.data
+                for (let i = 0; i < data.length; i++) {
+                    let html =
+                        `<div class="task">
+        <p><strong>` + data[i].taskMid + `</strong></p>
+        <p>` + data[i].taskDesc + `</p>
+        <img src="` + data[i].taskImg + `">
+        <div>
+            <span><strong>创建时间：</strong></span>
+            <span>` + data[i].createTime + `</span>
+            <br/>
+            <span><strong>任务类型：</strong></span>
+            <span>` + data[i].typeName + `</span>
+            <br/>
+            <span><strong>积分：</strong></span>
+            <span>` + data[i].taskPay + `</span>
+        </div>
+        <div class="controller-plane">
+            <a href="#">修改</a>
+            <a href="#">删除</a>
+        </div>
+    </div>`
+                    $("#main-view").append(html)
+                }
             },
             error: function () {
                 alert("请求失败")
