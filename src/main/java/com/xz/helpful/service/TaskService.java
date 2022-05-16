@@ -7,7 +7,7 @@ import com.xz.helpful.pojo.vo.TaskVo;
 import java.util.List;
 
 public interface TaskService {
-    List<Task> findAll();
+    List<TaskVo> findAll(Integer userId);
 
     /**
      * 根据任务id查询任务

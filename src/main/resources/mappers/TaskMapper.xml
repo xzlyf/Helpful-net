@@ -17,10 +17,12 @@
         from tasklist
         where id = #{id}
     </select>
-    <select id="findAll" resultType="com.xz.helpful.pojo.Task">
-        select task_type, task_pay, task_from, create_time, task_desc, task_url
-        from tasklist
-        where is_enable = 1
+    <select id="findAll" resultType="com.xz.helpful.pojo.vo.TaskVo">
+        select t.task_type,p.name as type_name, t.task_pay, t.create_time, t.task_desc, t.task_mid,t.task_img
+        from tasklist t
+        left join task_type p on p.id = t.task_type
+        where task_from = #{userId}
+          and is_enable = 1
           and is_hidden = 0
     </select>
     <!--随机取出n条数据，并且通过filter.task_id过滤已执行的任务，只返回n条未执行的任务-->

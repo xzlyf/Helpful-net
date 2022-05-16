@@ -1,8 +1,11 @@
 package com.xz.helpful.pojo.vo;
 
+
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author XiaoZe
@@ -19,4 +22,7 @@ public class TaskVo implements Serializable {
     private Integer taskPay;
     private String taskImg;
     private String taskUrl;
+    private String taskMid;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 }

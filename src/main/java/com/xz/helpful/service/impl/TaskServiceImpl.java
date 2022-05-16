@@ -31,8 +31,8 @@ public class TaskServiceImpl implements TaskService {
     private OrderService orderService;
 
     @Override
-    public List<Task> findAll() {
-        return taskMapper.findAll();
+    public List<TaskVo> findAll(Integer userId) {
+        return taskMapper.findAll(userId);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class TaskServiceImpl implements TaskService {
         //写入filter任务过滤表
         filterMapper.insert(email, task.getId());
         //写入订单
-        orderService.addOrder(userId, task.getId(),"+");
+        orderService.addOrder(userId, task.getId(), "+");
         //更新用户余额
         walletServer.updateMoneyByUserId(userId, +task.getTaskPay());
         //更新任务创建者的余额

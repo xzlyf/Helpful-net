@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.xz.helpful.annotation.LimitRequest;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.BiliMovie;
+import com.xz.helpful.pojo.vo.BaseVo;
+import com.xz.helpful.pojo.vo.TaskVo;
 import com.xz.helpful.service.TaskService;
 import com.xz.helpful.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 /**
@@ -100,5 +103,16 @@ public class TaskController {
         }
         modelAndView.addObject("msg", "任务发布成功");
         return modelAndView;
+    }
+
+    @GetMapping("/findAll")
+    @ResponseBody
+    public Object findAll(HttpSession session){
+        Integer userId = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
+        if (userId==null){
+            return BaseVo.failed("未登录");
+        }
+        List<TaskVo> all = taskService.findAll(userId);
+        return BaseVo.success(all);
     }
 }

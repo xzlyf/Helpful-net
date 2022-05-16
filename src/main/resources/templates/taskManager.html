@@ -8,7 +8,26 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
           integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        .task {
+            display: inline-block;
+            border: 2px solid black;
+            padding: 10px;
+            box-shadow: 2px 2px black;
+        }
 
+        .task p {
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            margin: 0;
+            text-overflow: ellipsis;
+        }
+        .task img{
+            width: 200px;
+            height: 100px
+        }
+    </style>
 </head>
 <body>
 <div class="nav">
@@ -26,5 +45,29 @@
         <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>
+<div>
+    <div class="task">
+        <p><strong>BV1oT4y1671T</strong></p>
+        <p>历史书太小 装不下一个人波澜壮阔的一生 历史书又太大 装下了华夏上下五千年</p>
+        <img src="http://i0.hdslb.com/bfs/archive/a29d0b8b081b1ffe90aca727543b528c5cdb4f9d.jpg">
+    </div>
+</div>
+<script>
+    $(function () {
+        // findAll()
+    })
+
+    function findAll() {
+        $.ajax({
+            url: "/taskManager/findAll",
+            success: function (res) {
+                console.log(res)
+            },
+            error: function () {
+                alert("请求失败")
+            }
+        })
+    }
+</script>
 </body>
 </html>
