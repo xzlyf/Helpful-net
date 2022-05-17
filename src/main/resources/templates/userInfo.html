@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>互助网-个人中心</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <style>
+        .main {
+            position: relative;
+            margin: 50px auto;
+            width: 500px;
+            text-align: center;
+        }
+
+        .avatar {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+        }
+    </style>
 </head>
 <body>
-
+<div class="nav">
+    <div class="logo">
+        <a href="/"><img th:src="@{/images/logo.png}"></a>
+    </div>
+    <div class="user-tool">
+        <ul class="user-menu">
+            <li><a href="/">主页</a></li>
+            <li><a href="/history">任务记录</a></li>
+            <li><a href="/manager">任务管理</a></li>
+            <li><a href="/helpful">使用帮助</a></li>
+            <li><a href="/userinfo">[[${info.name}]]</a></li>
+            <li><a href="/logout" class="btn_logout">退出登录</a></li>
+        </ul>
+    </div>
+</div>
+<div class="main">
+    <img class="avatar" th:alt="${info.email}+'头像'"
+         src="https://img1.baidu.com/it/u=2876685184,2972745678&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500">
+    <h1>[[${info.name}]]</h1>
+    <h3>[[${info.email}]]</h3>
+    <h5>注册时间：[[${info.createTime}]]</h5>
+</div>
 </body>
 </html>

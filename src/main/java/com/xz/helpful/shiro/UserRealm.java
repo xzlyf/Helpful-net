@@ -27,9 +27,9 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         String principal = (String) authenticationToken.getPrincipal();
-        User user = userServer.findByEmail(principal);
-        if (!ObjectUtils.isEmpty(user)) {
-            return new SimpleAuthenticationInfo(principal, user.getPasswd(), getName());
+        String pwd = userServer.getUserPassword(principal);
+        if (!ObjectUtils.isEmpty(pwd)) {
+            return new SimpleAuthenticationInfo(principal, pwd, getName());
         }
         return null;
     }

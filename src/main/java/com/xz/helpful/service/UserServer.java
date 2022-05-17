@@ -19,7 +19,7 @@ public interface UserServer {
     //校验账号密码是否符合规定
     boolean verify(User user);
 
-    User findByEmail(String email);
+    String getUserPassword(String email);
 
     UserVo findInfoByEmail(String email);
 

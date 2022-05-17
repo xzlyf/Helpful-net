@@ -9,12 +9,20 @@
         SELECT *
         from user
     </select>
-    <select id="findByEmail" resultType="com.xz.helpful.pojo.User">
-        select *
+    <select id="findByEmail" resultType="com.xz.helpful.pojo.vo.UserVo">
+        select u.name, u.email, u.passwd, u.code, u.mycode, w.money as wallet, u.create_time
+        from `user` u
+                 left join wallet w on w.user_id = u.id
+        where u.email = #{email}
+    </select>
+    <select id="findUserIdByEmail" resultType="java.lang.Integer">
+        select id
         from user
         where email = #{email}
     </select>
-    <select id="findUserIdByEmail" resultType="java.lang.Integer">
-        select id from user where email = #{email}
+    <select id="getPassword" resultType="java.lang.String">
+        select passwd
+        from `user`
+        where email = #{email}
     </select>
 </mapper>

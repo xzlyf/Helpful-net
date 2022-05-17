@@ -1,6 +1,7 @@
 package com.xz.helpful.dao;
 
 import com.xz.helpful.pojo.User;
+import com.xz.helpful.pojo.vo.UserVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,9 @@ import java.util.List;
 public interface UserMapper {
     List<User> findAll();
 
-    User findByEmail(String email);
+    String getPassword(String email);
+
+    UserVo findByEmail(String email);
 
     Integer findUserIdByEmail(String email);
 

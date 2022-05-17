@@ -1,5 +1,6 @@
 package com.xz.helpful.pojo.vo;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,5 +18,6 @@ public class UserVo implements Serializable {
     private String code;//使用的邀请码
     private String mycode;//自己的邀请码
     private Integer wallet;//积分余额
-    private Date create_time;
+    @JSONField(format = "yyyy-MM-dd")
+    private Date createTime;
 }

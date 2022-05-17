@@ -7,6 +7,7 @@ import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
 import com.xz.helpful.utils.RedisUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -28,6 +29,7 @@ import java.io.IOException;
  * @Author: xz
  * @Date: 2022/4/20
  */
+@Slf4j
 @Controller
 @RequestMapping("/")
 public class IndexController {
@@ -187,7 +189,7 @@ public class IndexController {
      * 发布任务
      */
     @GetMapping("/publish")
-    public ModelAndView publishTask(){
+    public ModelAndView publishTask() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -203,7 +205,7 @@ public class IndexController {
     }
 
     @GetMapping("/history")
-    public ModelAndView history(){
+    public ModelAndView history() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -219,7 +221,7 @@ public class IndexController {
     }
 
     @GetMapping("/manager")
-    public ModelAndView manager(){
+    public ModelAndView manager() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -235,7 +237,7 @@ public class IndexController {
     }
 
     @GetMapping("/userinfo")
-    public ModelAndView userinfo(){
+    public ModelAndView userinfo() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();
@@ -245,13 +247,14 @@ public class IndexController {
             modelAndView.setViewName("index");
             return modelAndView;
         }
+        log.info("实体:" + userInfo.toString());
         modelAndView.setViewName("userInfo");
         modelAndView.addObject("info", userInfo);
         return modelAndView;
     }
 
     @GetMapping("/helpful")
-    public ModelAndView helpful(){
+    public ModelAndView helpful() {
         ModelAndView modelAndView = new ModelAndView();
         Subject subject = SecurityUtils.getSubject();
         String email = subject.getPrincipal().toString();

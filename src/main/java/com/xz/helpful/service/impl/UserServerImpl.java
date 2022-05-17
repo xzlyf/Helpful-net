@@ -13,7 +13,6 @@ import com.xz.helpful.utils.RandomUtil;
 import com.xz.helpful.utils.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,24 +59,14 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public User findByEmail(String email) {
-        return userMapper.findByEmail(email);
+    public String getUserPassword(String email) {
+        return userMapper.getPassword(email);
     }
+
 
     @Override
     public UserVo findInfoByEmail(String email) {
-        User login = userMapper.findByEmail(email);
-        if (login == null) {
-            return null;
-        }
-        Integer wallet = walletServer.queryMoneyByUserId(login.getId());
-        if (wallet == null) {
-            wallet = 0;
-        }
-        UserVo vo = new UserVo();
-        BeanUtils.copyProperties(login, vo);
-        vo.setWallet(wallet);
-        return vo;
+        return userMapper.findByEmail(email);
     }
 
     @Override
@@ -86,7 +75,7 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public BaseVo verify(HttpSession session,RegisterVo registerVo) {
+    public BaseVo verify(HttpSession session, RegisterVo registerVo) {
         boolean verify = verify(registerVo.getUser());
         if (!verify) {
             return BaseVo.failed("邮箱或密码不符合规范");
@@ -98,8 +87,8 @@ public class UserServerImpl implements UserServer {
         if (!isOk) {
             return BaseVo.failed("验证码校验失败请重试");
         }
-        User byEmail = findByEmail(registerVo.getUser().getEmail());
-        if (byEmail != null) {
+        Integer userId = findUserIdByEmail(registerVo.getUser().getEmail());
+        if (userId != null) {
             return BaseVo.failed("邮箱已注册！");
         }
 
@@ -117,7 +106,7 @@ public class UserServerImpl implements UserServer {
         //存入session，校验邮件验证码时会用到
         registerVo.setSession(session.getId());
         //把待注册的信息写入redis，email作为key,绑定session请求 , 邮箱验证码与5分钟后过期，1分钟内不可重发
-        redisUtil.set(getRedisKey(registerVo.getUser().getEmail()), registerVo,60*5);
+        redisUtil.set(getRedisKey(registerVo.getUser().getEmail()), registerVo, 60 * 5);
         return BaseVo.success(60);
     }
 
@@ -157,9 +146,10 @@ public class UserServerImpl implements UserServer {
 
     /**
      * 返回redis的key
+     *
      * @param k 后缀
      */
-    private String getRedisKey(String k){
-        return RedisKey.REDIS_VERIFY_email+k;
+    private String getRedisKey(String k) {
+        return RedisKey.REDIS_VERIFY_email + k;
     }
 }
