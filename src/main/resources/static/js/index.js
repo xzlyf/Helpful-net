@@ -1,13 +1,25 @@
+$(function () {
+    let r = getParam('r');
+    if (r) {
+        toRegister_view(r);
+    }
+})
+
 function toLogin_view() {
     $("#index-view").hide(200)
     $("#login-view").show(200)
 }
 
-function toRegister_view() {
+function toRegister_view(r) {
     $("#index-view").hide(200)
     $("#register-view").show(200)
     let imgVerify = $("#imgVerify").get(0);
     getVerify(imgVerify);
+    if (r) {
+        $("#r-code")
+            .val(r)
+            .attr("disabled", "disabled")
+    }
 }
 
 function back() {
@@ -16,7 +28,16 @@ function back() {
     $("#index-view").show(200)
 }
 
-function register() {
+function getParam(name) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
+    if (r != null) {
+        return decodeURI(r[2]);
+    }
+    return null;
+}
+
+function submit() {
     let tips = $("#tips-r")
     tips.css("visibility", "hidden")
     let email = $("#r-email").val()
