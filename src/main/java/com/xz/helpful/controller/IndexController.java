@@ -234,4 +234,35 @@ public class IndexController {
         return modelAndView;
     }
 
+    @GetMapping("/userinfo")
+    public ModelAndView userinfo(){
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        modelAndView.setViewName("userInfo");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
+
+    @GetMapping("/helpful")
+    public ModelAndView helpful(){
+        ModelAndView modelAndView = new ModelAndView();
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+            subject.logout();
+            modelAndView.setViewName("index");
+            return modelAndView;
+        }
+        modelAndView.setViewName("helpful");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
 }
