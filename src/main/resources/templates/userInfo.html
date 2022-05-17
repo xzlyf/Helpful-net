@@ -22,6 +22,28 @@
             width: 150px;
             height: 150px;
         }
+
+        .box {
+            text-align: left;
+            display: inline-block;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+
+        .title {
+            font-size: xx-large;
+            color: black;
+            -moz-user-select: text;
+            -khtml-user-select: text;
+            user-select: text;
+        }
+
+        .none {
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+        }
     </style>
 </head>
 <body>
@@ -35,17 +57,22 @@
             <li><a href="/history">任务记录</a></li>
             <li><a href="/manager">任务管理</a></li>
             <li><a href="/helpful">使用帮助</a></li>
-            <li><a href="/userinfo">[[${info.name}]]</a></li>
+            <li><a href="/userinfo" th:text="${info.name}"></a></li>
             <li><a href="/logout" class="btn_logout">退出登录</a></li>
         </ul>
     </div>
 </div>
 <div class="main">
-    <img class="avatar" th:alt="${info.email}+'头像'"
-         src="https://img1.baidu.com/it/u=2876685184,2972745678&fm=253&fmt=auto&app=138&f=JPEG?w=514&h=500">
-    <h1>[[${info.name}]]</h1>
-    <h3>[[${info.email}]]</h3>
-    <h5>注册时间：[[${info.createTime}]]</h5>
+    <img class="avatar" th:alt="${info.email}+'头像'" th:src="'https://api.multiavatar.com/'+${info.email}+'.png'"/>
+    <h1 th:text="${info.name}"></h1>
+    <h3 th:text="${info.email}"></h3>
+    <h5 th:text="${#dates.format(info.createTime,'注册时间：yyyy-MM-dd')}"></h5>
+</div>
+<div class="main">
+    <div class="box">
+        <span class="title"><strong class="none">互助码：</strong>064165</span>
+    </div>
+    <p style="width: 250px;text-align:left;margin: 10px auto;font-size: medium">☑️他人注册时使用您分享的互助码，您会获得相应的互助积分，对方也可获得部分积分。</p>
 </div>
 </body>
 </html>

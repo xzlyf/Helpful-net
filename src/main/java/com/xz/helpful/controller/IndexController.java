@@ -3,8 +3,10 @@ package com.xz.helpful.controller;
 import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
+import com.xz.helpful.pojo.vo.OrderVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
+import com.xz.helpful.service.OrderService;
 import com.xz.helpful.service.UserServer;
 import com.xz.helpful.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @Author: xz
@@ -247,7 +250,6 @@ public class IndexController {
             modelAndView.setViewName("index");
             return modelAndView;
         }
-        log.info("实体:" + userInfo.toString());
         modelAndView.setViewName("userInfo");
         modelAndView.addObject("info", userInfo);
         return modelAndView;
