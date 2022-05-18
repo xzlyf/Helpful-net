@@ -20,6 +20,8 @@ public interface UserMapper {
 
     Integer findUserIdByEmail(String email);
 
+    String findUserNameByEmail(String email);
+
     /**
      * 新建用户
      *

@@ -17,8 +17,8 @@
     </div>
     <div class="user-tool">
         <span>积分：</span>
-        <span id="wallet" style="color: #f00">[[${info.wallet}]]</span>
-        <span style="margin: 0 30px">[[${info.name}]]</span>
+        <span id="wallet" style="color: #f00" th:text="${wallet}"></span>
+        <span style="margin: 0 30px" th:text="${name}"></span>
         <a href="/logout" class="btn_logout">退出登录</a>
     </div>
 </div>

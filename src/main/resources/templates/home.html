@@ -22,7 +22,7 @@
             <li><a href="/history">任务记录</a></li>
             <li><a href="/manager">任务管理</a></li>
             <li><a href="/helpful">使用帮助</a></li>
-            <li><a href="/userinfo">[[${info.name}]]</a></li>
+            <li><a href="/userinfo" th:text="${name}"></a></li>
             <li><a href="/user/logout" class="btn_logout">退出登录</a></li>
         </ul>
     </div>
@@ -30,7 +30,7 @@
 <div class="center">
     <div>
         <div>
-            <span style="font-size: 35px;color: #f00;font-weight: bolder">[[${info.wallet}]]</span>
+            <span style="font-size: 35px;color: #f00;font-weight: bolder" th:text="${wallet}"></span>
         </div>
         <div>
             <span style="font-size: 18px;color: #000;font-weight: bold">当前可用积分</span>

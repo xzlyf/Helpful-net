@@ -4,6 +4,7 @@ import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.User;
 import com.xz.helpful.pojo.vo.BaseVo;
 import com.xz.helpful.pojo.vo.RegisterVo;
+import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -113,10 +115,22 @@ public class UserController {
      * 退出登录接口
      */
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return "index";
     }
 
+    @GetMapping("/info")
+    public Object getUserInfo(HttpSession session){
+        ModelAndView modelAndView = new ModelAndView();
+        String email = (String) session.getAttribute(RedisKey.SESSION_USER_EMAIL);
+        UserVo userInfo = userServer.findInfoByEmail(email);
+        if (userInfo == null) {
+           throw new RuntimeException("未登录");
+        }
+        modelAndView.setViewName("view/user-info");
+        modelAndView.addObject("info", userInfo);
+        return modelAndView;
+    }
 }

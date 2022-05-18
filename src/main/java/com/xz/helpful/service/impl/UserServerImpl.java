@@ -75,6 +75,11 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
+    public String findUserNameByEmail(String email) {
+        return userMapper.findUserNameByEmail(email);
+    }
+
+    @Override
     public BaseVo verify(HttpSession session, RegisterVo registerVo) {
         boolean verify = verify(registerVo.getUser());
         if (!verify) {

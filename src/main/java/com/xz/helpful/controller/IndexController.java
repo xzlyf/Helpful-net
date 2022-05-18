@@ -1,8 +1,9 @@
 package com.xz.helpful.controller;
 
+import com.xz.helpful.global.RedisKey;
 import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
-import com.xz.helpful.utils.RedisUtil;
+import com.xz.helpful.service.WalletServer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,8 @@ import javax.servlet.http.HttpSession;
 public class IndexController {
     @Autowired
     private UserServer userServer;
+    @Autowired
+    private WalletServer walletServer;
 
     /**
      * 根目录跳转
@@ -49,20 +53,14 @@ public class IndexController {
      * home目录，要求已登录用户才能访问
      */
     @GetMapping("/home")
-    public ModelAndView home(HttpSession session,
-                             HttpServletRequest request,
-                             HttpServletResponse response) {
+    public ModelAndView home(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email,
+                                    @SessionAttribute(RedisKey.SESSION_USER_ID) Integer id) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        if (email == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
-        UserVo userInfo = userServer.findInfoByEmail(email);
+        String name = userServer.findUserNameByEmail(email);
+        Integer wallet = walletServer.queryMoneyByUserId(id);
         modelAndView.setViewName("home");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
+        modelAndView.addObject("wallet", wallet);
         return modelAndView;
     }
 
@@ -71,101 +69,66 @@ public class IndexController {
      * 跳转任务大厅
      */
     @GetMapping("/receive")
-    public ModelAndView receiveTask() {
+    public ModelAndView receiveTask(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email,
+                                    @SessionAttribute(RedisKey.SESSION_USER_ID) Integer id) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
+        Integer wallet = walletServer.queryMoneyByUserId(id);
         modelAndView.setViewName("receive");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
+        modelAndView.addObject("wallet", wallet);
         return modelAndView;
     }
+
 
     /**
      * 发布任务
      */
     @GetMapping("/publish")
-    public ModelAndView publishTask() {
+    public ModelAndView publishTask(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email,
+                                    @SessionAttribute(RedisKey.SESSION_USER_ID) Integer id) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
+        Integer wallet = walletServer.queryMoneyByUserId(id);
         modelAndView.setViewName("publish");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
+        modelAndView.addObject("wallet", wallet);
         return modelAndView;
     }
 
     @GetMapping("/history")
-    public ModelAndView history() {
+    public ModelAndView history(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
         modelAndView.setViewName("history");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
         return modelAndView;
     }
 
     @GetMapping("/manager")
-    public ModelAndView manager() {
+    public ModelAndView manager(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
         modelAndView.setViewName("taskManager");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
         return modelAndView;
     }
 
     @GetMapping("/userinfo")
-    public ModelAndView userinfo() {
+    public ModelAndView userinfo(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
         modelAndView.setViewName("userInfo");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
         return modelAndView;
     }
 
     @GetMapping("/helpful")
-    public ModelAndView helpful() {
+    public ModelAndView helpful(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
-        Subject subject = SecurityUtils.getSubject();
-        String email = subject.getPrincipal().toString();
-        UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-            subject.logout();
-            modelAndView.setViewName("index");
-            return modelAndView;
-        }
+        String name = userServer.findUserNameByEmail(email);
         modelAndView.setViewName("helpful");
-        modelAndView.addObject("info", userInfo);
+        modelAndView.addObject("name", name);
         return modelAndView;
     }
 }

@@ -85,7 +85,7 @@
             <li><a href="/history">任务记录</a></li>
             <li><a href="/manager">任务管理</a></li>
             <li><a href="/helpful">使用帮助</a></li>
-            <li><a href="/userinfo">[[${info.name}]]</a></li>
+            <li><a href="/userinfo" th:text="${name}"></a></li>
             <li><a href="/user/logout" class="btn_logout">退出登录</a></li>
         </ul>
     </div>

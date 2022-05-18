@@ -25,4 +25,7 @@
         from `user`
         where email = #{email}
     </select>
+    <select id="findUserNameByEmail" resultType="java.lang.String">
+        select `name` from `user` where email = #{email}
+    </select>
 </mapper>
