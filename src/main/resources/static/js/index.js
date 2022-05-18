@@ -65,7 +65,7 @@ function submit() {
         }
     }
     $.ajax({
-        url: "/verify",
+        url: "/user/verify",
         method: "POST",
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify(data),
@@ -90,7 +90,7 @@ function verifyEmail() {
     let email = $("#h-email").val();
     let code = $("#h-code").val()
     $.ajax({
-        url: "/register",
+        url: "/user/register",
         method: "POST",
         data: {
             email: email,
@@ -138,7 +138,7 @@ function login(obj) {
     }
     showLoading(obj)
     $.ajax({
-        url: "/login",
+        url: "/user/login",
         method: "POST",
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify(user),

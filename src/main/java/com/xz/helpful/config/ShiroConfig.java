@@ -89,11 +89,11 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
 
-        map.put("/logout", "logout");
+        map.put("/user/logout", "logout");
         map.put("/", "anon");
-        map.put("/login", "anon");
-        map.put("/register", "anon");
-        map.put("/verify", "anon");
+        map.put("/user/login", "anon");
+        map.put("/user/register", "anon");
+        map.put("/user/verify", "anon");
         //AffairController接口公开访问
         map.put("/event/**", "anon");
         //druid监控面板，测试用
