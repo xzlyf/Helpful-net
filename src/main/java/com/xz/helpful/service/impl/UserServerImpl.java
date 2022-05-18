@@ -14,6 +14,7 @@ import com.xz.helpful.utils.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -75,8 +76,13 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public String findUserNameByEmail(String email) {
-        return userMapper.findUserNameByEmail(email);
+    public String findUserNameByEmail(@NonNull String email) {
+        String name = (String) redisUtil.get(RedisKey.REDIS_USER_INFO + email);
+        if (name == null) {
+            name = userMapper.findUserNameByEmail(email);
+            redisUtil.set(RedisKey.REDIS_USER_INFO + email, name, 60 * 60 * 24);
+        }
+        return name;
     }
 
     @Override

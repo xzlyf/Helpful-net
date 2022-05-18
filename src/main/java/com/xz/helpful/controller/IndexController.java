@@ -1,7 +1,6 @@
 package com.xz.helpful.controller;
 
 import com.xz.helpful.global.RedisKey;
-import com.xz.helpful.pojo.vo.UserVo;
 import com.xz.helpful.service.UserServer;
 import com.xz.helpful.service.WalletServer;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
