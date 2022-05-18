@@ -122,15 +122,16 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public Object getUserInfo(HttpSession session){
+    public Object getUserInfo(@SessionAttribute(RedisKey.SESSION_USER_EMAIL)String email){
         ModelAndView modelAndView = new ModelAndView();
-        String email = (String) session.getAttribute(RedisKey.SESSION_USER_EMAIL);
         UserVo userInfo = userServer.findInfoByEmail(email);
-        if (userInfo == null) {
-           throw new RuntimeException("未登录");
-        }
         modelAndView.setViewName("view/user-info");
         modelAndView.addObject("info", userInfo);
         return modelAndView;
+    }
+
+    @GetMapping("/reset")
+    public Object getUserReset(){
+        return "view/user-reset";
     }
 }
