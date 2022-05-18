@@ -78,7 +78,7 @@ img {
 .btn_logout {
     border: 2px solid black;
     border-radius: 8px;
-    padding: 3px 5px 3px 5px;
+    padding: 3px 5px;
     font-size: 15px;
     color: #fff !important;
     background-color: #f00;
