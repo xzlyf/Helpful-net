@@ -1,8 +1,10 @@
 package com.xz.helpful.config;
+
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.Properties;
 
 /**
@@ -34,7 +36,9 @@ public class KaptchaConfig {
         // 字体
         properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
         //图片干扰
-        	    		     properties.setProperty("kaptcha.noise.impl","com.google.code.kaptcha.impl.DefaultNoise");
+        properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.DefaultNoise");
+        //图片样式
+        //properties.setProperty("kaptcha.obscurificator.impl", "com.google.code.kaptcha.impl.ShadowGimpy");
         //Kaptcha 使用上述配置
         Config config = new Config(properties);
         //DefaultKaptcha对象使用上述配置, 并返回这个Bean

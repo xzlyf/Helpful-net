@@ -48,8 +48,19 @@
             -khtml-user-select: none;
             user-select: none;
         }
-        .width-master{
+
+        .form-group label {
+            margin-top: 20px;
+        }
+
+        .width-master {
             width: 500px;
+        }
+
+        .width-master a {
+            color: black;
+            font-size: larger;
+            font-weight: bold;
         }
 
         #model {
@@ -81,6 +92,8 @@
     <div id="model"></div>
 </div>
 <script>
+    var infoHtml = null;
+    var resetHtml = null;
     $(function () {
         getInfo()
     })
@@ -88,25 +101,36 @@
     function getInfo() {
         $("#p1").addClass("active")
         $("#p2").removeClass("active")
+        if (infoHtml != null) {
+            $("#model").html(infoHtml)
+            return
+        }
         $.ajax({
             url: "/user/info",
             method: 'GET',
             success: function (res) {
-                $("#model").html(res)
+                infoHtml = res;
+                $("#model").html(infoHtml)
             },
             error: function () {
                 alert("当前与服务器通信失败")
             }
         })
     }
-    function getReset(){
+
+    function getReset() {
         $("#p2").addClass("active")
         $("#p1").removeClass("active")
+        if (resetHtml != null) {
+            $("#model").html(resetHtml)
+            return
+        }
         $.ajax({
             url: "/user/reset",
             method: 'GET',
             success: function (res) {
-                $("#model").html(res)
+                resetHtml = res;
+                $("#model").html(resetHtml)
             },
             error: function () {
                 alert("当前与服务器通信失败")
