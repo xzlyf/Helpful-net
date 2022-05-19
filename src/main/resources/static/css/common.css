@@ -162,3 +162,10 @@ img {
     text-decoration: none;
 
 }
+
+.form-group{
+    font-size: large;
+}
+.form-group label{
+    margin-top: 20px;
+}

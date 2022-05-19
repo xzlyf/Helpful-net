@@ -43,7 +43,7 @@ public class AffairController {
      * 刷新验证码
      */
     @GetMapping("/captcha")
-    @LimitRequest(count = 5)
+    @LimitRequest(count = 25)
     public Object captcha(HttpSession session) throws IOException {
         return BaseVo.success(captchaService.captchaCreator(session));
     }

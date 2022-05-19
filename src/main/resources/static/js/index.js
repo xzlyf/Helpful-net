@@ -136,14 +136,12 @@ function login(obj) {
         email: email,
         passwd: pwd
     }
-    showLoading(obj)
     $.ajax({
         url: "/user/login",
         method: "POST",
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify(user),
         success: function (res) {
-            hideLoading(obj, "登录")
 
             if (res.code === 1) {
                 // window.location.href = "/home";
@@ -155,7 +153,6 @@ function login(obj) {
 
         },
         error: function (ex) {
-            hideLoading(obj, "登录")
             alert("登陆失败")
         },
     })
@@ -178,16 +175,4 @@ function getVerify(obj) {
             }
         }
     });
-}
-
-function showLoading(obj) {
-    let btn = $(obj)
-    btn.html("<ui-loading style='--color:#000'/>")
-    btn.addClass("disable")
-}
-
-function hideLoading(obj, text) {
-    let btn = $(obj)
-    btn.html("<span class='t_span'>" + text + "</span>")
-    btn.removeClass("disable")
 }

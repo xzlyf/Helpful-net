@@ -6,9 +6,10 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" href="https://qidian.gtimg.com/lulu/edge/css/common/ui/Loading.css">
-    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" th:src="@{/js/index.js}" defer="defer"></script>
     <title>互助网</title>
     <style>
@@ -85,40 +86,10 @@
             font-size: 25px;
         }
 
-        .form-control {
-            display: block;
-            width: 300px;
-            height: 34px;
-            padding: 6px 12px;
+        .form-group {
             margin: 0 auto;
-            font-size: 14px;
-            line-height: 1.428571429;
-            color: #555555;
-            vertical-align: middle;
-            background-color: #ffffff;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-            -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            width: 250px;
         }
-
-        .form-control:focus {
-            border-color: #66afe9;
-            outline: 0;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-        }
-
-        .form-control:invalid {
-            border-color: #f00;
-            outline: 0;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-        }
-
-
     </style>
 </head>
 <body>
@@ -142,10 +113,12 @@
     <span class="t_back" onclick="back()">&lt;登录</span>
     <hr style="height: 4px;background-color: black"/>
     <form>
-        <p style="font-size: 20px;position:relative;left: 40px">邮箱</p>
-        <input id="l-email" class="form-control" type="email">
-        <p style="font-size: 20px;position:relative;left: 40px">密码</p>
-        <input id="l-pwd" class="form-control" type="password">
+        <div class="form-group">
+            <label for="l-email">邮箱</label>
+            <input type="email" class="form-control" id="l-email" placeholder="Email">
+            <label for="l-pwd">密码</label>
+            <input type="password" class="form-control" id="l-pwd" placeholder="Password">
+        </div>
     </form>
     <div style="margin-top: 25px;text-align: center;visibility:hidden">
         <span id="tips" style="font-weight: bold;color: #f00">0</span>
@@ -159,22 +132,24 @@
 <div id="register-view" class="center" style="display: none;">
     <span class="t_back" onclick="back()">&lt;注册</span>
     <hr style="height: 4px;background-color: black"/>
-    <form>
-        <p style="font-size: 20px;position:relative;left: 40px">邮箱</p>
-        <input id="r-email" class="form-control" type="email">
-        <p style="font-size: 20px;position:relative;left: 40px">密码</p>
-        <input id="r-pwd" class="form-control" type="password">
-        <p style="font-size: 20px;position:relative;left: 40px">互助码</p >
-        <input id="r-code" class="form-control" type="text">
+    <form class="form-group">
+        <label for="r-email">邮箱</label>
+        <input id="r-email" class="form-control" type="email" placeholder="Email">
+        <label for="r-pwd">密码</label>
+        <input id="r-pwd" class="form-control" type="password" placeholder="Password">
+        <label for="r-code">互助码</label>
+        <input id="r-code" class="form-control" type="text" placeholder="Code">
+        <label for="verify-code">验证码</label>
+        <div style="display: flex">
+            <a href="javascript:void(0);" title="点击更换验证码" style="text-decoration: none;">
+                <img style="vertical-align:middle;width: 250px;height: 45px" src="" alt="更换验证码" id="imgVerify"
+                     onclick="getVerify(this)">
+            </a>
+            <input id="verify-code" class="form-control" type="text"
+                   style="height: 45px;vertical-align:middle;display: inline-block;text-align: center" maxlength="4">
+        </div>
     </form>
-    <div style="position:relative;left: 40px">
-        <p style="font-size: 20px;">验证码</p>
-        <a href="javascript:void(0);" title="点击更换验证码" tabindex="-1" style="text-decoration: none;">
-            <img style="vertical-align:middle;height: 48px" src="" alt="更换验证码" id="imgVerify" onclick="getVerify(this)">
-        </a>
-        <input id="verify-code" class="form-control" type="text"
-               style="width: 80px;height: 36px;vertical-align:middle;display: inline-block">
-    </div>
+
     <div style="margin-top: 15px;text-align: center;visibility:hidden">
         <span id="tips-r" style="font-weight: bold;color: #f00">0</span>
     </div>
