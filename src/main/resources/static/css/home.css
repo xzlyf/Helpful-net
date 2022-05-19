@@ -2,41 +2,7 @@
 
 
 
-.center {
-    width: 800px;
-    height: 400px;
-    position: relative;
-    padding: 5px;
-    margin-top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-}
 
-.center a {
-    color: black;
-    text-decoration: none;
-}
-
-/*正常的未被访问过的链接*/
-.center a:link {
-    text-decoration: none;
-}
-
-/*已经访问过的链接*/
-.center a:visited {
-    text-decoration: none;
-}
-
-/*鼠标划过(停留)的链接*/
-.center a:hover {
-    text-decoration: none;
-}
-
-/* 正在点击的链接*/
-.center a:active {
-    text-decoration: none;
-
-}
 
 .center div {
     text-align: center;
