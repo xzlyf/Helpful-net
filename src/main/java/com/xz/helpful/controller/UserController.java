@@ -131,7 +131,10 @@ public class UserController {
     }
 
     @GetMapping("/reset")
-    public Object getUserReset(){
-        return "view/user-reset";
+    public Object getUserReset(@SessionAttribute(RedisKey.SESSION_USER_EMAIL)String email){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("view/user-reset");
+        modelAndView.addObject("email",email);
+        return modelAndView;
     }
 }

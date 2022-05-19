@@ -1,8 +1,8 @@
-<div style="width: 300px;margin: 0 auto;">
-    <form>
+<div style="width: 300px;margin: 0 auto;" xmlns:th="http://www.thymeleaf.org">
+    <form method="post">
         <div class="form-group">
             <label for="email">邮箱号</label>
-            <input type="email" class="form-control" id="email" placeholder="Email">
+            <input type="email" class="form-control" id="email" placeholder="Email" th:value="${email}" disabled>
 
             <label for="code">验证码</label>
             <div class="input-group">
