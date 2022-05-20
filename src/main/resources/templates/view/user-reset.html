@@ -1,19 +1,19 @@
 <div style="width: 300px;margin: 0 auto;" xmlns:th="http://www.thymeleaf.org">
-    <form method="post">
+    <form id="form-reset" class="form-group">
         <div class="form-group">
             <label for="email">邮箱号</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" th:value="${email}" disabled>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" th:value="${email}" disabled>
 
             <label for="code">验证码</label>
             <div class="input-group">
-                <input type="text" class="form-control" id="code" placeholder="Code...">
+                <input type="text" class="form-control" id="code" name="code" placeholder="Code...">
                 <span class="input-group-btn">
                  <button class="btn btn-info" type="button">获取邮箱验证码</button>
              </span>
             </div>
             <label for="passwd">新密码</label>
-            <input type="password" class="form-control" id="passwd" placeholder="Password">
+            <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Password">
         </div>
-        <button type="submit" class="btn btn-primary">修改密码</button>
     </form>
+    <button type="button" class="btn btn-primary" onclick="reset()">修改密码</button>
 </div>

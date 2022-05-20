@@ -137,4 +137,12 @@ public class UserController {
         modelAndView.addObject("email",email);
         return modelAndView;
     }
+
+    @ResponseBody
+    @PostMapping("/reset/passwd")
+    public Object resetPasswd(@RequestParam String passwd,
+                              @RequestParam String code){
+
+        return BaseVo.success(passwd+code);
+    }
 }

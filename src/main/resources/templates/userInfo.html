@@ -136,6 +136,21 @@
             }
         })
     }
+    function reset() {
+        let pass = $("#passwd").val()
+        let code = $("#code").val()
+        $.ajax({
+            url:"/user/reset/passwd",
+            method:"POST",
+            data:$("#form-reset").serialize(),
+            success:function (res) {
+                console.log(res)
+            },
+            error:function () {
+                alert("当前与服务器通信失败")
+            }
+        })
+    }
 </script>
 </body>
 </html>

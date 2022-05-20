@@ -59,4 +59,10 @@ public class AffairController {
     //    }
     //    return BaseVo.success(null);
     //}
+
+    @GetMapping("/send/email")
+    public Object sendEmailVerify(){
+        //todo 发送邮件
+        return null;
+    }
 }
