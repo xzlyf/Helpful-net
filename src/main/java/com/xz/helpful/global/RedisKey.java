@@ -21,7 +21,7 @@ public class RedisKey {
     //shiro session key
     public static final String REDIS_SHIRO_SESSION = "session:id:";
     //人机验证码
-    public static final String REDIS_VERIFY_robot = "verify:robot:";
+    public static final String REDIS_VERIFY_ROBOT = "verify:robot:";
     //邮箱验证码
-    public static final String REDIS_VERIFY_email = "verify:email:";
+    public static final String REDIS_VERIFY_EMAIL = "verify:email:";
 }

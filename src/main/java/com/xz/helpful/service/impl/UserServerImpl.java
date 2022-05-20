@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.http.HttpSession;
@@ -102,65 +101,43 @@ public class UserServerImpl implements UserServer {
         if (userId != null) {
             return BaseVo.failed("邮箱已注册！");
         }
-
-        //查询是否近期发送过验证码
-        boolean has = redisUtil.hasKey(getRedisKey(registerVo.getUser().getEmail()));
-        if (has) {
-            return BaseVo.success(0);
+        //发送邮箱验证码
+        try {
+            captchaService.sendEmailCaptcha(session, registerVo.getUser().getEmail());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseVo.failed("异常：" + e.getMessage());
         }
-
-
-        //TODO 发送邮件验证码。。。
-        String code = RandomUtil.getRandomNum(4);
-        log.info("邮箱：" + registerVo.getUser().getEmail() + "\t验证码：" + code);//todo debug
-        registerVo.setVerifyCode(code);//移除原先人机验证码，替换成邮箱验证码供后面使用
-        //存入session，校验邮件验证码时会用到
-        registerVo.setSession(session.getId());
-        //把待注册的信息写入redis，email作为key,绑定session请求 , 邮箱验证码与5分钟后过期，1分钟内不可重发
-        redisUtil.set(getRedisKey(registerVo.getUser().getEmail()), registerVo, 60 * 5);
+        //把用户数据存入redis,待用户通过验证拿来写入数据库
+        redisUtil.set(RedisKey.REDIS_USER_TEMP + registerVo.getUser().getEmail(), registerVo.getUser(), 60 * 5);
+        //返回验证码可再次刷新的倒计时
         return BaseVo.success(60);
     }
 
     @Override
     @Transactional
-    public User register(String email, String code, String session) throws IOException {
-        //校验邮件验证码
-        if (!redisUtil.hasKey(getRedisKey(email))) {
-            throw new IOException("邮件验证码已过期，请重新发送");
-        }
-        RegisterVo registerVo = (RegisterVo) redisUtil.get(getRedisKey(email));
-        if (!session.equalsIgnoreCase(registerVo.getSession())) {
-            throw new IOException("非法请求");//session不一致
-        }
-        if (!code.equalsIgnoreCase(registerVo.getVerifyCode())) {
-            throw new IOException("验证码错误");
-        }
-        //验证完成后删除redis
-        redisUtil.del(getRedisKey(email));
+    public User register(String email, String code, HttpSession session) throws Exception {
+        //校验邮件验证码，校验失败抛出异常
+        captchaService.verifyEmailCaptcha(session, email, code);
+        //从缓存拿到用户信息
+        User user = (User) redisUtil.get(RedisKey.REDIS_USER_TEMP + email);
 
-        registerVo.getUser().setName("互助侠" + RandomUtil.getRandomNum(6));
-        registerVo.getUser().setMycode(RandomUtil.getRandomNum(6));
+        //用户基本信息生成
+        user.setName("互助侠" + RandomUtil.getRandomNum(6));
+        user.setMycode(RandomUtil.getRandomNum(6));
         try {
-            userMapper.save(registerVo.getUser());
+            userMapper.save(user);
         } catch (Exception e) {
             throw new IOException("邮箱已注册");
         }
         try {
-            //主键已获取registerVo.getUser().getId()
-            walletServer.initWallet(registerVo.getUser().getId());
+            //此时以及获取到主键
+            walletServer.initWallet(user.getId());
         } catch (Exception e) {
-            //手动事务回滚
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            throw new IOException("钱包初始化失败，事务回滚");
         }
-        return registerVo.getUser();
+        return user;
     }
 
-    /**
-     * 返回redis的key
-     *
-     * @param k 后缀
-     */
-    private String getRedisKey(String k) {
-        return RedisKey.REDIS_VERIFY_email + k;
-    }
+
 }

@@ -88,8 +88,8 @@ public class UserController {
                            @RequestParam String code) {
         User user = null;
         try {
-            user = userServer.register(email, code, session.getId());
-        } catch (IOException e) {
+            user = userServer.register(email, code, session);
+        } catch (Exception e) {
             return BaseVo.failed(e.getMessage());
         }
         //注册成功后完成登录操作

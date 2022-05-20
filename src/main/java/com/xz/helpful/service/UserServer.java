@@ -32,5 +32,5 @@ public interface UserServer {
     BaseVo verify(HttpSession session,RegisterVo registerVo);
 
     //验证邮箱验证码并注册
-    User register(String email,String code,String session) throws IOException;
+    User register(String email,String code,HttpSession session) throws Exception;
 }
