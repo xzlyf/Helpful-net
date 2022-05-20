@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * @author XiaoZe
@@ -40,7 +39,7 @@ public class UserController {
     @PostMapping("/login")
     public Object login(HttpSession session,
                         @RequestBody User user) {
-        boolean verify = userServer.verify(user);
+        boolean verify = userServer.norm(user);
         if (!verify) {
             return BaseVo.failed("账号或密码格式不正确");
         }
@@ -75,6 +74,20 @@ public class UserController {
     @PostMapping("/verify")
     public Object verify(HttpSession session, @RequestBody RegisterVo registerVo) {
         return userServer.verify(session, registerVo);
+    }
+
+    /**
+     * 验证码重发
+     * todo 开发权限接口访问，还有测试一下
+     */
+    @GetMapping("/retry")
+    public Object retry(HttpSession session, @RequestParam String email) {
+        try {
+            userServer.sendEmailAgain(session, email);
+        } catch (Exception e) {
+            return BaseVo.failed(e.getMessage());
+        }
+        return BaseVo.success(null);
     }
 
     /**
@@ -122,7 +135,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public Object getUserInfo(@SessionAttribute(RedisKey.SESSION_USER_EMAIL)String email){
+    public Object getUserInfo(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
         UserVo userInfo = userServer.findInfoByEmail(email);
         modelAndView.setViewName("view/user-info");
@@ -131,18 +144,18 @@ public class UserController {
     }
 
     @GetMapping("/reset")
-    public Object getUserReset(@SessionAttribute(RedisKey.SESSION_USER_EMAIL)String email){
+    public Object getUserReset(@SessionAttribute(RedisKey.SESSION_USER_EMAIL) String email) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("view/user-reset");
-        modelAndView.addObject("email",email);
+        modelAndView.addObject("email", email);
         return modelAndView;
     }
 
     @ResponseBody
     @PostMapping("/reset/passwd")
     public Object resetPasswd(@RequestParam String passwd,
-                              @RequestParam String code){
+                              @RequestParam String code) {
 
-        return BaseVo.success(passwd+code);
+        return BaseVo.success(passwd + code);
     }
 }

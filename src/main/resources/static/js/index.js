@@ -74,6 +74,7 @@ function submit() {
                 $("#register-view").hide(200)
                 $("#confirm-view").show(200)
                 $("#h-email").val(email)
+                loopText("#h-btn", 60)
                 return
             }
             tips.css("visibility", "visible").text(res.data)
@@ -84,6 +85,25 @@ function submit() {
 
     })
 
+}
+
+function reSend() {
+    let email = $("#h-email").val()
+    $.ajax({
+        url: "/user/retry",
+        method: "GET",
+        data: {
+            email: email
+        },
+        success: function (res) {
+            console.log(res)
+            loopText("#h-btn", 60)
+            alert(res.data)
+        },
+        error: function () {
+            alert("当前与服务器通信失败，请稍后重试")
+        }
+    })
 }
 
 function verifyEmail() {
@@ -176,3 +196,27 @@ function getVerify(obj) {
         }
     });
 }
+
+/**
+ * 循环更新控件文本
+ * @param obj 对象
+ * @param text 内容
+ * @param end 结束时间，单位秒。
+ * @returns {number} 定时器id，可手动清除定时器
+ */
+function loopText(obj, end) {
+    let start = 0
+    let view = $(obj)
+    view.addClass("disabled");
+    let loop = setInterval(function () {
+        start++
+        view.text((end - start) + "秒后可发送")
+        if (start >= end) {
+            clearInterval(loop)
+            view.text("获取邮件验证码")
+            view.removeClass("disabled")
+        }
+    }, 1000)
+    return loop
+}
+

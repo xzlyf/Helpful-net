@@ -162,8 +162,12 @@
     <span style="font-size: 30px;font-weight: bold">验证码已发至您的邮箱</span>
     <hr style="height: 4px;background-color: black"/>
     <form class="form-group">
-        <label for="h-code">邮箱验证码</label>
-        <input id="h-code" class="form-control" type="text">
+        <label for="h-code">验证码</label>
+        <div class="input-group">
+            <input type="text" class="form-control" id="h-code" name="code" placeholder="Code...">
+            <span class="input-group-btn">
+                 <button class="btn btn-info" type="button" id="h-btn" onclick="reSend()">获取邮箱验证码</button></span>
+        </div>
         <input id="h-email" value="" type="hidden" name="email">
     </form>
     <div style="margin-top: 15px;text-align: center;">

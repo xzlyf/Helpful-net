@@ -6,7 +6,6 @@ import com.xz.helpful.pojo.vo.RegisterVo;
 import com.xz.helpful.pojo.vo.UserVo;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -17,7 +16,7 @@ public interface UserServer {
     List<User> findAll();
 
     //校验账号密码是否符合规定
-    boolean verify(User user);
+    boolean norm(User user);
 
     String getUserPassword(String email);
 
@@ -29,8 +28,11 @@ public interface UserServer {
     String findUserNameByEmail(String email);
 
     //验证人机，并验证邮箱是否注册，完成验证后发送验证码邮件，并把用户数据存入redis
-    BaseVo verify(HttpSession session,RegisterVo registerVo);
+    BaseVo verify(HttpSession session, RegisterVo registerVo);
+
+    //再次发送邮箱验证码
+    void sendEmailAgain(HttpSession session, String email) throws Exception;
 
     //验证邮箱验证码并注册
-    User register(String email,String code,HttpSession session) throws Exception;
+    User register(String email, String code, HttpSession session) throws Exception;
 }

@@ -45,7 +45,7 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
-    public boolean verify(User user) {
+    public boolean norm(User user) {
         if (user == null) {
             return false;
         }
@@ -86,7 +86,7 @@ public class UserServerImpl implements UserServer {
 
     @Override
     public BaseVo verify(HttpSession session, RegisterVo registerVo) {
-        boolean verify = verify(registerVo.getUser());
+        boolean verify = norm(registerVo.getUser());
         if (!verify) {
             return BaseVo.failed("邮箱或密码不符合规范");
         }
@@ -112,6 +112,23 @@ public class UserServerImpl implements UserServer {
         redisUtil.set(RedisKey.REDIS_USER_TEMP + registerVo.getUser().getEmail(), registerVo.getUser(), 60 * 5);
         //返回验证码可再次刷新的倒计时
         return BaseVo.success(60);
+    }
+
+    @Override
+    public void sendEmailAgain(HttpSession session, String email) throws Exception {
+        //判断用户的注册信息还在不在缓存
+        boolean b = redisUtil.hasKey(RedisKey.REDIS_USER_TEMP + email);
+        if (!b) {
+            throw new RuntimeException("注册信息已过期，请刷新网页重试！");
+        }
+        //判断距离上次发送时间的间隔
+        long expire = redisUtil.getExpire(RedisKey.REDIS_USER_TEMP + email);
+        long sub = 300 - expire;
+        if (sub <= 60) {
+            throw new RuntimeException("发送验证码频繁，请稍后重试！");
+        }
+        //发送邮箱验证码
+        captchaService.sendEmailCaptcha(session, email);
     }
 
     @Override

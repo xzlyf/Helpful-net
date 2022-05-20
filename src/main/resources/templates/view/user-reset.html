@@ -2,14 +2,15 @@
     <form id="form-reset" class="form-group">
         <div class="form-group">
             <label for="email">邮箱号</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email" th:value="${email}" disabled>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" th:value="${email}"
+                   disabled>
 
             <label for="code">验证码</label>
             <div class="input-group">
                 <input type="text" class="form-control" id="code" name="code" placeholder="Code...">
                 <span class="input-group-btn">
                  <button class="btn btn-info" type="button">获取邮箱验证码</button>
-             </span>
+                </span>
             </div>
             <label for="passwd">新密码</label>
             <input type="password" class="form-control" id="passwd" name="passwd" placeholder="Password">
