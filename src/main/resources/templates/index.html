@@ -161,13 +161,13 @@
 <div id="confirm-view" class="center" style="display: none">
     <span style="font-size: 30px;font-weight: bold">验证码已发至您的邮箱</span>
     <hr style="height: 4px;background-color: black"/>
-    <form>
-        <p style="font-size: 20px;position:relative;left: 40px">验证码</p>
+    <form class="form-group">
+        <label for="h-code">邮箱验证码</label>
         <input id="h-code" class="form-control" type="text">
         <input id="h-email" value="" type="hidden" name="email">
     </form>
     <div style="margin-top: 15px;text-align: center;">
-        <span id="tips-h">验证码有效期为5分钟。</span>
+        <span id="tips-h">验证码有效期为5分钟。<br/>如果没有收到邮件，请检查是否被误判进入邮箱邮件！</span>
     </div>
     <div style="position:relative;margin-top: 25px">
         <div class="btn-register" style="width: 100%" onclick="verifyEmail()"><span class="t_span">完成注册</span></div>
