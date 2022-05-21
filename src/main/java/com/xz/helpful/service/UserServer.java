@@ -35,4 +35,14 @@ public interface UserServer {
 
     //验证邮箱验证码并注册
     User register(String email, String code, HttpSession session) throws Exception;
+
+    /**
+     * 重置用户密码
+     *
+     * @param session
+     * @param code    邮箱验证码
+     * @param newPwd  新密码
+     * @throws Exception 无异常操作成功
+     */
+    void resetPasswd(HttpSession session,String email, String code, String newPwd) throws RuntimeException;
 }

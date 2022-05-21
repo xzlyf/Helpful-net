@@ -96,7 +96,6 @@ function reSend() {
             email: email
         },
         success: function (res) {
-            console.log(res)
             loopText("#h-btn", 60)
             alert(res.data)
         },

@@ -5,6 +5,11 @@
     <insert id="save" parameterType="com.xz.helpful.pojo.User" useGeneratedKeys="true" keyProperty="id">
         insert into user (name, email, passwd, mycode) value (#{name},#{email},#{passwd},#{mycode})
     </insert>
+    <update id="updateUserPasswd">
+        update `user` u
+        set u.passwd = #{newPwd}
+        where u.email = #{email}
+    </update>
     <select id="findAll" resultType="com.xz.helpful.pojo.User">
         SELECT *
         from user
@@ -26,6 +31,8 @@
         where email = #{email}
     </select>
     <select id="findUserNameByEmail" resultType="java.lang.String">
-        select `name` from `user` where email = #{email}
+        select `name`
+        from `user`
+        where email = #{email}
     </select>
 </mapper>

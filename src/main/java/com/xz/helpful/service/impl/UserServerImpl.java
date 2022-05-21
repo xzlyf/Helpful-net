@@ -156,5 +156,16 @@ public class UserServerImpl implements UserServer {
         return user;
     }
 
+    @Override
+    public void resetPasswd(HttpSession session, String email, String code, String newPwd) throws RuntimeException {
+        if (newPwd.length() < 6) {
+            throw new RuntimeException("密码长度不能小于6位");
+        }
+        //校验邮件验证码
+        captchaService.verifyEmailCaptcha(session, email, code);
+        //修改密码
+        userMapper.updateUserPasswd(email, newPwd);
+    }
+
 
 }

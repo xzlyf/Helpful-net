@@ -136,17 +136,63 @@
             }
         })
     }
-    function reset() {
-        let pass = $("#passwd").val()
-        let code = $("#code").val()
+
+    function reSend() {
+        let email = $("#email").val()
         $.ajax({
-            url:"/user/reset/passwd",
-            method:"POST",
-            data:$("#form-reset").serialize(),
-            success:function (res) {
-                console.log(res)
+            url: "/user/retry",
+            method: "GET",
+            data: {
+                email: email
             },
-            error:function () {
+            success: function (res) {
+                console.log("reSend():")
+                console.log(res)
+                loopText("#form-resend", 60)
+                alert(res.data)
+            },
+            error: function () {
+                alert("当前与服务器通信失败，请稍后重试")
+            }
+        })
+    }
+
+    /**
+     * 循环更新控件文本
+     * @param obj 对象
+     * @param text 内容
+     * @param end 结束时间，单位秒。
+     * @returns {number} 定时器id，可手动清除定时器
+     */
+    function loopText(obj, end) {
+        let start = 0
+        let view = $(obj)
+        view.addClass("disabled");
+        let loop = setInterval(function () {
+            start++
+            view.text((end - start) + "秒后可发送")
+            if (start >= end) {
+                clearInterval(loop)
+                view.text("获取邮件验证码")
+                view.removeClass("disabled")
+            }
+        }, 1000)
+        return loop
+    }
+
+
+    function reset() {
+        let form = $("#form-reset")
+        $.ajax({
+            url: "/user/reset/passwd",
+            method: "POST",
+            data: form.serialize(),
+            success: function (res) {
+                console.log("reset():")
+                console.log(res)
+                form.reset()
+            },
+            error: function () {
                 alert("当前与服务器通信失败")
             }
         })

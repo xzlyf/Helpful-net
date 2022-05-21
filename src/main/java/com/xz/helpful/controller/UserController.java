@@ -78,6 +78,7 @@ public class UserController {
 
     /**
      * 验证码重发
+     * todo 邮件重发接口好像不能共用
      */
     @ResponseBody
     @GetMapping("/retry")
@@ -153,9 +154,19 @@ public class UserController {
 
     @ResponseBody
     @PostMapping("/reset/passwd")
-    public Object resetPasswd(@RequestParam String passwd,
+    public Object resetPasswd(HttpSession session,
+                              @RequestParam String passwd,
                               @RequestParam String code) {
-
-        return BaseVo.success(passwd + code);
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        if (email == null) {
+            return BaseVo.failed("非法请求");
+        }
+        try {
+            userServer.resetPasswd(session, email, code, passwd);
+        } catch (RuntimeException e) {
+            return BaseVo.failed(e.getMessage());
+        }
+        return BaseVo.success(null);
     }
 }
