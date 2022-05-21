@@ -11,8 +11,7 @@ import com.xz.helpful.service.UserServer;
 import com.xz.helpful.service.WalletServer;
 import com.xz.helpful.utils.RandomUtil;
 import com.xz.helpful.utils.RedisUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -27,9 +26,9 @@ import java.util.List;
  * @Author: xz
  * @Date: 2022/4/20
  */
+@Slf4j
 @Service
 public class UserServerImpl implements UserServer {
-    private static final Logger log = LoggerFactory.getLogger(UserServerImpl.class);
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -114,6 +113,9 @@ public class UserServerImpl implements UserServer {
         return BaseVo.success(60);
     }
 
+    /**
+     * 注册接口用，再次发送邮箱验证码
+     */
     @Override
     public void sendEmailAgain(HttpSession session, String email) throws Exception {
         //判断用户的注册信息还在不在缓存
@@ -154,6 +156,18 @@ public class UserServerImpl implements UserServer {
             throw new IOException("钱包初始化失败，事务回滚");
         }
         return user;
+    }
+
+    /**
+     * 重置密码接口用，与注册接口的不一样
+     * 发送邮件验证码
+     * @param email   目标邮箱
+     * @throws RuntimeException 无异常操作成功
+     */
+    @Override
+    public void resetVerify(HttpSession session, String email) throws RuntimeException {
+        //调用邮件发送服务
+        captchaService.sendEmailCaptcha(session,email);
     }
 
     @Override

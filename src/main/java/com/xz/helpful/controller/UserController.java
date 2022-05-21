@@ -77,8 +77,8 @@ public class UserController {
     }
 
     /**
+     * 注册接口的
      * 验证码重发
-     * todo 邮件重发接口好像不能共用
      */
     @ResponseBody
     @GetMapping("/retry")
@@ -150,6 +150,26 @@ public class UserController {
         modelAndView.setViewName("view/user-reset");
         modelAndView.addObject("email", email);
         return modelAndView;
+    }
+
+    /**
+     * 重置密码接口用
+     * 发送验证码
+     */
+    @ResponseBody
+    @GetMapping("/reset/send")
+    public Object resetVerify(HttpSession session) {
+        Subject subject = SecurityUtils.getSubject();
+        String email = subject.getPrincipal().toString();
+        if (email == null) {
+            return BaseVo.failed("非法请求");
+        }
+        try {
+            userServer.resetVerify(session, email);
+        }catch (RuntimeException e){
+            return BaseVo.failed(e.getMessage());
+        }
+        return BaseVo.success(null);
     }
 
     @ResponseBody

@@ -102,6 +102,7 @@ public class ShiroConfig {
         map.put("/user/logout", "logout");
         map.put("/user/info", "authc");
         map.put("/user/reset", "authc");
+        //map.put("/user/reset/send", "authc");// todo 开启后无法访问 images的资源文件 待解决
         //map.put("/user/login", "anon");
         //map.put("/user/register", "anon");
         //map.put("/user/verify", "anon");

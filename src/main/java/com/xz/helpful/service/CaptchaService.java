@@ -13,7 +13,7 @@ public interface CaptchaService {
     boolean versifyCaptcha(HttpSession session, String inputCode);
 
     //发送邮箱验证码
-    void sendEmailCaptcha(HttpSession session, String email) throws Exception;
+    void sendEmailCaptcha(HttpSession session, String email) throws RuntimeException;
 
     //邮箱验证码验证,没有异常就验证成功
     void verifyEmailCaptcha(HttpSession session,String email,String inputCode) throws RuntimeException;

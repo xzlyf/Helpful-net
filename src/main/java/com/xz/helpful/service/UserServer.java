@@ -37,12 +37,22 @@ public interface UserServer {
     User register(String email, String code, HttpSession session) throws Exception;
 
     /**
+     * 重置密码接口用
+     * 发送验证码
+     *
+     * @param session
+     * @param email   目标邮箱
+     * @throws RuntimeException 无异常操作成功
+     */
+    void resetVerify(HttpSession session, String email) throws RuntimeException;
+
+    /**
      * 重置用户密码
      *
      * @param session
      * @param code    邮箱验证码
      * @param newPwd  新密码
-     * @throws Exception 无异常操作成功
+     * @throws RuntimeException 无异常操作成功
      */
-    void resetPasswd(HttpSession session,String email, String code, String newPwd) throws RuntimeException;
+    void resetPasswd(HttpSession session, String email, String code, String newPwd) throws RuntimeException;
 }

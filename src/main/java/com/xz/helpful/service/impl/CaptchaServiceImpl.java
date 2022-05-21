@@ -74,7 +74,7 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public void sendEmailCaptcha(HttpSession session, String email) throws Exception {
+    public void sendEmailCaptcha(HttpSession session, String email) throws RuntimeException {
         //查询是否近期发送过验证码
         boolean has = redisUtil.hasKey(getEmailKey(email));
         if (has) {

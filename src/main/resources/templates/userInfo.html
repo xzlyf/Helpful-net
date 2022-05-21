@@ -140,16 +140,17 @@
     function reSend() {
         let email = $("#email").val()
         $.ajax({
-            url: "/user/retry",
+            url: "/user/reset/send",
             method: "GET",
             data: {
                 email: email
             },
             success: function (res) {
-                console.log("reSend():")
-                console.log(res)
-                loopText("#form-resend", 60)
-                alert(res.data)
+                if (res.code === 1) {
+                    loopText("#form-resend", 60)
+                } else {
+                    alert(res.data)
+                }
             },
             error: function () {
                 alert("当前与服务器通信失败，请稍后重试")
@@ -188,15 +189,19 @@
             method: "POST",
             data: form.serialize(),
             success: function (res) {
-                console.log("reset():")
-                console.log(res)
-                form.reset()
+                if (res.code === 1) {
+                    alert("密码修改成功")
+                    window.location.replace("/home")
+                }else{
+                    alert(res.data)
+                }
             },
             error: function () {
                 alert("当前与服务器通信失败")
             }
         })
     }
+
 </script>
 </body>
 </html>
