@@ -90,21 +90,26 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, String> map = new HashMap<>();
 
-        map.put("/user/logout", "logout");
+        map.put("/**", "authc");
         map.put("/", "anon");
-        map.put("/user/login", "anon");
-        map.put("/user/register", "anon");
-        map.put("/user/verify", "anon");
-        //AffairController接口公开访问
-        map.put("/event/**", "anon");
-        //druid监控面板，测试用
-        map.put("/druid/**", "anon");
         //静态资源访问
         map.put("/css/**", "anon");
         map.put("/js/**", "anon");
         map.put("/images/**", "anon");
         map.put("/favicon.ico", "anon");
-        map.put("/**", "authc");
+        //UserController
+        map.put("/user/**","anon");
+        map.put("/user/logout", "logout");
+        map.put("/user/info", "authc");
+        map.put("/user/reset", "authc");
+        //map.put("/user/login", "anon");
+        //map.put("/user/register", "anon");
+        //map.put("/user/verify", "anon");
+        //map.put("/user/retry", "anon");
+        //AffairController接口公开访问
+        map.put("/event/**", "anon");
+        //druid监控面板，测试用
+        map.put("/druid/**", "anon");
         //登录
         shiroFilterFactoryBean.setLoginUrl("/");
         //首页

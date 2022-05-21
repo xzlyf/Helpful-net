@@ -78,8 +78,8 @@ public class UserController {
 
     /**
      * 验证码重发
-     * todo 开发权限接口访问，还有测试一下
      */
+    @ResponseBody
     @GetMapping("/retry")
     public Object retry(HttpSession session, @RequestParam String email) {
         try {
