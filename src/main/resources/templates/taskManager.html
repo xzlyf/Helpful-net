@@ -94,6 +94,8 @@
 
 </div>
 <script>
+    var tasklist = null
+
     $(function () {
         findAll()
     })
@@ -106,30 +108,8 @@
                     alert(res.data)
                     return
                 }
-                let data = res.data
-                for (let i = 0; i < data.length; i++) {
-                    let html =
-                        `<div class="task">
-        <p><strong>` + data[i].taskMid + `</strong></p>
-        <p>` + data[i].taskDesc + `</p>
-        <img src="` + data[i].taskImg + `">
-        <div>
-            <span><strong>创建时间：</strong></span>
-            <span>` + data[i].createTime + `</span>
-            <br/>
-            <span><strong>任务类型：</strong></span>
-            <span>` + data[i].typeName + `</span>
-            <br/>
-            <span><strong>积分：</strong></span>
-            <span>` + data[i].taskPay + `</span>
-        </div>
-        <div class="controller-plane">
-            <a href="#">修改</a>
-            <a href="#" onclick="deleteTask(` + data[i].taskId + `)">删除</a>
-        </div>
-    </div>`
-                    $("#main-view").append(html)
-                }
+                tasklist = res.data
+                updateList();
             },
             error: function () {
                 alert("请求失败")
@@ -137,13 +117,15 @@
         })
     }
 
-    function deleteTask(id) {
+    function deleteTask(index) {
+        let id = tasklist[index].taskId
         $.ajax({
             url: "taskManager/task/" + id,
             method: "DELETE",
             success: function (res) {
-                if (res.code === 0) {
-
+                if (res.code === 1) {
+                    tasklist.splice(index, 1)
+                    updateList()
                 } else {
                     alert("操作失败：" + res.data)
                 }
@@ -152,6 +134,38 @@
                 alert("当前与服务器通信异常，请稍后再试！")
             }
         })
+    }
+
+    function updateList() {
+        console.log(tasklist)
+        if (tasklist == null || tasklist.length === 0) {
+            return
+        }
+        var mianView = $("#main-view");
+        mianView.html("")
+        for (let i = 0; i < tasklist.length; i++) {
+            let html =
+                `<div class="task">
+        <p><strong>` + tasklist[i].taskMid + `</strong></p>
+        <p>` + tasklist[i].taskDesc + `</p>
+        <img src="` + tasklist[i].taskImg + `">
+        <div>
+            <span><strong>创建时间：</strong></span>
+            <span>` + tasklist[i].createTime + `</span>
+            <br/>
+            <span><strong>任务类型：</strong></span>
+            <span>` + tasklist[i].typeName + `</span>
+            <br/>
+            <span><strong>积分：</strong></span>
+            <span>` + tasklist[i].taskPay + `</span>
+        </div>
+        <div class="controller-plane">
+            <a href="#">修改</a>
+            <a href="#" onclick="deleteTask(` + i + `)">删除</a>
+        </div>
+    </div>`
+            mianView.append(html)
+        }
     }
 </script>
 </body>

@@ -122,7 +122,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void deleteTask(Integer userId, Integer taskId) {
-
+        taskMapper.delete(userId,taskId);
     }
 
     @Override
