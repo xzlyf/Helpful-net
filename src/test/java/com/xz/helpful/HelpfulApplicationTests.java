@@ -1,22 +1,20 @@
 package com.xz.helpful;
 
-import com.xz.helpful.pojo.Task;
 import com.xz.helpful.service.TaskService;
-import com.xz.helpful.service.UserServer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.List;
+import java.util.Arrays;
 
-@SpringBootTest
+//@SpringBootTest
 @Slf4j
 class HelpfulApplicationTests {
 
 
     @Autowired
     TaskService taskService;
+
     @Test
     void contextLoads() {
         //List<Task> all = taskService.findAll(52);
@@ -24,11 +22,31 @@ class HelpfulApplicationTests {
     }
 
     @Test
-    void textMain(){
+    void textMain() {
         String st = "哈哈哈哈";
         String st2 = "哈哈哈哈";
         System.out.println(st.hashCode());
         System.out.println(st2.hashCode());
+    }
+
+    @Test
+    void test() {
+        int[] nums = new int[]{1, 2, 3, 4};
+
+        int[] target = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            target[i] = total(nums, i);
+        }
+
+        System.out.println(Arrays.toString(target));
+    }
+
+    int total(int[] nums, int index) {
+        int temp = 0;
+        for (int i = 0; i <= index; i++) {
+            temp += nums[i];
+        }
+        return temp;
     }
 
 }

@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -97,7 +94,7 @@ public class TaskController {
         }
         try {
             taskService.createOne(userId, data);
-        }catch (Exception e){
+        } catch (Exception e) {
             modelAndView.addObject("msg", "任务已存在，请勿发布已存在的任务！");
             return modelAndView;
         }
@@ -107,12 +104,23 @@ public class TaskController {
 
     @GetMapping("/findAll")
     @ResponseBody
-    public Object findAll(HttpSession session){
+    public Object findAll(HttpSession session) {
         Integer userId = (Integer) session.getAttribute(RedisKey.SESSION_USER_ID);
-        if (userId==null){
+        if (userId == null) {
             return BaseVo.failed("未登录");
         }
         List<TaskVo> all = taskService.findAll(userId);
         return BaseVo.success(all);
+    }
+
+    @ResponseBody
+    @DeleteMapping("/task/{taskId}")
+    public Object deleteTask(@SessionAttribute(RedisKey.SESSION_USER_ID) Integer userId,
+                             @PathVariable Integer taskId) {
+        if (userId == null) {
+            return BaseVo.failed("用户登录已过期");
+        }
+        taskService.deleteTask(userId, taskId);
+        return BaseVo.success(null);
     }
 }

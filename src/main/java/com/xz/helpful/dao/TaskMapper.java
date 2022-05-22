@@ -18,4 +18,6 @@ public interface TaskMapper {
     void updateTaskEnable(Integer id, Integer enable);
 
     Integer insert(Task task) throws Exception;
+
+    Integer delete(Integer userId, Integer taskId);
 }

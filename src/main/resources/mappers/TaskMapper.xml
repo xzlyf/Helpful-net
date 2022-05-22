@@ -12,13 +12,16 @@
         set is_enable = #{enable}
         where id = #{id}
     </update>
+    <delete id="delete">
+        delete from tasklist where id = #{taskId} and task_from = #{userId}
+    </delete>
     <select id="findById" resultType="com.xz.helpful.pojo.Task">
         select *
         from tasklist
         where id = #{id}
     </select>
     <select id="findAll" resultType="com.xz.helpful.pojo.vo.TaskVo">
-        select t.task_type,p.name as type_name, t.task_pay, t.create_time, t.task_desc, t.task_mid,t.task_img
+        select t.id as taskId, t.task_type,p.name as type_name, t.task_pay, t.create_time, t.task_desc, t.task_mid,t.task_img
         from tasklist t
         left join task_type p on p.id = t.task_type
         where task_from = #{userId}

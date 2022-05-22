@@ -121,6 +121,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public void deleteTask(Integer userId, Integer taskId) {
+
+    }
+
+    @Override
     public void createOne(Integer userId, BiliMovie biliMovie) throws Exception {
         Task task = new Task();
         task.setTaskType(2);
