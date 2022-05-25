@@ -8,9 +8,10 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
-        table{
-            table-layout:fixed;
+        table {
+            table-layout: fixed;
         }
+
         td {
             word-break: keep-all; /* 不换行 */
             white-space: nowrap; /* 不换行 */
@@ -37,6 +38,10 @@
 </div>
 
 <div style="width: 800px;margin: 50px auto;">
+    <ul class="nav nav-tabs" style="font-size: larger;font-weight: bold">
+        <li id="l1" role="presentation" class="active"><a href="#" onclick="findAll('from')">谁帮助了我</a></li>
+        <li id="l2" role="presentation"><a href="#" onclick="findAll('done')">我帮助了谁</a></li>
+    </ul>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -55,12 +60,26 @@
 <script>
 
     $(function () {
-        findAll()
+        findAll("from")
     })
 
-    function findAll() {
+    function findAll(mode) {
+        if (mode === "done") {
+            $("#l1").removeClass("active")
+            $("#l2").addClass("active")
+        } else if (mode === "from") {
+            $("#l2").removeClass("active")
+            $("#l1").addClass("active")
+        } else {
+            alert("非法参数")
+            return
+        }
         $.ajax({
             url: "/order/findAll",
+            data: {
+                r: Math.random(),
+                mode: mode
+            },
             method: "GET",
             success: function (res) {
                 if (res.code === 1) {
@@ -69,11 +88,11 @@
                     for (let i = 0; i < data.length; i++) {
                         html +=
                             "<tr>" +
-                            "<td>" + data[i].doneUser + "</td>" +
-                            "<td>" + data[i].fromUser + "</td>" +
+                            "<td>" + data[i].doneUserName + "</td>" +
+                            "<td>" + data[i].fromUserName + "</td>" +
                             "<td>" + data[i].taskType + "</td>" +
-                            "<td>" + data[i].payType + data[i].taskPay + "</td>" +
-                            "<td>" + data[i].taskDesc + "</td>" +
+                            "<td>" + data[i].taskPay + "</td>" +
+                            "<td>" + data[i].taskDesc + "...</td>" +
                             "<td>" + data[i].createTime + "</td>" +
                             "</tr>"
                     }

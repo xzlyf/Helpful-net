@@ -13,12 +13,12 @@ import java.util.Date;
  */
 @Data
 public class OrderVo implements Serializable {
-    private String doneUser;
-    private String fromUser;
-    private String taskType;
-    private Integer taskPay;
-    private String payType;
+    private String doneUserName;
+    private String fromUserName;
     private String taskDesc;
+    private String taskType;
+    private String taskPay;
+
     /*
     JsonFormat注解是jackson的注解。
     JSONField注解是fastjson的注解。

@@ -27,6 +27,8 @@ public interface UserServer {
 
     String findUserNameByEmail(String email);
 
+    String findUserNameById(Integer id);
+
     //验证人机，并验证邮箱是否注册，完成验证后发送验证码邮件，并把用户数据存入redis
     BaseVo verify(HttpSession session, RegisterVo registerVo);
 

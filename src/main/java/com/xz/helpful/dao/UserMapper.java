@@ -22,7 +22,9 @@ public interface UserMapper {
 
     String findUserNameByEmail(String email);
 
-    Integer updateUserPasswd(String email,String newPwd);
+    String findUserNameById(Integer id);
+
+    Integer updateUserPasswd(String email, String newPwd);
 
     /**
      * 新建用户

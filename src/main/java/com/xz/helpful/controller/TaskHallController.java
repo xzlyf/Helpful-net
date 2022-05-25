@@ -75,7 +75,8 @@ public class TaskHallController {
     @GetMapping("/startTask")
     public Object startTask(HttpSession session,
                             @RequestParam String taskId) throws InterruptedException {
-        Thread.sleep(15000);
+        //todo  debug  default 15000
+        Thread.sleep(3000);
         String r = uuidUtil.getUUID32();
         //存入uuid，做校验用，60秒后过期
         redisUtil.set(RedisKey.REDIS_TASK_CHECK + session.getId() + taskId, r, 60);

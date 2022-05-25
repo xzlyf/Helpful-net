@@ -101,12 +101,13 @@ public class TaskServiceImpl implements TaskService {
         }
         //写入filter任务过滤表
         filterMapper.insert(email, task.getId());
-        //写入订单
-        orderService.addOrder(userId, task.getId(), "+");
+
         //更新用户余额
         walletServer.updateMoneyByUserId(userId, +task.getTaskPay());
         //更新任务创建者的余额
         walletServer.updateMoneyByUserId(task.getTaskFrom(), -task.getTaskPay());
+        //写入订单
+        orderService.addOrder(userId,task.getTaskFrom(), task);
         Integer taskFromWallet = walletServer.queryMoneyByUserId(task.getTaskFrom());
         if (taskFromWallet <= 0) {
             //创建者余额耗尽，任务关闭

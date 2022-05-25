@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xz.helpful.dao.OrderMapper">
-    <insert id="addOrder">
-        insert into `order` (user_id, task_id,`type`)
-        values (#{userId}, #{taskId},#{payType})
+    <insert id="addOrder" parameterType="com.xz.helpful.pojo.Task">
+        insert into `order` (done_user_id, from_user_id, task_id, task_type, task_pay, task_desc, from_user_name,
+                             done_user_name)
+            value (#{doneUser},#{fromUser},#{task.id},#{task.taskType},#{task.taskPay},#{task.taskDesc},#{fUser},#{tUser})
     </insert>
     <select id="findAll" resultType="com.xz.helpful.pojo.vo.OrderVo">
-        select o.id,
-               o.type as pay_type,
-               u.name  as done_user,
-               uf.name as from_user,
-               p.name  as task_type,
-               t.task_pay,
-               t.task_desc,
+        select o.done_user_name,
+               o.from_user_name,
+               o.task_desc,
+               tt.name as task_type,
+               o.task_pay,
                o.create_time
         from `order` o
-                 left join tasklist t on o.task_id = t.id
-                 left join task_type p on t.task_type = p.id
-                 left join `user` u on o.user_id = u.id
-                 left join `user` uf on t.task_from = uf.id
-        where o.user_id = #{userId} limit 0,100
+                 left join task_type tt on o.task_type = tt.id
+        <if test="mode=='from'">
+            where o.from_user_id = #{userId}
+        </if>
+        <if test="mode=='done'">
+            where o.done_user_id = #{userId}
+        </if>
+        limit 0,100
     </select>
 </mapper>

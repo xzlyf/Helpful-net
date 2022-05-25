@@ -84,6 +84,11 @@ public class UserServerImpl implements UserServer {
     }
 
     @Override
+    public String findUserNameById(Integer id) {
+        return userMapper.findUserNameById(id);
+    }
+
+    @Override
     public BaseVo verify(HttpSession session, RegisterVo registerVo) {
         boolean verify = norm(registerVo.getUser());
         if (!verify) {
