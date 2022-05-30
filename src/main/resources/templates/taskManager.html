@@ -91,7 +91,24 @@
 </div>
 <div class="alert alert-info master-width" role="alert"><strong style="font-size: large">所有任务</strong></div>
 <div id="main-view" class="main master-width">
+</div>
 
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">重要提醒</h4>
+            </div>
+            <div class="modal-body">
+                <h4>是否删除该任务：<span id="modal-taskName"></span></h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="modal-submit">删除</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var tasklist = null
@@ -118,6 +135,7 @@
     }
 
     function deleteTask(index) {
+        $("#confirmModal").modal("hide")
         let id = tasklist[index].taskId
         $.ajax({
             url: "taskManager/task/" + id,
@@ -161,11 +179,17 @@
         </div>
         <div class="controller-plane">
             <a href="#">修改</a>
-            <a href="#" onclick="deleteTask(` + i + `)">删除</a>
+            <a href="#" onclick="showConfirmModal(` + i + `)">删除</a>
         </div>
     </div>`
             mianView.append(html)
         }
+    }
+
+    function showConfirmModal(index) {
+        $("#confirmModal").modal("show")
+        $("#modal-taskName").text(tasklist[index].taskMid)
+        $("#modal-submit").attr("onclick","deleteTask("+index+")")
     }
 </script>
 </body>
